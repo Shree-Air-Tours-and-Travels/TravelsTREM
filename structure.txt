@@ -1,0 +1,53 @@
+my-mern-website/
+│-- backend/                # Backend (Node.js + Express)
+│   ├── models/             # User Model (MongoDB)
+│   ├── routes/             # API Routes (Auth)
+│   ├── controllers/        # Request Handlers
+│   ├── middleware/         # Authentication Middleware
+│   ├── config/             # Database Configuration
+│   ├── utils/              # Helper Functions (JWT)
+│   ├── server.js           # Main Server File
+│   ├── .env                # Environment Variables
+│
+│-- frontend/               # Frontend (React + Redux)
+│   ├── src/
+│   │   ├── components/     # UI Components
+│   │   ├── pages/          # Login, Register, Profile Pages
+│   │   ├── redux/          # Redux Store & User Slice
+│   │   ├── api/            # API Calls
+│   │   ├── App.js          # Main Component
+│   │   ├── index.js        # Entry Point
+│   ├── package.json        # Frontend Dependencies
+│
+│-- README.md               # Project Documentation
+
+
+
+
+///////////// sass ////////////////
+📂 src
+ ├── 📂 styles
+ │   ├── 📂 base
+ │   │   ├── _reset.scss
+ │   │   ├── _typography.scss
+ │   │   ├── _global.scss
+ │   ├── 📂 components
+ │   │   ├── _button.scss
+ │   │   ├── _navbar.scss
+ │   │   ├── _form.scss
+ │   ├── 📂 layout
+ │   │   ├── _header.scss
+ │   │   ├── _footer.scss
+ │   │   ├── _grid.scss
+ │   ├── 📂 pages
+ │   │   ├── _home.scss
+ │   │   ├── _profile.scss
+ │   │   ├── _auth.scss
+ │   ├── 📂 themes
+ │   │   ├── _dark.scss
+ │   │   ├── _light.scss
+ │   ├── 📂 utils
+ │   │   ├── _variables.scss
+ │   │   ├── _mixins.scss
+ │   │   ├── _functions.scss
+ │   ├── main.scss
