@@ -1,3 +1,30 @@
+MERN Authentication Setup Breakdown
+1️⃣ MERN Stack Overview
+MERN stands for:
+
+MongoDB (Database)
+
+Express.js (Backend Framework)
+
+React.js (Frontend)
+
+Node.js (Runtime for Backend)
+
+For authentication, the flow is:
+
+User enters credentials on the React frontend.
+
+The frontend makes an API request to the Node.js backend.
+
+The backend validates the credentials and communicates with MongoDB.
+
+If valid, the backend generates a JWT (JSON Web Token) and sends it to the frontend.
+
+The frontend stores the token (e.g., in localStorage or Redux) and uses it for authentication.
+
+
+
+
 my-mern-website/
 │-- backend/                # Backend (Node.js + Express)
 │   ├── models/             # User Model (MongoDB)
