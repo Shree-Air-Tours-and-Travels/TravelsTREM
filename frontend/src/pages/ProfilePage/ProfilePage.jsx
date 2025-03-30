@@ -2,23 +2,18 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getProfile } from "../../redux/userSlice";
+import ProfileHeader from "../../components/profilePage/profileHeader";
 
-const ProfilePage = () => {
+const ProfilePage = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user, loading } = useSelector((state) => state.user);
-  console.log(user, loading);
+  console.log(user, loading, "safsdf");
   useEffect(() => {
     dispatch(getProfile());
   }, [dispatch]);
 
-  return (
-    <div>
-    <h1>Welcome, {user.name}!</h1>
-    <p>Email: {user.email}</p>
-    <button onClick={() => navigate("/")}>Logout</button>
-  </div>
-  );
+  return   <ProfileHeader user= {user} navigate={navigate} />
 };
 
 export default ProfilePage;

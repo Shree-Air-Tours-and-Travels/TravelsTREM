@@ -1,0 +1,77 @@
+.ui-header {
+  background: #fff;
+  padding: 1rem 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000; // Ensures it stays above other content
+  width: 100%;
+  &__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  &__logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+
+    a {
+      text-decoration: none;
+      color: #333;
+      transition: color 0.3s ease;
+
+      &.active {
+        color: #007bff;
+      }
+    }
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+  }
+
+  &__menu {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin: 0 15px;
+
+      a {
+        text-decoration: none;
+        color: #333;
+        font-size: 1rem;
+        transition: color 0.3s ease;
+
+        &.active {
+          color: #007bff;
+          font-weight: bold;
+          border-bottom: 2px solid #007bff;
+        }
+
+        &:hover {
+          color: #0056b3;
+        }
+      }
+    }
+
+    &--end {
+      li {
+        &:first-child a.active {
+          color: #007bff;
+        }
+
+        &:last-child a.active {
+          color: #28a745;
+        }
+      }
+    }
+  }
+}

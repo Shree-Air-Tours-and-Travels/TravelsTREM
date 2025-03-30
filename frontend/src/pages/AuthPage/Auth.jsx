@@ -18,7 +18,7 @@ const AuthPage = () => {
     try {
       const result = await dispatch(action(userData)).unwrap();
       if (result) {
-        navigate("/profile");
+        navigate("/");
       }
     } catch (error) {
       console.error("Authentication failed:", error);

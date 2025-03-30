@@ -1,17 +1,11 @@
-import { Routes, Route } from "react-router-dom";
+import React from "react";
 import { useSelector } from "react-redux";
-import AuthPage from "./pages/AuthPage/Auth";
-import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import Layout from "./components/layout/layout";
+
 
 const App = () => {
   const { user } = useSelector((state) => state.user);
-
-  return (
-    <Routes>
-      <Route path="/" element={<AuthPage />} />
-      <Route path="/profile" element={user ? <ProfilePage /> : <AuthPage />} />
-    </Routes>
-  );
+  return <Layout user={user} />;
 };
 
 export default App;
