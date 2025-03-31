@@ -1,0 +1,105 @@
+@import "../../styles/base/typography"; // Import typography variables
+
+
+.ui-button {
+  font-family: $font-primary;
+  font-weight: $font-bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  // Size Variants
+  &--large {
+    font-size: $font-size-lg;
+    padding: 1rem 2rem;
+  }
+
+  &--medium {
+    font-size: $font-size-md;
+    padding: 0.75rem 1.5rem;
+  }
+
+  &--small {
+    font-size: $font-size-sm;
+    padding: 0.5rem 1rem;
+  }
+
+  &--extra-small {
+    font-size: $font-size-xs;
+    padding: 0.3rem 0.8rem;
+  }
+
+  // Circular Button (For Icon Buttons)
+  &--circular {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    padding: 0;
+  }
+
+  // Solid Style
+  &--solid {
+    &.ui-button--primary {
+      background: $primary-color;
+      color: $light-color;
+      border-color: $primary-color;
+      &:hover {
+        background: darken($primary-color, 10%);
+      }
+    }
+
+    &.ui-button--secondary {
+      background: $secondary-color;
+      color: $light-color;
+      border-color: $secondary-color;
+      &:hover {
+        background: darken($secondary-color, 10%);
+      }
+    }
+
+    &.ui-button--danger {
+      background: $danger-color;
+      color: $light-color;
+      border-color: $danger-color;
+      &:hover {
+        background: darken($danger-color, 10%);
+      }
+    }
+  }
+
+  // Outline Style
+  &--outline {
+    background: transparent;
+
+    &.ui-button--primary {
+      color: $primary-color;
+      border-color: $primary-color;
+      &:hover {
+        background: $primary-color;
+        color: $light-color;
+      }
+    }
+
+    &.ui-button--secondary {
+      color: $secondary-color;
+      border-color: $secondary-color;
+      &:hover {
+        background: $secondary-color;
+        color: $light-color;
+      }
+    }
+
+    &.ui-button--danger {
+      color: $danger-color;
+      border-color: $danger-color;
+      &:hover {
+        background: $danger-color;
+        color: $light-color;
+      }
+    }
+  }
+}

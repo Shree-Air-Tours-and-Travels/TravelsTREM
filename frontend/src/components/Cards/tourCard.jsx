@@ -1,21 +1,18 @@
 import React from "react";
-import "../../styles/components/tourCard.scss";
 import { FaMapMarkerAlt, FaStar } from "react-icons/fa";
+import Button from "../../stories/Button";
+import "../../styles/components/tourCard.scss";
 
-const TourCard = ({ tour }) => {
-  const { title, location, price, reviews, avgRating,photo } = tour;
-
-  // Calculate average rating
-//   const averageRating =
-//     reviews.length > 0
-//       ? (reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length).toFixed(1)
-//       : "No reviews";
+const TourCard = ({ tour, handleNavigate }) => {
+  const { id, title, location, price, reviews, avgRating, ratingKey, photo } = tour;
 
   return (
     <div className="ui-tour-card">
       <img src={photo} alt={title} className="ui-tour-card__image" />
       <div className="ui-tour-card__content">
-        <h3 className="ui-tour-card__title">{title}</h3>
+        <a href={`/tours/${id}`} className="ui-tour-card__title">
+          {title}
+        </a>
         <div className="ui-tour-card__info">
           <span className="ui-tour-card__location">
             <FaMapMarkerAlt /> {location}
@@ -24,11 +21,11 @@ const TourCard = ({ tour }) => {
         </div>
         <div className="ui-tour-card__reviews">
           <span className="ui-tour-card__review-count">{reviews.length} Reviews</span>
-          <span className="ui-tour-card__rating">
-            <FaStar /> {avgRating} 
+          <span className={`ui-tour-card__rating ui-tour-card__rating--${ratingKey}`}>
+            <FaStar /> {avgRating}
           </span>
         </div>
-        <button className="ui-tour-card__button">Book Now</button>
+        <Button className="ui-tour-card__button" text="Book Now" variant="outline" onClick={() => handleNavigate(id)} />
       </div>
     </div>
   );

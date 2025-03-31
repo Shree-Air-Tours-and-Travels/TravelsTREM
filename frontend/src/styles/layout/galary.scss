@@ -1,0 +1,84 @@
+@import "../../styles/base/typography"; // Ensure this file contains your typography theme variables
+
+.ui-gallery {
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 3rem 0;
+  width: 100%;
+  background-color: $light-color;
+
+  &__header {
+    margin-bottom: 2rem;
+  }
+
+  &__title {
+    font-size: $font-size-xxl;
+    font-weight: $font-bold;
+    color: $text-dark;
+  }
+
+  &__subtitle {
+    font-size: $font-size-md;
+    color: $text-secondary;
+    font-weight: $font-regular;
+  }
+
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  &__images {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  &__image {
+    transition: transform 0.3s ease-in-out;
+    border-radius: 10px;
+    object-fit: cover;
+
+    &--small {
+      width: 150px;
+      height: 100px;
+      opacity: 0.7;
+    }
+
+    &--large {
+      width: 250px;
+      height: 170px;
+      transform: scale(1.2);
+      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  &__arrow {
+    background: none;
+    border: none;
+    font-size: $font-size-lg;
+    color: $primary-color;
+    cursor: pointer;
+    transition: color 0.3s ease-in-out;
+
+    &:hover {
+      color: darken($primary-color, 10%);
+    }
+
+    &--left {
+      position: absolute;
+      left: -40px;
+    }
+
+    &--right {
+      position: absolute;
+      right: -40px;
+    }
+  }
+}

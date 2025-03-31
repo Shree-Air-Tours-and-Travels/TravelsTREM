@@ -7,6 +7,11 @@ import videoSrc from "../../assets/images/hero-video.mp4";
 import SearchBar from "../../components/SEO/searchBar";
 import ServiceList from "../../Services/serviceLst";
 import TourPackages from "../../Featured/tourPackages";
+import Title from "../../stories/Title";
+import Button from "../../stories/Button";
+import Experience from "../../Services/experience";
+import Gallery from "../../components/galary/galary";
+import Reviews from "../../Services/review";
 const header = {
   buttonText: "Know Before You Go",
   title: "Traveling opens the door to creating",
@@ -31,16 +36,21 @@ const Home = () => {
           <section className="ui-home__main__hero">
             <div className="ui-home__main__hero__content">
               <div className="ui-home__main__hero__cta">
-                <button className="ui-home__main__hero__cta__button">
-                  {header.buttonText}
-                </button>
+                <Button className="ui-home__main__hero__cta__button" 
+                  text={header.buttonText}
+                  variant="outline"
+                  size="extra-small"  
+                  color="primary"
+                  isCircular={false}
+                  onClick={() => console.log("Button clicked!")}
+                />               
                 <div className="ui-home__main__hero__cta__image">
                   <img src={header.images.main} alt="Tiny Travel Icon" />
                 </div>
               </div>
 
               <h1 className="ui-home__main__hero__title">
-                {header.title} <span>{header.highlight}</span>
+                <Title text={header.title}/> <span><Title text= {header.highlight} variant="secondary"/></span>
               </h1>
               <p className="ui-home__main__hero__description">{header.description}</p>
             </div>
@@ -68,6 +78,9 @@ const Home = () => {
         <SearchBar />
         <ServiceList />
         <TourPackages/>
+        <Experience />
+        <Gallery />
+        <Reviews />
       </section>
       </div>
   );

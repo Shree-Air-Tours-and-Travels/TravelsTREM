@@ -1,0 +1,162 @@
+// ==============================
+// Typography Variables
+// ==============================
+
+// Font Family
+$font-primary: "Poppins", sans-serif;
+$font-secondary: "Roboto", sans-serif;
+
+// Font Sizes
+$font-size-xs: 0.75rem;  // 12px
+$font-size-sm: 0.875rem; // 14px
+$font-size-md: 1rem;     // 16px
+$font-size-lg: 1.25rem;  // 20px
+$font-size-xl: 1.5rem;   // 24px
+$font-size-xxl: 2rem;    // 32px
+$font-size-xxxl: 2.5rem; // 40px
+
+// Font Weights
+$font-light: 300;
+$font-regular: 400;
+$font-medium: 500;
+$font-semibold: 600;
+$font-bold: 700;
+$font-extrabold: 800;
+
+// Line Heights
+$line-height-sm: 1.2;
+$line-height-md: 1.5;
+$line-height-lg: 1.75;
+
+// Colors - Theme Colors
+$primary-color: #11467f;   // Blue
+$secondary-color: #a5b8c8; // Gray
+$accent-color: #ff9900;    // Orange
+$success-color: #28a745;   // Green
+$danger-color: #dc3545;    // Red
+$warning-color: #ffc107;   // Yellow
+$info-color: #17a2b8;      // Cyan
+$light-color: #f8f9fa;     // Light Gray
+$dark-color: #343a40;      // Dark Gray
+$border-color: #ced4da;      // Border Gray
+
+// Text Colors
+$text-primary: #212529;
+$text-secondary: #6c757d;
+$text-light: #f9f9f9;
+$text-dark: #1c1c1c;
+
+// Background Colors
+$bg-primary: #ffffff;
+$bg-secondary: #f4f4f4;
+$bg-dark: #1c1c1c;
+$light-gray: #e9ecefa0;
+
+// ==============================
+// Global Typography Styles
+// ==============================
+body {
+  font-family: $font-primary;
+  font-size: $font-size-md;
+  font-weight: $font-regular;
+  color: $text-primary;
+  background-color: $bg-primary;
+  line-height: $line-height-md;
+}
+
+// Headings
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-primary;
+  font-weight: $font-bold;
+  color: $text-dark;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-size: $font-size-xxxl;
+}
+
+h2 {
+  font-size: $font-size-xxl;
+}
+
+h3 {
+  font-size: $font-size-xl;
+}
+
+h4 {
+  font-size: $font-size-lg;
+}
+
+h5 {
+  font-size: $font-size-md;
+}
+
+h6 {
+  font-size: $font-size-sm;
+}
+
+// Paragraphs
+p {
+  font-size: $font-size-md;
+  font-weight: $font-regular;
+  line-height: $line-height-lg;
+  color: $text-secondary;
+  margin-bottom: 1rem;
+}
+
+// Links
+a {
+  text-decoration: none;
+  color: $primary-color;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: darken($primary-color, 10%);
+  }
+}
+
+// Buttons
+button {
+  font-size: $font-size-md;
+  font-weight: $font-semibold;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease-in-out;
+
+  &.btn-primary {
+    background-color: $primary-color;
+    color: $text-light;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+  }
+
+  &.btn-secondary {
+    background-color: $secondary-color;
+    color: $text-light;
+
+    &:hover {
+      background-color: darken($secondary-color, 10%);
+    }
+  }
+}
+
+// Utility Classes
+.text-primary { color: $primary-color; }
+.text-secondary { color: $secondary-color; }
+.text-light { color: $text-light; }
+.text-dark { color: $text-dark; }
+.text-accent { color: $accent-color; }
+
+.bg-primary { background-color: $bg-primary; }
+.bg-secondary { background-color: $bg-secondary; }
+.bg-dark { background-color: $bg-dark; }
+
+.font-light { font-weight: $font-light; }
+.font-regular { font-weight: $font-regular; }
+.font-medium { font-weight: $font-medium; }
+.font-bold { font-weight: $font-bold; }

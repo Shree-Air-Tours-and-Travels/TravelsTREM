@@ -3,6 +3,7 @@ import "../styles/layout/serviceList.scss";
 import weatherImg from "../assets/images/weather.png"; 
 import guideImg from "../assets/images/guide.png";
 import customizeImg from "../assets/images/user.png";
+import ServiceCard from "../components/Cards/serviceCard";
 
 const serviceData = {
   title: "Our Services",
@@ -42,13 +43,7 @@ const ServiceList = () => {
         {/* Right Section: Service Cards */}
         <div className="ui-service__cards">
           {serviceData.services.map((service) => (
-            <div key={service.id} className="ui-service__card">
-              <div className="ui-service__card-image-container">
-                <img src={service.image} alt={service.label} className="ui-service__card-image" />
-              </div>
-              <h3 className="ui-service__card-title">{service.label}</h3>
-              <p className="ui-service__card-description">{service.description}</p>
-            </div>
+            <ServiceCard key={service.id} service={service} />
           ))}
         </div>
       </div>
