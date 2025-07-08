@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.post("/register", register);
 router.post("/login", login);
-router.get("/profile", authMiddleware, getProfile);
+router.get("/home", authMiddleware, getProfile);
 
 export default router; // ✅ Use ES Module export

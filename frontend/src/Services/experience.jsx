@@ -2,7 +2,7 @@ import React from "react";
 import "../styles/layout/experience.scss";
 import { FaSuitcaseRolling } from "react-icons/fa";
 import { IoPeopleSharp } from "react-icons/io5";
-import { MdOutlineWorkspacePremium } from "react-icons/md";
+import { MdOutlineWorkspacePremium, MdTitle } from "react-icons/md";
 import Title from "../stories/Title";
 import experienceImage from "../assets/images/experience.png"; // Import the image
 
@@ -24,7 +24,7 @@ const Experience = () => {
     <section className="ui-experience">
       <div className="ui-experience__content">
         <Title className="ui-experience__tag" text={experienceData.tag} />
-        <h2 className="ui-experience__title">{experienceData.title}</h2>
+        <Title className="ui-experience__title" text={experienceData.title} size="small" variant="secondary"/>
         <p className="ui-experience__description">{experienceData.description}</p>
         <div className="ui-experience__stats">
           {experienceData.stats.map((stat) => (

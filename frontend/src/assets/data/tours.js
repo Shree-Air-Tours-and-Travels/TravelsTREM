@@ -8,13 +8,21 @@ import tourImg07 from "../images/tour-img07.jpg";
 
 const tours = [
   {
-    id: "01",
+    id: "1",
     title: "Westminister Bridge",
     city: "London",
     distance: 300,
     price: 99,
     maxGroupSize: 10,
     desc: "this is the description",
+    address: {
+      "line1": "Somewhere in Indonesia",
+      "line2": "Somewhere in Indonesia",
+      "city": "Bali",
+      "state": "Bali",
+      "zip": "12345",
+      "country": "Indonesia"
+    },
     reviews: [
       {
         name: "jhon doe",
@@ -38,12 +46,20 @@ const tours = [
     featured: true,
   },
   {
-    id: "02",
+    id: "2",
     title: "Bali, Indonesia",
     city: "Indonesia",
     distance: 400,
     price: 99,
     maxGroupSize: 8,
+    address: {
+      "line1": "Somewhere in Indonesia",
+      "line2": "Somewhere in Indonesia",
+      "city": "Bali",
+      "state": "Bali",
+      "zip": "12345",
+      "country": "Indonesia"
+    },
     desc: "this is the description",
     reviews: [
       {
@@ -68,11 +84,19 @@ const tours = [
     featured: true,
   },
   {
-    id: "03",
+    id: "3",
     title: "Snowy Mountains, Thailand",
     city: "Thailand",
     distance: 500,
     price: 99,
+    address: {
+      "line1": "Somewhere in Indonesia",
+      "line2": "Somewhere in Indonesia",
+      "city": "Bali",
+      "state": "Bali",
+      "zip": "12345",
+      "country": "Indonesia"
+    },
     maxGroupSize: 8,
     desc: "this is the description",
     reviews: [
@@ -86,11 +110,19 @@ const tours = [
     featured: true,
   },
   {
-    id: "04",
+    id: "4",
     title: "Beautiful Sunrise, Thailand",
     city: "Thailand",
     distance: 500,
     price: 99,
+    address: {
+      "line1": "Somewhere in Indonesia",
+      "line2": "Somewhere in Indonesia",
+      "city": "Bali",
+      "state": "Bali",
+      "zip": "12345",
+      "country": "Indonesia"
+    },
     maxGroupSize: 8,
     desc: "this is the description",
     reviews: [
@@ -104,11 +136,19 @@ const tours = [
     featured: true,
   },
   {
-    id: "05",
+    id: "5",
     title: "Nusa Pendia Bali, Indonesia",
     city: "Indonesia",
     distance: 500,
     price: 99,
+    address: {
+      "line1": "Somewhere in Indonesia",
+      "line2": "Somewhere in Indonesia",
+      "city": "Bali",
+      "state": "Bali",
+      "zip": "12345",
+      "country": "Indonesia"
+    },
     maxGroupSize: 8,
     desc: "this is the description",
     reviews: [
@@ -122,12 +162,20 @@ const tours = [
     featured: false,
   },
   {
-    id: "06",
+    id: "6",
     title: "Cherry Blossoms Spring",
     city: "Japan",
     distance: 500,
     price: 99,
     maxGroupSize: 8,
+    address: {
+      "line1": "Somewhere in Indonesia",
+      "line2": "Somewhere in Indonesia",
+      "city": "Bali",
+      "state": "Bali",
+      "zip": "12345",
+      "country": "Indonesia"
+    },
     desc: "this is the description",
     reviews: [
       {
@@ -140,12 +188,20 @@ const tours = [
     featured: false,
   },
   {
-    id: "07",
+    id: "7",
     title: "Holmen Lofoten",
     city: "France",
     distance: 500,
     price: 99,
     maxGroupSize: 8,
+    address: {
+      "line1": "Somewhere in Indonesia",
+      "line2": "Somewhere in Indonesia",
+      "city": "Bali",
+      "state": "Bali",
+      "zip": "12345",
+      "country": "Indonesia"
+    },
     desc: "this is the description",
     reviews: [
       {
@@ -158,11 +214,19 @@ const tours = [
     featured: false,
   },
   {
-    id: "08",
+    id: "8",
     title: "Snowy Mountains, Thailand",
     city: "Thailand",
     distance: 500,
     price: 99,
+    address: {
+      "line1": "Somewhere in Indonesia",
+      "line2": "Somewhere in Indonesia",
+      "city": "Bali",
+      "state": "Bali",
+      "zip": "12345",
+      "country": "Indonesia"
+    },
     maxGroupSize: 8,
     desc: "this is the description",
     reviews: [

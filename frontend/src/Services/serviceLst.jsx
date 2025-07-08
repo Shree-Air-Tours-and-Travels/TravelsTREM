@@ -4,6 +4,7 @@ import weatherImg from "../assets/images/weather.png";
 import guideImg from "../assets/images/guide.png";
 import customizeImg from "../assets/images/user.png";
 import ServiceCard from "../components/Cards/serviceCard";
+import Title from "../stories/Title";
 
 const serviceData = {
   title: "Our Services",
@@ -36,7 +37,7 @@ const ServiceList = () => {
       <div className="ui-service__container">
         {/* Left Section: Title & Description */}
         <div className="ui-service__intro">
-          <h2 className="ui-service__intro-title">{serviceData.title}</h2>
+          <Title className="ui-service__intro-title" text={serviceData.title}/>
           <p className="ui-service__intro-description">{serviceData.description}</p>
         </div>
 

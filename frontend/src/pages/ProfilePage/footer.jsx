@@ -3,8 +3,12 @@ import "../../styles/components/footer.scss";
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 import Logo from "../../assets/images/logo.png";
 import Button from "../../stories/Button";
+// import { useSelector } from "react-redux";
 
-const Footer = () => {
+const Footer = ({user}) => {
+  // const { user } = useSelector((state) => state.user);
+
+  console.log("user in footer", user);
   const footerContent = {
     contactDetails: {
       phone: "960********",
@@ -42,7 +46,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="ui-footer__query">
-          <h3 className="ui-footer__title">Query?</h3>
+          <h3 className="ui-footer__title">Query?{user?.name}</h3>
           <form className="ui-footer__form">
             <input type="text" placeholder="Name" />
             <input type="text" placeholder="Phone" />
