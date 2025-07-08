@@ -10,9 +10,13 @@ const TourCard = ({ tour, handleNavigate }) => {
     <div className="ui-tour-card">
       <img src={photo} alt={title} className="ui-tour-card__image" />
       <div className="ui-tour-card__content">
-        <a href={`/tours/${id}`} className="ui-tour-card__title">
+      <h3 
+          className="ui-tour-card__title"
+          onClick={() => handleNavigate(id)}
+          style={{ cursor: 'pointer' }}
+        >
           {title}
-        </a>
+        </h3>
         <div className="ui-tour-card__info">
           <span className="ui-tour-card__location">
             <FaMapMarkerAlt /> {location}
