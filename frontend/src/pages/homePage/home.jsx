@@ -76,7 +76,7 @@ const Home = ({user}) => {
 
         {/* { <!-- main Section -->} */}
       <section className="ui-home__explore">
-        <SearchBar />
+        {/* <SearchBar /> */}
         <ServiceList />
         <TourPackages/>
         <Experience />

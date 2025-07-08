@@ -8,7 +8,6 @@ import Button from "../../stories/Button";
 const Footer = ({user}) => {
   // const { user } = useSelector((state) => state.user);
 
-  console.log("user in footer", user);
   const footerContent = {
     contactDetails: {
       phone: "960********",
