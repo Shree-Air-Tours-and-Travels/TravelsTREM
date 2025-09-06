@@ -69,6 +69,16 @@
         background: darken($danger-color, 10%);
       }
     }
+
+    &.ui-button--white {
+      background: $white-color;
+      color: $light-color;
+      border-color: $white-color;
+      &:hover {
+        background: darken($white-color, 10%);
+      }
+    }
+
   }
 
   // Outline Style
@@ -99,6 +109,15 @@
       &:hover {
         background: $danger-color;
         color: $light-color;
+      }
+    }
+
+    &.ui-button--white {
+      background: transparent;
+      color: $white-color;
+      border-color: $white-color;
+      &:hover {
+        background: darken($white-color, 10%);
       }
     }
   }
