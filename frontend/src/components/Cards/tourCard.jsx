@@ -1,9 +1,10 @@
 import React from "react";
 import { FaMapMarkerAlt, FaStar } from "react-icons/fa";
-import Button from "../../stories/Button";
+// import Button from "../../stories/Button";
 import "../../styles/components/tourCard.scss";
+import { Link } from "react-router-dom";
 
-const TourCard = ({ tour, handleNavigate }) => {
+const TourCard = ({ tour }) => {
   const { id, title, location, price, reviews, avgRating, ratingKey, photo } = tour;
 
   return (
@@ -12,7 +13,6 @@ const TourCard = ({ tour, handleNavigate }) => {
       <div className="ui-tour-card__content">
       <h3 
           className="ui-tour-card__title"
-          onClick={() => handleNavigate(id)}
           style={{ cursor: 'pointer' }}
         >
           {title}
@@ -24,12 +24,12 @@ const TourCard = ({ tour, handleNavigate }) => {
           <span className="ui-tour-card__price">${price}</span>
         </div>
         <div className="ui-tour-card__reviews">
-          <span className="ui-tour-card__review-count">{reviews.length} Reviews</span>
+          <span className="ui-tour-card__review-count">{reviews?.length} Reviews</span>
           <span className={`ui-tour-card__rating ui-tour-card__rating--${ratingKey}`}>
             <FaStar /> {avgRating}
           </span>
         </div>
-        <Button className="ui-tour-card__button" text="Book Now" variant="outline" onClick={() => handleNavigate(id)} />
+        <Link className="ui-tour-card__button" text="Book Now" variant="outline" to={`/tours/:${id}`}/>
       </div>
     </div>
   );
