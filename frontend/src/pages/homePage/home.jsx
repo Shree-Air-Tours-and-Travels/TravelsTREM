@@ -6,7 +6,7 @@ import img2 from "../../assets/images/hero-img02.jpg";
 import videoSrc from "../../assets/images/hero-video.mp4";
 import SearchBar from "../../components/SEO/searchBar";
 import ServiceList from "../../Services/serviceLst";
-import TourPackages from "../../Featured/tourPackages";
+import TourPackages from "../../featured/tourPackages";
 import Title from "../../stories/Title";
 import Button from "../../stories/Button";
 import Experience from "../../Services/experience";
