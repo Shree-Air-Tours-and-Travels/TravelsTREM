@@ -78,3 +78,9 @@ my-mern-website/
  │   │   ├── _mixins.scss
  │   │   ├── _functions.scss
  │   ├── main.scss
+
+
+git branch -m production release
+git fetch origin
+git branch -u origin/release release
+git remote set-head origin -a
