@@ -56,6 +56,20 @@ export const getProfile = createAsyncThunk(
   }
 );
 
+// loader slice
+export const uiSlice = createSlice({
+  name: "ui",
+  initialState: { loading: false },
+  reducers: {
+    setLoading: (state, action) => {
+      state.loading = action.payload;
+    },
+  },
+});
+
+export const { setLoading } = uiSlice.actions;
+
+
 // Initial state: load user from localStorage if present
 const initialState = {
   user: JSON.parse(localStorage.getItem("userInfo")) || null,

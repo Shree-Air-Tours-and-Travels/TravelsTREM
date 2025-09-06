@@ -3,7 +3,7 @@ import Slider from "react-slick";
 import "../styles/layout/review.scss";
 import ReviewCard from "../components/Cards/reviewCard";
 import Title from "../stories/Title";
-import user from "../assets/images/user.png"; // Default user image
+import user from "../assets/service-images/user.png"; // Default user image
 
 const reviewsData = [
   {
