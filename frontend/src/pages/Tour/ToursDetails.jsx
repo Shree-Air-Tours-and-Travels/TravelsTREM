@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../styles/pages/tourDetails.scss";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import api from "../../utils/api";
 
 const TourDetails = () => {
     const { id } = useParams(); // ✅ grab ID from route
@@ -15,7 +16,7 @@ const TourDetails = () => {
         console.log("Fetching tour with id:", id);
         const fetchTour = async () => {
             try {
-                const res = await axios.get(`http://localhost:5000/api/tours/${id}`);
+                const res = await api.get(`/tours/${id}`);
                 setTour(res.data);
             } catch (err) {
                 console.error(err);
