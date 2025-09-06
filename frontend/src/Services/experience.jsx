@@ -10,7 +10,7 @@ const experienceData = {
   tag: "Experience",
   title: "With all our experience we will serve you",
   description:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quas aliquam, hic tempora inventore suscipit unde.",
+    "For over 15 years, we’ve been creating unforgettable journeys, ensuring comfort, safety, and unique experiences for every traveler.",
   stats: [
     { id: 1, icon: <FaSuitcaseRolling />, value: "12k+", label: "Successful trip" },
     { id: 2, icon: <IoPeopleSharp />, value: "2k+", label: "Regular clients" },
