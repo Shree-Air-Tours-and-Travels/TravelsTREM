@@ -1,50 +1,76 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
+// import api from "api";
+import api from "../utils/api";
 
 // Register User
-export const registerUser = createAsyncThunk("user/register", async (userData, { dispatch, rejectWithValue }) => {
-  try {
-    const response = await axios.post("http://localhost:5000/api/auth/register", userData, { withCredentials: true });
+export const registerUser = createAsyncThunk(
+  "user/register",
+  async (userData, {dispatch, rejectWithValue}) => {
+    try {
+      const response = await api.post("/auth/register", userData);
 
-    if (response.status === 201) {
-      dispatch(getProfile()); // ✅ Fetch profile only after successful registration
-      return response.data;
-    } else {
-      return rejectWithValue("Registration failed");
+      if (response.status === 201) {
+        dispatch(getProfile()); // Fetch profile only after successful registration
+        // Save user in localStorage
+        localStorage.setItem("userInfo", JSON.stringify(response.data));
+        return response.data;
+      } else {
+        return rejectWithValue("Registration failed");
+      }
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Registration failed"
+      );
     }
-  } catch (error) {
-    return rejectWithValue(error.response?.data?.message || "Registration failed");
   }
-});
+);
 
 // Login User
-export const loginUser = createAsyncThunk("user/login", async (userData, { dispatch, rejectWithValue }) => {
-  try {
-    const response = await axios.post("http://localhost:5000/api/auth/login", userData, { withCredentials: true });
-    dispatch(getProfile()); // ✅ Fetch fresh user data after login
-    return response.data; 
-  } catch (error) {
-    return rejectWithValue(error.response.data.message || "Login failed");
+export const loginUser = createAsyncThunk(
+  "user/login",
+  async (userData, {dispatch, rejectWithValue}) => {
+    try {
+      const response = await api.post("/auth/login", userData);
+      dispatch(getProfile()); // Fetch fresh user data after login
+      // Save user in localStorage
+      localStorage.setItem("userInfo", JSON.stringify(response.data));
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Login failed");
+    }
   }
-});
+);
 
 // Get Profile
-export const getProfile = createAsyncThunk("user/getProfile", async (_, { rejectWithValue }) => {
-  try {
-    const response = await axios.get("http://localhost:5000/api/auth/profile", { withCredentials: true });
-    return response.data; 
-  } catch (error) {
-    return rejectWithValue(error.response.data.message || "Failed to load profile");
+export const getProfile = createAsyncThunk(
+  "user/getProfile",
+  async (_, {rejectWithValue}) => {
+    try {
+      const response = await api.get("/auth/profile");
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to load profile"
+      );
+    }
   }
-});
+);
+
+// Initial state: load user from localStorage if present
+const initialState = {
+  user: JSON.parse(localStorage.getItem("userInfo")) || null,
+  loading: false,
+  error: null,
+};
 
 const userSlice = createSlice({
   name: "user",
-  initialState: { user: null, loading: false, error: null },
+  initialState,
   reducers: {
     logout: (state) => {
       state.user = null;
       state.error = null;
+      localStorage.removeItem("userInfo"); // Remove persisted user
     },
   },
   extraReducers: (builder) => {
@@ -55,7 +81,7 @@ const userSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload; // ✅ Ensure new user is stored
+        state.user = action.payload;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
@@ -79,6 +105,8 @@ const userSlice = createSlice({
       .addCase(getProfile.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
+        // Update localStorage in case profile changed
+        localStorage.setItem("userInfo", JSON.stringify(action.payload));
       })
       .addCase(getProfile.rejected, (state, action) => {
         state.loading = false;
@@ -87,5 +115,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { logout } = userSlice.actions;
+export const {logout} = userSlice.actions;
 export default userSlice.reducer;
