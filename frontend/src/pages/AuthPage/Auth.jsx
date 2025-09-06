@@ -6,7 +6,7 @@ import "../../styles/pages/AuthPage.scss";
 
 const AuthPage = () => {
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.user);
+  const { loading, error, user } = useSelector((state) => state.user); // Get user from Redux
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("login");
   const [userData, setUserData] = useState({ name: "", email: "", password: "" });
@@ -18,7 +18,7 @@ const AuthPage = () => {
     try {
       const result = await dispatch(action(userData)).unwrap();
       if (result) {
-        navigate("/");
+        navigate("/"); // redirect to home page
       }
     } catch (error) {
       console.error("Authentication failed:", error);
@@ -42,8 +42,6 @@ const AuthPage = () => {
         </button>
       </div>
       <div className="auth">
-
-
         <p className="auth__text">Sign in with:</p>
         <div className="auth__socials">
           <i className="auth__icon fab fa-facebook"></i>
@@ -51,9 +49,7 @@ const AuthPage = () => {
           <i className="auth__icon fab fa-twitter"></i>
           <i className="auth__icon fab fa-github"></i>
         </div>
-
         <p className="auth__or">or:</p>
-
         <form className="auth__form" onSubmit={handleSubmit}>
           {activeTab === "register" && (
             <input
@@ -77,7 +73,6 @@ const AuthPage = () => {
             onChange={(e) => setUserData({ ...userData, password: e.target.value })}
             required
           />
-
           <div className="auth__options">
             <label className="auth__checkbox">
               <input type="checkbox" />
@@ -85,20 +80,13 @@ const AuthPage = () => {
             </label>
             <a href="#" className="auth__forgot">Forgot password?</a>
           </div>
-
           {error && <p className="auth__error">{error}</p>}
-
           <button type="submit" className="auth__button" disabled={loading}>
             {loading ? "Processing..." : activeTab === "login" ? "Sign In" : "Register"}
           </button>
         </form>
-
         <p className="auth__register">
-          Not a member?     <a style={{ cursor: "pointer" }}
-            onClick={() => setActiveTab("register")}
-          >
-            Register
-          </a>
+          Not a member? <a style={{ cursor: "pointer" }} onClick={() => setActiveTab("register")}>Register</a>
         </p>
       </div>
     </div>

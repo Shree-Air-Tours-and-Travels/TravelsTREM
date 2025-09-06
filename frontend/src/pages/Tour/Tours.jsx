@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SearchBar from "../../components/SEO/searchBar";
 import Title from "../../stories/Title";
-import TourPackages from "../../Featured/tourPackages";
+import TourPackages from "../../featured/tourPackages";
 import "../../styles/pages/tours.scss";
 import Button from "../../stories/Button";
 
