@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import tourRoutes from "./routes/tourRoutes.js";
+import heroRoutes from "./routes/heroRoutes.js";
 
 
 const app = express();
@@ -32,6 +33,8 @@ app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/tours", tourRoutes);
+app.use("/api/hero", heroRoutes);
+
 
 connectDB().then(() => {
   app.listen(5000, () => console.log("🚀 Server running on port 5000"));

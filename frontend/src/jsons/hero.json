@@ -1,0 +1,15 @@
+{
+  "success": true,
+  "message": "Hero content fetched successfully",
+  "data": {
+    "title": "Traveling opens the door to creating",
+    "highlight": "memories",
+    "description": "Discover the world with TravelsTREM...",
+    "buttonText": "Explore Now",
+    "images": {
+      "main": "hero-main.jpg",
+      "gallery": ["img1.jpg", "img2.jpg"],
+      "video": "hero-video.mp4"
+    }
+  }
+}

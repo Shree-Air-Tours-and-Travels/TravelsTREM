@@ -18,6 +18,10 @@
   }
 
   &__logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
     a {
       font-size: $font-size-xxl;
       font-weight: $font-bold;
@@ -63,7 +67,7 @@
         position: relative;
 
         &::after {
-          content: '';
+          content: "";
           position: absolute;
           bottom: -5px;
           left: 0;
