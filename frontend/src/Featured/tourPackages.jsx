@@ -7,6 +7,7 @@ import { calculateAverageRating } from "../utils/calculateRating"; // Import uti
 import "../styles/layout/tourPackages.scss";
 import Title from "../stories/Title";
 import axios from "axios";
+import api from "../utils/api";
 
 const TourPackages = () => {
     // Header content for the tour packages section
@@ -20,7 +21,7 @@ const TourPackages = () => {
 
     // Fetch tours from backend or use static data
     useEffect(() => {
-        axios.get("http://localhost:5000/api/tours").then(res => {
+        api.get("/tours").then(res => {
             setTours(res.data);
         }).catch(err => console.log("Error fetching tours:", err));
     }, []);
