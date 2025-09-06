@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { calculateAverageRating } from "../utils/calculateRating"; // Import utility function
 
 import "../styles/layout/tourPackages.scss";
+import Title from "../stories/Title";
 
 const TourPackages = () => {
   const headerContent = {
@@ -22,7 +23,7 @@ const TourPackages = () => {
   return (
     <>
       <div className="ui-tour__header">
-        <h2 className="ui-tour__title">{headerContent.title}</h2>
+        <Title className="ui-tour__title" text={headerContent.title} />
         <p className="ui-tour__description">{headerContent.description}</p>
       </div>
       <div className="ui-tour__packages">

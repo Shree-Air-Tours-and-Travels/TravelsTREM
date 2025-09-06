@@ -1,31 +1,33 @@
 import React from "react";
 import "../styles/layout/serviceList.scss";
-import weatherImg from "../assets/images/weather.png"; 
-import guideImg from "../assets/images/guide.png";
-import customizeImg from "../assets/images/user.png";
+import flightsHotelsImg from "../assets/images/flights-hotel.png"; 
+import travelPackagesImg from "../assets/images/guide.png";
+import visaPassportImg from "../assets/images/visa.png";
 import ServiceCard from "../components/Cards/serviceCard";
+import Title from "../stories/Title";
+
 
 const serviceData = {
   title: "Our Services",
-  description: "Explore our top-notch travel services designed to make your journey smooth and unforgettable.",
+  description: "We offer a complete range of travel solutions to make your journey hassle-free and memorable.",
   services: [
     {
-      id: "weather",
-      label: "Calculate Weather",
-      description: "Get real-time weather updates for your destination.",
-      image: weatherImg,
+      id: "flights-hotels",
+      label: "Flights & Hotels",
+      description: "Book the best deals on domestic and international flights and comfortable hotel stays worldwide.",
+      image: flightsHotelsImg, // Replace with the correct image variable
     },
     {
-      id: "guide",
-      label: "Best Tour Guide",
-      description: "Connect with the best local tour guides for an amazing experience.",
-      image: guideImg,
+      id: "travel-packages",
+      label: "Travel Packages",
+      description: "Explore our curated domestic and international travel packages for every kind of traveler.",
+      image: travelPackagesImg, // Replace with the correct image variable
     },
     {
-      id: "customization",
-      label: "Customization",
-      description: "Tailor your travel experience to your preferences.",
-      image: customizeImg,
+      id: "visa-passport",
+      label: "Visa & Passport Assistance",
+      description: "Get expert assistance for your visa applications and passport-related services.",
+      image: visaPassportImg, // Replace with the correct image variable
     },
   ],
 };
@@ -36,7 +38,7 @@ const ServiceList = () => {
       <div className="ui-service__container">
         {/* Left Section: Title & Description */}
         <div className="ui-service__intro">
-          <h2 className="ui-service__intro-title">{serviceData.title}</h2>
+          <Title className="ui-service__intro-title" text={serviceData.title}/>
           <p className="ui-service__intro-description">{serviceData.description}</p>
         </div>
 

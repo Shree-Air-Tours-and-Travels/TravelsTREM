@@ -12,21 +12,22 @@ import Button from "../../stories/Button";
 import Experience from "../../Services/experience";
 import Gallery from "../../components/galary/galary";
 import Reviews from "../../Services/review";
-const header = {
-  buttonText: "Know Before You Go",
-  title: "Traveling opens the door to creating",
-  highlight: "memories",
-  description:
-    "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ullam ipsum nobis asperiores soluta voluptas quas voluptates. Molestiae tempora dignissimos, animi praesentium molestias porro expedita delectus. Soluta natus porro.",
-  images: {
-    main: mainImage,
-    gallery: [img1, img2],
-    video: videoSrc,
-  },
-};
+import { upperFirst } from "lodash";
 
-const Home = () => {
 
+const Home = ({user}) => {
+  const header = {
+    buttonText: `Welcome, ${upperFirst((user?.name))}` || "Explore Now",
+    title: "Traveling opens the door to creating",
+    highlight: "memories",
+    description:
+      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ullam ipsum nobis asperiores soluta voluptas quas voluptates. Molestiae tempora dignissimos, animi praesentium molestias porro expedita delectus. Soluta natus porro.",
+    images: {
+      main: mainImage,
+      gallery: [img1, img2],
+      video: videoSrc,
+    },
+  };
 
   return (
       <div className="ui-home">
@@ -39,7 +40,7 @@ const Home = () => {
                 <Button className="ui-home__main__hero__cta__button" 
                   text={header.buttonText}
                   variant="outline"
-                  size="extra-small"  
+                  size="medium"  
                   color="primary"
                   isCircular={false}
                   onClick={() => console.log("Button clicked!")}
@@ -75,7 +76,7 @@ const Home = () => {
 
         {/* { <!-- main Section -->} */}
       <section className="ui-home__explore">
-        <SearchBar />
+        {/* <SearchBar /> */}
         <ServiceList />
         <TourPackages/>
         <Experience />

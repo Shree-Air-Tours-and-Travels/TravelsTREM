@@ -1,0 +1,67 @@
+@import "../../styles/base/typography"; // Ensure this file contains your typography theme variables
+
+.ui-tours {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    background-color: $bg-secondary;
+  
+    &__title {
+      font-size: $font-size-xxl;
+      font-weight: $font-bold;
+      color: $primary-color;
+      margin-bottom: 0.5rem;
+    }
+  
+    &__highlight {
+      font-size: $font-size-xxl;
+      font-weight: $font-bold;
+      color: $accent-color;
+    }
+  
+    &__search-bar {
+      width: 100%;
+      max-width: 600px;
+      margin: 1.5rem 0;
+    }
+  
+    &__pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2rem;
+  
+      &__button {
+        font-size: $font-size-md;
+        font-weight: $font-semibold;
+        padding: 0.5rem 1rem;
+        border: 1px solid $border-color;
+        border-radius: 5px;
+        background-color: $primary-color;
+        color: $text-light;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        margin: 0 0.5rem;
+  
+        &:hover {
+          background-color: darken($primary-color, 10%);
+        }
+  
+        &:disabled {
+          background-color: $light-gray;
+          color: $text-secondary;
+          cursor: not-allowed;
+        }
+      }
+  
+      &__current-page {
+        font-size: $font-size-lg;
+        font-weight: $font-semibold;
+        color: $text-primary;
+        margin: 0 1rem;
+      }
+    }
+  }
+  

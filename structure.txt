@@ -22,7 +22,7 @@ If valid, the backend generates a JWT (JSON Web Token) and sends it to the front
 
 The frontend stores the token (e.g., in localStorage or Redux) and uses it for authentication.
 
-
+Shop Number-105, Ground Floor, Shalimar Complex, Church Road, M I Road, Jaipur - 302001, Opposite Church,Near Om Tower
 
 
 my-mern-website/
