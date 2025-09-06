@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import tourData from "../../assets/data/tours.js";
+// import tourData from "../../../../backend/utils/dummy data's/tours.js";
 import "../../styles/pages/tourDetails.scss";
 import { find } from "lodash";
 const TourDetails = () => {
@@ -12,7 +12,7 @@ const TourDetails = () => {
   const serviceCharge = 10;
 
   useEffect(() => {
-    const foundTour =find( tourData,tour => tour.id === id);
+    const foundTour =find( [],tour => tour.id === id);
     if (foundTour) {
       setTour(foundTour);
       setReviews(foundTour.reviews || []);
