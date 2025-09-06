@@ -22,6 +22,7 @@ const Header = () => {
         <header className="ui-header">
             <div className="ui-header__container">
                 <div className="ui-header__logo">
+                    <img src="/hero-images/logo-main.png" style={{ width: "30px", height: "30px" }} alt="TravelsTREM Logo" className="ui-header__logo-image" />
                     <NavLink to="/" className={({ isActive }) => (isActive ? "active" : "")}>
                         TravelsTREM
                     </NavLink>
@@ -32,7 +33,7 @@ const Header = () => {
                             <NavLink to="/" className={({ isActive }) => (isActive ? "active" : "")}>Home</NavLink>
                         </li>
                         <li>
-                            <NavLink to="/tours" className={({ isActive }) => (isActive ? "active" : "")}>Tour</NavLink>
+                            <NavLink to="/tours" className={({ isActive }) => (isActive ? "active" : "")}>Packages</NavLink>
                         </li>
                         <li>
                             <NavLink to="/about" className={({ isActive }) => (isActive ? "active" : "")}>About</NavLink>

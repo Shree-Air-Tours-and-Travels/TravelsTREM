@@ -6,8 +6,9 @@ import { calculateAverageRating } from "../utils/calculateRating"; // Import uti
 
 import "../styles/layout/tourPackages.scss";
 import Title from "../stories/Title";
-import axios from "axios";
 import api from "../utils/api";
+import { useState } from "react";
+import Loader from "../components/Loader/Loader";
 
 const TourPackages = () => {
     // Header content for the tour packages section
@@ -17,15 +18,24 @@ const TourPackages = () => {
     };
 
     // State to hold the list of tours
-    const [tours, setTours] = React.useState([]);
+    const [tours, setTours] = useState([]);
+    // State to manage loading state
+    const [loading, setLoading] = useState(false);
 
-    // Fetch tours from backend or use static data
+    // Fetch tours from the backend API on component mount
     useEffect(() => {
-        api.get("/tours").then(res => {
-            setTours(res.data);
-        }).catch(err => console.log("Error fetching tours:", err));
+        setLoading(true); // start loader
+        api.get("/tours")
+            .then((res) => {
+                setTours(res.data);
+            })
+            .catch((err) => console.log("Error fetching tours:", err))
+            .finally(() => setLoading(false)); // stop loader
     }, []);
-    console.log("Tours state:", tours);
+
+    if (loading) return <Loader />;
+
+
 
     // Render the tour packages section
     return (
