@@ -8,12 +8,14 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import tourRoutes from "./routes/tourRoutes.js";
 import heroRoutes from "./routes/heroRoutes.js";
+import serviceRoutes from "./routes/serviceRoutes.js";
+
 
 
 const app = express();
 
 // ✅ Fix: Allow multiple frontend origins
-const allowedOrigins = ["http://localhost:3000", "http://localhost:5173"];
+const allowedOrigins = ["http://localhost:3000", "http://localhost:5173", "http://localhost:3002"];
 
 app.use(
   cors({
@@ -34,6 +36,7 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/tours", tourRoutes);
 app.use("/api/hero", heroRoutes);
+app.use("/api/services", serviceRoutes);
 
 
 connectDB().then(() => {
