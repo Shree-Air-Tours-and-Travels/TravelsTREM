@@ -56,7 +56,7 @@ const TourCard = ({ tour }) => {
                 <Button
                     className="ui-tour-card__button"
                     text="Book Now"
-                    variant="outline"
+                    variant="solid"
                     onClick={handleClick}
                 />
             </div>

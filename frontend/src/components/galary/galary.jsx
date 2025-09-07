@@ -16,10 +16,10 @@ const defaultImages = [img1, img2, img3, img4, img5];
 const Gallery = ({
     images = defaultImages,
     title = "Gallery",
+    color = {color},
     subtitle = "Capturing the essence of unforgettable journeys",
     autoPlay = false,
     autoPlayInterval = 4000,
-    showIndicators = true,
 }) => {
     const imgs = Array.isArray(images) && images.length ? images : defaultImages;
     const [index, setIndex] = useState(0);
@@ -73,7 +73,7 @@ const Gallery = ({
         };
         window.addEventListener("keydown", onKey);
         return () => window.removeEventListener("keydown", onKey);
-    }, [imgs.length]);
+    }, [imgs.length, ]);
 
     if (!imgs || imgs.length === 0) return null;
 
@@ -92,14 +92,15 @@ const Gallery = ({
             }}
         >
             <div className="ui-gallery__header">
-                <Title text={title} className="ui-gallery__title" />
-                <SubTitle className="ui-gallery__subtitle">{subtitle}</SubTitle>
+                <Title text={title} className="ui-gallery__title" color={color}/>
+                <SubTitle className="ui-gallery__subtitle" color={color} >{subtitle}</SubTitle>
             </div>
 
             <div className="ui-gallery__container">
                 <button
                     aria-label="Previous slide"
                     className="ui-gallery__arrow ui-gallery__arrow--left"
+                    style={{color : color}}
                     onClick={prevSlide}
                 >
                     <FaChevronLeft />
@@ -140,25 +141,12 @@ const Gallery = ({
                 <button
                     aria-label="Next slide"
                     className="ui-gallery__arrow ui-gallery__arrow--right"
+                    style={{color : color}}
                     onClick={nextSlide}
                 >
                     <FaChevronRight />
                 </button>
             </div>
-
-            {/* indicators */}
-            {showIndicators && (
-                <div className="ui-gallery__indicators">
-                    {imgs.map((_, i) => (
-                        <button
-                            key={i}
-                            aria-label={`Go to slide ${i + 1}`}
-                            className={`ui-gallery__dot ${i === index ? "ui-gallery__dot--active" : ""}`}
-                            onClick={() => setIndex(i)}
-                        />
-                    ))}
-                </div>
-            )}
         </section>
     );
 };

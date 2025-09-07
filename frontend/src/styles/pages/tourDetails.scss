@@ -4,18 +4,21 @@
 .ui-tour-details {
   width: 100%;
   min-height: 60vh;
-  background: $bg-secondary;
   padding: 2rem;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   align-items: center;
+  background: rgba($color: $primary-color, $alpha: 1);
+
 
   &__main {
     width: 100%;
     max-width: 1200px;
-    padding: 0 1.25rem;
+    padding: 1.25rem;
+    background: white;
+    border-radius: 1rem;
 
     &__info {
       display: flex;

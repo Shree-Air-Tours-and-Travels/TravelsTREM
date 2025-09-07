@@ -15,12 +15,29 @@ const reviewSchema = new mongoose.Schema({
   comment: {type: String, default: ""},
 });
 
+const periodSchema = new mongoose.Schema(
+  {
+    days: {
+      type: Number,
+      required: true,
+      min: 1, // at least 1 day
+    },
+    nights: {
+      type: Number,
+      required: true,
+      min: 0, // nights can be 0 (like a day trip)
+    },
+  },
+  {_id: false} // don’t create separate _id for period
+);
+
 const tourSchema = new mongoose.Schema(
   {
     title: {type: String, required: true, unique: true},
     city: {type: String, required: true},
     address: {type: addressSchema, required: true},
     distance: {type: Number, required: true},
+    period: { type: periodSchema, required: true },
     // Backwards-compatible single photo (optional)
     photo: {type: String},
     // Preferred field: array of photo URLs

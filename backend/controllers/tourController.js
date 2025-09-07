@@ -9,7 +9,7 @@ export const getTours = async (req, res) => {
       status: "success",
       message: "Tours fetched successfully",
       componentData: {
-        title: "Our Tour Packages",
+        title: "Our Popular Tour Packages",
         description:
           "Explore curated tours across stunning destinations with flexible packages and memorable experiences.",
         data: tours,

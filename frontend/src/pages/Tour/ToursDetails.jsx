@@ -9,6 +9,7 @@ import SummaryCard from "../../components/cards/Summary/summaryCard.jsx"
 
 const TourDetails = () => {
     const { id } = useParams();
+    const sumamryData = []
 
     // transform: turn componentData into a single tour object
     const transform = useCallback((componentData) => {
@@ -29,7 +30,7 @@ const TourDetails = () => {
     // endpoint includes id (string), that's fine
     const endpoint = `/tours/${id}`;
 
-    const { loading, error, componentData: tour, refetch } = useComponentData(endpoint, {
+    const { loading, error, componentData: tour } = useComponentData(endpoint, {
         auto: true,
         transform,
     });
@@ -44,6 +45,7 @@ const TourDetails = () => {
             <Gallery
                 images={tour.photos}
                 title={tour.title}
+                color={"white"}
                 subtitle={tour.city ? `Explore ${tour.city}` : "Explore the destination"}
                 autoPlay={false}
                 showIndicators={true}
@@ -56,7 +58,7 @@ const TourDetails = () => {
                         <InfoCard tour={tour} />
                     </div>
                     <div className="ui-tour-details__main__info--info-right">
-                        <SummaryCard tour={tour} />
+                        <SummaryCard tour={tour} data = {sumamryData} />
                     </div>
                 </section>
 
