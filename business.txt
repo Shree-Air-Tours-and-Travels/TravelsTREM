@@ -3,6 +3,8 @@ TravelsTREM — a comprehensive tours and travel website offering domestic & int
               Business Analyst/Product Owner to help you define:
 
 T.R.E.M. = Travel, Reservation, Experience & Management
+
+https://chatgpt.com/share/686d5c67-28c0-8003-a6d7-12b0b5485cbf // Chat gpt link
 ⸻
 :rocket: TravelsTREM: Feature & Service Breakdown
 ⸻
