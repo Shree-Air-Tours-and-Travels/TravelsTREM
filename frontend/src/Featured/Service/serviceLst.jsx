@@ -1,50 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./serviceList.scss";
-import { fetchData } from "../../utils/fetchData";
 import Title from "../../stories/Title";
 import SubTitle from "../../stories/SubTitle";
-import ServiceCard from "../../components/Cards/serviceCard";
+import Loader from "../../components/Loader/Loader";
+import useComponentData from "../../hooks/useComponentData";
+import ServiceCard from "../../components/cards/serviceCard";
+
 
 const ServiceList = () => {
-    const [state, setState] = useState({
-        loading: true,
-        error: null,
-        componentData: {
-            title: "",
-            description: "",
-            data: [],
-            structure: {},
-            config: {},
-        },
-    });
+    const { loading, error, componentData } = useComponentData("/services");
 
-    useEffect(() => {
-        const getServices = async () => {
-            setState((prev) => ({ ...prev, loading: true }));
 
-            const response = await fetchData("/services");
-
-            if (response.status === "success") {
-                setState({
-                    loading: false,
-                    error: null,
-                    componentData: response.componentData,
-                });
-            } else {
-                setState({
-                    loading: false,
-                    error: response.message,
-                    componentData: response.componentData,
-                });
-            }
-        };
-
-        getServices();
-    }, []);
-
-    const { loading, error, componentData } = state;
-
-    if (loading) return <p>Loading services...</p>;
+    if (loading) return <Loader />;
     if (error) return <p>{error}</p>;
     if (!componentData?.data?.length) return <p>No services available</p>;
 
