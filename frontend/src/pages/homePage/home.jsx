@@ -1,11 +1,11 @@
 import React from "react";
 import HeroSection from "../../featured/Hero/heroSection";
-import ServiceList from "../../Services/serviceLst";
 import TourPackages from "../../featured/tourPackages";
-import Experience from "../../Services/experience";
+import Experience from "../../featured/experience";
 import Gallery from "../../components/galary/galary";
-import Reviews from "../../Services/review";
+import Reviews from "../../featured/review";
 import "../../styles/pages/home.scss";
+import ServiceList from "../../featured/Service/serviceLst";
 
 const Home = ({ user }) => {
   return (

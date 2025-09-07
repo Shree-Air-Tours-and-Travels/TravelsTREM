@@ -84,3 +84,19 @@ git branch -m production release
 git fetch origin
 git branch -u origin/release release
 git remote set-head origin -a
+
+
+
+// JSONS pattern
+
+{
+  "status": "success" | "error",
+  "message": "text message",
+  "componentData": {
+    "title": "string",              // always present
+    "description": "string",        // always present
+    "data": [],                     // for dynamic DB-fetched data
+    "structure": {},                // for static things (UI structure, defaults, etc.)
+    "config": {}                    // for any extra settings or metadata
+  }
+}
