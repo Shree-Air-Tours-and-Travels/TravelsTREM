@@ -1,0 +1,39 @@
+{
+    "status": "success",
+    "message": "Tour fetched successfully",
+    "componentData": {
+        "title": "Holmen Lofoten, France",
+        "description": "this is the description",
+        "data": [
+            {
+                "photo": [],
+                "_id": "68bd69bd12b342a4df6eaff4",
+                "title": "Holmen Lofoten, France",
+                "city": "Paris",
+                "address": {
+                    "line1": "Somewhere in France",
+                    "line2": "",
+                    "city": "Paris",
+                    "state": "Paris",
+                    "zip": "00000",
+                    "country": "France",
+                    "_id": "68bd69bd12b342a4df6eaff5"
+                },
+                "distance": 500,
+                "photos": [
+                    "/tour-images/tour-img07.jpg"
+                ],
+                "desc": "this is the description",
+                "price": 99,
+                "maxGroupSize": 8,
+                "reviews": [],
+                "featured": true,
+                "__v": 0,
+                "createdAt": "2025-09-07T11:17:17.141Z",
+                "updatedAt": "2025-09-07T11:17:17.141Z"
+            }
+        ],
+        "structure": {},
+        "config": {}
+    }
+}

@@ -1,19 +1,24 @@
-// seed.js
 import dotenv from "dotenv";
-dotenv.config();
 import connectDB from "./config/db.js";
 import Tour from "./models/Tour.js";
 import tours from "./utils/dummydata/tours.js";
 
+dotenv.config();
+
 const seedTours = async () => {
   try {
-    await connectDB(); // ✅ use same db.js
+    await connectDB();
+
+    // Clear existing tours
     await Tour.deleteMany();
-    await Tour.insertMany(tours);
-    console.log("✅ Tours seeded!");
+
+    // Insert dummy tours
+    const createdTours = await Tour.insertMany(tours);
+
+    console.log(`✅ Seeded ${createdTours.length} tours`);
     process.exit();
-  } catch (err) {
-    console.error("❌ Error seeding tours:", err);
+  } catch (error) {
+    console.error("❌ Error seeding tours:", error.message);
     process.exit(1);
   }
 };

@@ -1,128 +1,67 @@
-import React, { useState, useEffect } from "react";
-import "../../styles/pages/tourDetails.scss";
-import axios from "axios";
+// src/pages/tours/TourDetails.jsx
+import React, { useCallback } from "react";
 import { useParams } from "react-router-dom";
-import api from "../../utils/api";
+import useComponentData from "../../hooks/useComponentData";
+import "../../styles/pages/tourDetails.scss"; // ensure this file exists
+import Gallery from "../../components/galary/galary";
+import InfoCard from "../../components/cards/Info/infoCard"
+import SummaryCard from "../../components/cards/Summary/summaryCard.jsx"
 
 const TourDetails = () => {
-    const { id } = useParams(); // ✅ grab ID from route
-    const [tour, setTour] = useState(null);
-    const [reviews, setReviews] = useState([]);
-    const [newReview, setNewReview] = useState({ name: "", rating: "", comment: "" });
-    const [guestCount, setGuestCount] = useState(1);
-    const serviceCharge = 10;
+    const { id } = useParams();
+    const sumamryData = []
 
-    useEffect(() => {
-        console.log("Fetching tour with id:", id);
-        const fetchTour = async () => {
-            try {
-                const res = await api.get(`/tours/${id}`);
-                setTour(res.data);
-            } catch (err) {
-                console.error(err);
-            }
-        };
+    // transform: turn componentData into a single tour object
+    const transform = useCallback((componentData) => {
+        const candidate =
+            componentData && Array.isArray(componentData.data) && componentData.data.length
+                ? componentData.data[0]
+                : componentData;
 
-        fetchTour();
-    }, [id]);
+        if (!candidate) return null;
 
-    // Normalize address display
-    const displayAddress = (address) => {
-        if (typeof address === "string") return address;
-        return `${address.line1}, ${address.city}, ${address.country}`;
-    };
-
-    const totalPrice = tour ? tour.price * guestCount + serviceCharge : 0;
-
-    const handleReviewSubmit = (e) => {
-        e.preventDefault();
-        if (newReview.name && newReview.rating && newReview.comment) {
-            setReviews([...reviews, newReview]);
-            setNewReview({ name: "", rating: "", comment: "" });
+        if ((!candidate.photos || candidate.photos.length === 0) && candidate.photo) {
+            candidate.photos = [candidate.photo];
         }
-    };
 
-    if (!tour) return <div>Loading tour details...</div>; // ✅ now only until fetch finishes
+        return candidate;
+    }, []);
+
+    // endpoint includes id (string), that's fine
+    const endpoint = `/tours/${id}`;
+
+    const { loading, error, componentData: tour } = useComponentData(endpoint, {
+        auto: true,
+        transform,
+    });
+
+    if (loading) return <div className="ui-loader">Loading tour...</div>;
+    if (error) return <div className="ui-error">{typeof error === "string" ? error : "Failed to load tour"}</div>;
+    if (!tour) return <div className="ui-error">Tour not found</div>;
 
     return (
-        <div className="tour-details">
-            {/* Image & Info Container */}
-            <div className="tour-details__container">
-                <div className="tour-details__image">
-                    <img src={tour.photo} alt="Tour" />
-                </div>
+        <div className="ui-tour-details">
+            {/* SECTION 1: Photos */}
+            <Gallery
+                images={tour.photos}
+                title={tour.title}
+                color={"white"}
+                subtitle={tour.city ? `Explore ${tour.city}` : "Explore the destination"}
+                autoPlay={false}
+                showIndicators={true}
+            />
 
-                <div className="tour-details__info">
-                    <h2>{tour.title}</h2>
-                    <p><span>📍</span> {tour.city}</p>
-                    <p><span>📌</span> {displayAddress(tour.address)}</p>
-                    <p><span>⏳</span> {tour.distance} km away</p>
-                    <p><span>👥</span> Max {tour.maxGroupSize} People</p>
-                    <p><span>💲</span> ${tour.price} per person</p>
-                    <p>{tour.desc}</p>
-                </div>
-            </div>
+            <div className="ui-tour-details__main">
+                {/* SECTION 2: Info */}
+                <section className="ui-tour-details__main__info">
+                    <div className="ui-tour-details__main__info--info-left">
+                        <InfoCard tour={tour} />
+                    </div>
+                    <div className="ui-tour-details__main__info--info-right">
+                        <SummaryCard tour={tour} data = {sumamryData} />
+                    </div>
+                </section>
 
-            {/* Reviews & Booking */}
-            <div className="tour-details__container">
-                {/* Reviews */}
-                <div className="tour-details__reviews">
-                    <h3>Reviews ({reviews.length})</h3>
-                    <ul>
-                        {reviews.map((review, index) => (
-                            <li key={index}>
-                                <strong>{review.name}</strong> - ⭐ {review.rating}
-                            </li>
-                        ))}
-                    </ul>
-
-                    <form onSubmit={handleReviewSubmit} className="review-form">
-                        <input
-                            type="text"
-                            placeholder="Your Name"
-                            value={newReview.name}
-                            onChange={(e) => setNewReview({ ...newReview, name: e.target.value })}
-                            required
-                        />
-                        <select
-                            value={newReview.rating}
-                            onChange={(e) => setNewReview({ ...newReview, rating: e.target.value })}
-                            required
-                        >
-                            <option value="">Rate the tour</option>
-                            {[1, 2, 3, 4, 5].map((num) => (
-                                <option key={num} value={num}>{num} Star</option>
-                            ))}
-                        </select>
-                        <textarea
-                            placeholder="Your Review"
-                            value={newReview.comment}
-                            onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
-                            required
-                        />
-                        <button type="submit">Submit Review</button>
-                    </form>
-                </div>
-
-                {/* Booking Form */}
-                <div className="tour-details__booking">
-                    <h3>Book This Tour</h3>
-                    <form>
-                        <input type="text" placeholder="Full Name" required />
-                        <input type="tel" placeholder="Phone Number" required />
-                        <input type="date" placeholder="Start Date" required />
-                        <input type="date" placeholder="End Date" required />
-                        <input
-                            type="number"
-                            min="1"
-                            max="10"
-                            value={guestCount}
-                            onChange={(e) => setGuestCount(e.target.value)}
-                        />
-                        <p>Total Price: ${totalPrice}</p>
-                        <button type="submit">Book Now</button>
-                    </form>
-                </div>
             </div>
         </div>
     );

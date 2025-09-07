@@ -1,0 +1,96 @@
+/* src/styles/components/infoCard.scss */
+@import "../../../styles/base/typography";
+
+/* Info card: left side of tour details */
+.info-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  &__title {
+    /* extend the h2 element rules from typography */
+    @extend h2;
+    margin: 0;
+    /* strengthen weight if needed */
+    @extend .font-bold;
+    color: $text-dark;
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .rating {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      .rating-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        background: linear-gradient(90deg, $accent-color, darken($accent-color, 6%));
+        color: $white-color;
+        padding: 0.28rem 0.55rem;
+        border-radius: 999px;
+        @extend .font-medium;
+        font-size: $font-size-sm;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+      }
+
+      .muted {
+        color: $text-secondary;
+        font-size: $font-size-sm;
+      }
+    }
+
+    .chips {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+
+      .chip {
+        background: $light-color;
+        padding: 0.25rem 0.6rem;
+        border-radius: 999px;
+        @extend .font-medium;
+        font-size: $font-size-sm;
+        color: $text-dark;
+      }
+
+      .chip--price {
+        background: lighten($accent-color, 40%);
+        color: $primary-color;
+        @extend .font-bold;
+      }
+    }
+  }
+
+  &__address {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+
+    .address-icon {
+      color: $danger-color;
+      font-size: $font-size-md;
+      margin-top: 3px;
+    }
+
+    .address-text {
+      .address-main {
+        @extend .font-medium;
+        font-size: $font-size-md;
+        color: $text-dark;
+      }
+
+      .address-sub {
+        color: $text-secondary;
+        font-size: $font-size-sm;
+      }
+    }
+  }
+}

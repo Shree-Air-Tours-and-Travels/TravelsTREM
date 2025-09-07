@@ -2,7 +2,7 @@ import React from "react";
 import "../styles/layout/experience.scss";
 import { FaSuitcaseRolling } from "react-icons/fa";
 import { IoPeopleSharp } from "react-icons/io5";
-import { MdOutlineWorkspacePremium, MdTitle } from "react-icons/md";
+import { MdOutlineWorkspacePremium } from "react-icons/md";
 import Title from "../stories/Title";
 import experienceImage from "../assets/images/experience.png"; // Import the image
 
