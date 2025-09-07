@@ -71,7 +71,7 @@ export const getServices = async (req, res) => {
           config: {},
         },
       });
-    }, 1000);
+    }, 3000);
   } catch (err) {
     res.status(500).json({
       status: "error",

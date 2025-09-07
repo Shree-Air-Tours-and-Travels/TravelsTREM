@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../../styles/components/searchBar.scss";
-import SearchBarCard from "../Cards/searchBarCard";
+import SearchBarCard from "../cards/searchBarCard";
 
 const searchData = {
   fields: [
