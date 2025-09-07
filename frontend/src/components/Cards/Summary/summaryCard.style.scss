@@ -1,0 +1,71 @@
+/* src/styles/components/summaryCard.scss */
+@import "../../../styles/base/typography";
+
+.summary-card {
+  width: 100%;
+  border-radius: 10px;
+  padding: 1rem;
+  background: linear-gradient(180deg, $bg-primary, $bg-primary);
+  border: 1px solid $light-gray;
+  box-shadow: 0 8px 20px rgba(8, 15, 30, 0.04);
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.45rem 0;
+    border-bottom: 1px dashed rgba($border-color, 0.6);
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+
+    .summary-label {
+      color: $text-secondary;
+      font-size: $font-size-sm;
+      @extend .font-regular;
+    }
+
+    .summary-value {
+      @extend .font-medium;
+      font-size: $font-size-md;
+      color: $text-dark;
+    }
+  }
+
+  .summary-actions {
+    margin-top: 0.85rem;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: stretch;
+
+    .btn {
+      flex: 1;
+      padding: 0.55rem 0.6rem;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.18s ease;
+      @extend .font-medium;
+      font-size: $font-size-sm;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, $info-color, $primary-color);
+      color: $white-color;
+
+      &:hover {
+        opacity: 0.96;
+      }
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: $text-dark;
+      border-color: rgba($border-color, 0.7);
+
+      &:hover {
+        background: $bg-secondary;
+      }
+    }
+  }
+}

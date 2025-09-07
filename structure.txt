@@ -100,3 +100,9 @@ git remote set-head origin -a
     "config": {}                    // for any extra settings or metadata
   }
 }
+
+
+
+
+// TODO: 
+Here leave these points, now till yet things are working fine. Now I want to create a tour's details page, which consists of 4 section. 1st: pictures of the destination or photos 2nd: info of place and price, and time period of package and number of people a package is desiged for and etc 3rd: review section [which shows existing reiviews and user can also enter its review which can be stored in the db] 4th: booking form, which includes [user name, num of people, when to go, when to come, phone number, Gmail, button for submit or contact agent ] Keep the 4th point json different and will work on it seprately one all 3 above points are done. we have these 4 tasks for next, i can go to my tour details page when i click on the book now button from the home page tour card. it takes me to /tours/:{id} and there i want to render these 4 sections so we will go one by one here. i hope you under stand the requirement and i am sending you json i recieve from BE for particular tour.
