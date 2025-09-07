@@ -16,10 +16,10 @@ const Home = ({ user }) => {
             {/* Explore Section */}
             <section className="ui-home__explore">
                 <ServiceList />
-                <TourPackages />
-                {/* <Experience />
-                <Gallery />
-                <Reviews /> */}
+                <TourPackages user ={user} />
+                {/* <Experience /> */}
+                {/* <Gallery /> */}
+                {/* <Reviews /> */}
             </section>
         </div>
     );

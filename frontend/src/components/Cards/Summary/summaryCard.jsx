@@ -1,42 +1,59 @@
 // src/components/cards/SummaryCard.jsx
 import React from "react";
 import "./summaryCard.style.scss";
+import SubTitle from "../../../stories/SubTitle";
+import Title from "../../../stories/Title";
+import Button from "../../../stories/Button";
+import _ from "lodash";
 
-const SummaryCard = ({ tour }) => {
-  if (!tour) return null;
+const SummaryCard = ({ tour, onBook, onContact }) => {
+    if (!tour) return null;
+    console.log(tour, "summary")
+    const period = `${_.get(tour, "period.days", null)}d ${_.get(tour, "period.nights", null)}n`
+    const price = _.get(tour, "price", null)
+    return (
+        <div className="summary-card">
+            <div className="summary-row">
+                <SubTitle text="Duration" variant="tertiary" size="small" />
+                <Title text={period} variant="primary" size="medium" />
+            </div>
 
-  const period =
-    tour.period ||
-    (tour.durationDays && tour.durationNights ? `${tour.durationDays}d ${tour.durationNights}n` : null) ||
-    (tour.durationDays ? `${tour.durationDays}d` : null) ||
-    (tour.duration ? `${tour.duration}` : null);
+            <div className="summary-row">
+                <SubTitle text="People" variant="tertiary" size="small" />
+                <Title
+                    text={typeof tour.maxGroupSize !== "undefined" ? tour.maxGroupSize : "—"}
+                    variant="primary"
+                    size="medium"
+                />
+            </div>
 
-  const avgRating = Array.isArray(tour.reviews) && tour.reviews.length
-    ? (tour.reviews.reduce((s, r) => s + (Number(r.rating) || 0), 0) / tour.reviews.length).toFixed(1)
-    : tour.rating
-    ? Number(tour.rating).toFixed(1)
-    : "—";
+            <div className="summary-row">
+                <SubTitle text="Price" variant="tertiary" size="small" />
+                 <Title
+                    text={`$${tour.price}`}
+                    variant="primary"
+                    size="medium"
+                />
+            </div>
 
-  return (
-    <div className="summary-card">
-      <div className="summary-row">
-        <span className="summary-label">Duration</span>
-        <span className="summary-value">{period || "—"}</span>
-      </div>
-      <div className="summary-row">
-        <span className="summary-label">People</span>
-        <span className="summary-value">{tour.maxGroupSize ?? "—"}</span>
-      </div>
-      <div className="summary-row">
-        <span className="summary-label">Rating</span>
-        <span className="summary-value">{avgRating}</span>
-      </div>
-      <div className="summary-actions">
-        <button className="btn btn-primary">Book Now</button>
-        <button className="btn btn-outline">Contact</button>
-      </div>
-    </div>
-  );
+            <div className="summary-actions">
+                <Button
+                    text="Book Now"
+                    size="medium"
+                    variant="solid"
+                    color="primary"
+                    onClick={onBook ?? (() => { })}
+                />
+                <Button
+                    text="Contact"
+                    size="medium"
+                    variant="outline"
+                    color="primary"
+                    onClick={onContact ?? (() => { })}
+                />
+            </div>
+        </div>
+    );
 };
 
 export default SummaryCard;

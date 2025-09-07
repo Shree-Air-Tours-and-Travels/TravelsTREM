@@ -26,7 +26,7 @@ const Tours = () => {
                 <Title text={header.highlight} variant="secondary" />
             </span>
             <SearchBar />
-            <TourPackages />
+            {/* <TourPackages /> */}
             <div className="ui-tours__pagination">
                 <Button
                     className="ui-tours__pagination__button"
