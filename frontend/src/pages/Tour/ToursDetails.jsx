@@ -1,129 +1,118 @@
-import React, { useState, useEffect } from "react";
+// src/pages/tours/TourDetails.jsx
+import React, { useMemo, useState } from "react";
+import { useParams, useLocation } from "react-router-dom";
+import useComponentData from "../../hooks/useComponentData";
 import "../../styles/pages/tourDetails.scss";
-import axios from "axios";
-import { useParams } from "react-router-dom";
-import api from "../../utils/api";
+import Gallery from "../../components/galary/galary";
+import ContactAgentModal from "../../modals/ContactAgentModal.jsx";
+import get from "lodash/get";
+import isArray from "lodash/isArray";
+import { fetchData } from "../../utils/fetchData";
+import SummaryCard from "../../components/cards/Summary/summaryCards.jsx";
 
 const TourDetails = () => {
-    const { id } = useParams(); // ✅ grab ID from route
-    const [tour, setTour] = useState(null);
-    const [reviews, setReviews] = useState([]);
-    const [newReview, setNewReview] = useState({ name: "", rating: "", comment: "" });
-    const [guestCount, setGuestCount] = useState(1);
-    const serviceCharge = 10;
+    const { id, slug } = useParams();
+    const location = useLocation();
+    const [modalOpen, setModalOpen] = useState(false);
+    const [formData, setFormData] = useState(null);
 
-    useEffect(() => {
-        console.log("Fetching tour with id:", id);
-        const fetchTour = async () => {
-            try {
-                const res = await api.get(`/tours/${id}`);
-                setTour(res.data);
-            } catch (err) {
-                console.error(err);
-            }
+    // endpoint to fetch — controller provides new shape at /tours or /tours/:id
+    const endpoint = id ? `/tours.json/${id}` : slug ? `/tours/slug/${slug}` : "/tours.json";
+    const { loading, error, componentData, handler } = useComponentData(endpoint, { auto: Boolean(endpoint) });
+
+
+    // try to get the primary tour object from multiple possible shapes
+    const tour = useMemo(() => {
+        // prefer navigation state first (fast)
+        const stateTourFromNav = location.state?.tour;
+        if (stateTourFromNav) {
+            // ensure page meta under _page if available
+            const _page = stateTourFromNav._page || {
+                title: get(componentData, "config.header.title") || get(componentData, "state.data.title") || get(componentData, "componentData.state.data.title"),
+                description: get(componentData, "state.data.description") || get(componentData, "componentData.state.data.description") || get(componentData, "description"),
+                structure: get(componentData, "structure") || get(componentData, "componentData.structure"),
+                config: get(componentData, "config") || get(componentData, "componentData.config"),
+                actions: get(componentData, "actions") || get(componentData, "componentData.actions"),
+            };
+            return { ...stateTourFromNav, _page };
+        }
+
+        if (!componentData) return null;
+
+        // new schema: componentData.state.data.tours (array) or state.data itself
+        const stateData = get(componentData, "state.data") || get(componentData, "componentData.state.data") || get(componentData, "componentData.data") || get(componentData, "data");
+
+        let candidate = null;
+        if (!stateData) {
+            candidate = null;
+        } else if (isArray(stateData.tours) && stateData.tours.length) {
+            candidate = stateData.tours[0];
+        } else if (isArray(stateData)) {
+            candidate = stateData[0];
+        } else if (typeof stateData === "object" && Object.keys(stateData).length && !isArray(stateData)) {
+            // stateData might be the tour object itself (when API returns single tour)
+            candidate = stateData.tours && isArray(stateData.tours) && stateData.tours.length ? stateData.tours[0] : stateData;
+        }
+
+        if (!candidate) return null;
+
+        const _page = {
+            title: get(componentData, "config.header.title") || get(componentData, "state.data.title") || get(componentData, "componentData.state.data.title") || candidate.title,
+            description: get(componentData, "state.data.description") || get(componentData, "componentData.state.data.description") || candidate.desc || candidate.description,
+            structure: get(componentData, "structure") || get(componentData, "componentData.structure"),
+            config: get(componentData, "config") || get(componentData, "componentData.config"),
+            actions: get(componentData, "actions") || get(componentData, "componentData.actions"),
+            rawComponentData: componentData,
         };
 
-        fetchTour();
-    }, [id]);
+        return { ...candidate, _page };
+    }, [componentData, location.state]);
 
-    // Normalize address display
-    const displayAddress = (address) => {
-        if (typeof address === "string") return address;
-        return `${address.line1}, ${address.city}, ${address.country}`;
-    };
-
-    const totalPrice = tour ? tour.price * guestCount + serviceCharge : 0;
-
-    const handleReviewSubmit = (e) => {
-        e.preventDefault();
-        if (newReview.name && newReview.rating && newReview.comment) {
-            setReviews([...reviews, newReview]);
-            setNewReview({ name: "", rating: "", comment: "" });
+    // Contact button -> fetch form and open modal
+    const handleContactClick = async (selectedTour) => {
+        try {
+            const res = await fetchData(`/form.json?form=contact-agent&tourId=${selectedTour._id}`);
+            if (res?.status === "success") {
+                setFormData(res.componentData);
+                setModalOpen(true);
+            }
+        } catch (err) {
+            console.error(err);
         }
     };
 
-    if (!tour) return <div>Loading tour details...</div>; // ✅ now only until fetch finishes
+    if (loading) return <div className="ui-loader">Loading tour...</div>;
+    if (error) return <div className="ui-error">{typeof error === "string" ? error : "Failed to load tour"}</div>;
+    if (!tour) return <div className="ui-error">Tour not found</div>;
+
+    // ensure photos fallback
+    if ((!tour.photos || tour.photos.length === 0) && tour.photo) {
+        tour.photos = [tour.photo];
+    }
 
     return (
-        <div className="tour-details">
-            {/* Image & Info Container */}
-            <div className="tour-details__container">
-                <div className="tour-details__image">
-                    <img src={tour.photo} alt="Tour" />
-                </div>
+        <div className="ui-tour-details">
+            <Gallery
+                images={tour.photos || []}
+                title={get(tour, "_page.title", tour.title)}
+                color={"white"}
+                subtitle={tour.city ? `Explore ${tour.city}` : "Explore the destination"}
+                autoPlay={false}
+                showIndicators={true}
+            />
 
-                <div className="tour-details__info">
-                    <h2>{tour.title}</h2>
-                    <p><span>📍</span> {tour.city}</p>
-                    <p><span>📌</span> {displayAddress(tour.address)}</p>
-                    <p><span>⏳</span> {tour.distance} km away</p>
-                    <p><span>👥</span> Max {tour.maxGroupSize} People</p>
-                    <p><span>💲</span> ${tour.price} per person</p>
-                    <p>{tour.desc}</p>
-                </div>
+            <div className="ui-tour-details__main">
+                <section className="ui-tour-details__main__info">
+                    <div className="ui-tour-details__main__info--info-left">
+                        {/* InfoCard removed — using only SummaryCard */}
+                        <SummaryCard tour={tour} onBook={(t) => { /* booking flow */ }} onContact={handleContactClick} />
+                    </div>
+                </section>
             </div>
 
-            {/* Reviews & Booking */}
-            <div className="tour-details__container">
-                {/* Reviews */}
-                <div className="tour-details__reviews">
-                    <h3>Reviews ({reviews.length})</h3>
-                    <ul>
-                        {reviews.map((review, index) => (
-                            <li key={index}>
-                                <strong>{review.name}</strong> - ⭐ {review.rating}
-                            </li>
-                        ))}
-                    </ul>
-
-                    <form onSubmit={handleReviewSubmit} className="review-form">
-                        <input
-                            type="text"
-                            placeholder="Your Name"
-                            value={newReview.name}
-                            onChange={(e) => setNewReview({ ...newReview, name: e.target.value })}
-                            required
-                        />
-                        <select
-                            value={newReview.rating}
-                            onChange={(e) => setNewReview({ ...newReview, rating: e.target.value })}
-                            required
-                        >
-                            <option value="">Rate the tour</option>
-                            {[1, 2, 3, 4, 5].map((num) => (
-                                <option key={num} value={num}>{num} Star</option>
-                            ))}
-                        </select>
-                        <textarea
-                            placeholder="Your Review"
-                            value={newReview.comment}
-                            onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
-                            required
-                        />
-                        <button type="submit">Submit Review</button>
-                    </form>
-                </div>
-
-                {/* Booking Form */}
-                <div className="tour-details__booking">
-                    <h3>Book This Tour</h3>
-                    <form>
-                        <input type="text" placeholder="Full Name" required />
-                        <input type="tel" placeholder="Phone Number" required />
-                        <input type="date" placeholder="Start Date" required />
-                        <input type="date" placeholder="End Date" required />
-                        <input
-                            type="number"
-                            min="1"
-                            max="10"
-                            value={guestCount}
-                            onChange={(e) => setGuestCount(e.target.value)}
-                        />
-                        <p>Total Price: ${totalPrice}</p>
-                        <button type="submit">Book Now</button>
-                    </form>
-                </div>
-            </div>
+            {modalOpen && (
+                <ContactAgentModal open={modalOpen} tourId={tour._id} onClose={() => setModalOpen(false)} formData={formData} />
+            )}
         </div>
     );
 };

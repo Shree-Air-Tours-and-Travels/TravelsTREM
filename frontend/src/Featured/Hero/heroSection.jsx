@@ -1,77 +1,95 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { upperFirst } from "lodash";
 import Title from "../../stories/Title";
 import SubTitle from "../../stories/SubTitle";
 import Button from "../../stories/Button";
-import Loader from "../../components/Loader/Loader";
-import api from "../../utils/api";
+// import Loader from "../../components/Loader/Loader";
+import HighlightSpan from "../../stories/HighlightSpan";
 import { useNavigate } from "react-router-dom";
+import useComponentData from "../../hooks/useComponentData"; // ✅ our new hook
 import "./heroSection.style.scss";
 
+const HeroPreloader = () => {
+  return (
+    <section className="hero-preloader">
+      <div className="hero-preloader__content">
+        <div className="hp-line hp-title" />
+        <div className="hp-line hp-highlight" />
+        <div className="hp-line hp-desc" />
+        <div className="hp-actions">
+          <div className="hp-btn hp-btn-primary" />
+          <div className="hp-btn hp-btn-outline" />
+        </div>
+      </div>
+
+      <div className="hero-preloader__media">
+        <div className="hp-media" />
+      </div>
+    </section>
+  );
+};
+
 const HeroSection = ({ user }) => {
-    const [hero, setHero] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const navigate = useNavigate(); // ✅ initialize navigate
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchHero = async () => {
-            try {
-                setLoading(true);
-                const res = await api.get("/hero");
-                console.log(res?.data, "Hero data fetched");
-                setHero(res?.data?.data);
-            } catch (err) {
-                console.log("Error fetching hero:", err);
-            } finally {
-                setLoading(false);
-            }
-        };
+    // ✅ Fetch hero content
+    const { loading, error, componentData } = useComponentData("/hero.json", {headers: {}, params: {
+        hero:"hero.json",
+    }});
 
-        fetchHero();
-    }, []);
+    const { title, description, structure } = componentData;
 
-    // ✅ handle loading and no data states
-    if (loading) return <Loader />;
-    if (!hero) return null;
+    if (loading) return <HeroPreloader />;
+    if (error) return <p className="ui-home__main__hero__error">{error}</p>;
+    if (!componentData) return null;
 
     // ✅ handle button click based on user state
     const handleHeroClick = () => {
         if (user) {
-            navigate("/tours"); // ✅ logged in → tours page
+            navigate("/tours"); // logged in → tours page
         } else {
-            navigate("/login"); // ✅ not logged in → login page
+            navigate("/login"); // not logged in → login page
         }
     };
 
     return (
-        <section className="ui-home__main__hero" >
+        <section className="ui-home__main__hero">
             <div className="ui-home__main__hero__content">
                 <h1 className="ui-home__main__hero__title">
-                    <Title text={hero.title} color="#fff" />{" "}
-                    <Title text={hero.highlight} variant="secondary"  />
+                    <Title text={title} color="white" />{" "}
+                    <Title text={structure?.highlight} variant="secondary" />
                 </h1>
                 <SubTitle
                     className="ui-home__main__hero__description"
-                    text={hero.description}
+                    text={description}
                     variant="tertiary"
                     size="small"
-                    color="#fff" 
+                    color="white"
                 />
                 <Button
                     text={
-                        user?.name
-                            ? `Welcome, ${upperFirst(user?.name)}! ${hero?.buttonText}`
-                            : hero?.buttonText
+                        user?.name ? (
+                            <>
+                                Welcome,{" "}
+                                <HighlightSpan variant="light">
+                                    {upperFirst(user?.name)}
+                                </HighlightSpan>
+                                ! {structure?.buttonText}
+                            </>
+                        ) : (
+                            structure?.buttonText
+                        )
                     }
                     variant="outline"
                     size="medium"
                     color="white"
-                    onClick={handleHeroClick} // ✅ use handler
+                    onClick={handleHeroClick}
                 />
             </div>
+
             <div className="ui-home__main__hero__media">
                 <img
-                    src={hero.images?.main || "/hero-images/logo-main.png"}
+                    src={structure?.images?.main || "/hero-images/logo-main.png"}
                     alt="Hero Main"
                     className="ui-home__main__hero__image"
                 />

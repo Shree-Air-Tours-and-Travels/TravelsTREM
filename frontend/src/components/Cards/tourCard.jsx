@@ -5,17 +5,26 @@ import "../../styles/components/tourCard.scss";
 import { useNavigate } from "react-router-dom";
 
 const TourCard = ({ tour }) => {
-    const { _id, title, city, price, reviews = [], avgRating, photo } = tour;
+    const { _id, title, city, price, reviews = [], avgRating, photos = [] } = tour;
     const navigate = useNavigate();
 
-    const handleClick = () => navigate(`/tours/${_id}`)
+    const handleClick = () => navigate(`/tours/${_id}`);
+
+    // Photo fallback (first photo)
+    const coverPhoto = photos.length > 0 ? photos[0] : "/tour-images/placeholder.jpg";
+
+    // show one decimal place (or 0)
+    const displayRating = Number.isFinite(avgRating) ? avgRating.toFixed(1) : "0.0";
 
     return (
         <div className="ui-tour-card">
-            <img src={photo} alt={title} className="ui-tour-card__image" />
+            <img src={coverPhoto} alt={title} className="ui-tour-card__image" />
 
             <div className="ui-tour-card__content">
-                <h3 className="ui-tour-card__title" style={{ cursor: "pointer" }}>
+                <h3
+                    className="ui-tour-card__title"
+                    onClick={handleClick}
+                >
                     {title}
                 </h3>
 
@@ -27,16 +36,18 @@ const TourCard = ({ tour }) => {
                 </div>
 
                 <div className="ui-tour-card__reviews">
-                    <span className="ui-tour-card__review-count">{reviews.length} Reviews</span>
-                    <span className="ui-tour-card__rating">
-                        <FaStar /> {avgRating || 0}
+                    <span className="ui-tour-card__review-count">
+                        {reviews.length} {reviews.length === 1 ? "Review" : "Reviews"}
+                    </span>
+                    <span className="ui-tour-card__rating" >
+                        <FaStar /> {displayRating}
                     </span>
                 </div>
 
                 <Button
                     className="ui-tour-card__button"
                     text="Book Now"
-                    variant="outline"
+                    variant="solid"
                     onClick={handleClick}
                 />
             </div>
