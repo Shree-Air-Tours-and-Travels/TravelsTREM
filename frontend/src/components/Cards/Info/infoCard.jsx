@@ -1,61 +1,56 @@
-// src/components/cards/InfoCard.jsx
+// src/components/cards/Info/infoCard.jsx
 import React from "react";
-import { FaMapMarkerAlt, FaStar } from "react-icons/fa";
+import get from "lodash/get";
 import "./infoCard.style.scss";
-import _ from "lodash";
-import Title from "../../../stories/Title";
-import SubTitle from "../../../stories/SubTitle";
-import HighlightSpan from "../../../stories/HighlightSpan";
 
 const InfoCard = ({ tour }) => {
-    if (!tour) return null;
+  if (!tour) return null;
 
-    const reviewCount = Array.isArray(tour.reviews) ? tour.reviews.length : tour.reviewsCount || 0;
+  const title = get(tour, "title", get(tour, "_page.title", "Tour"));
+  const description = get(tour, "desc", get(tour, "_page.description", ""));
+  const address = get(tour, "address", {});
+  const city = get(tour, "city", get(address, "city", ""));
+  const periodDays = get(tour, "period.days");
+  const periodNights = get(tour, "period.nights");
+  const maxGroupSize = get(tour, "maxGroupSize");
+  const structure = get(tour, "_page.structure", {});
+  const sections = get(structure, "sections", []);
 
-    const period = `${_.get(tour, "period.days", null)}d ${_.get(tour, "period.nights", null)}n`
-    const avgRating = _.get(tour, "avgRating", "");
+  return (
+    <div className="info-card">
+      <h1 className="info-card__title">{title}</h1>
 
-    return (
-        <div className="info-card">
-            {/* Title uses your custom Title component */}
-            <Title text={tour.title} variant="primary" size="large" />
+      {description && <p className="info-card__description">{description}</p>}
 
-            <div className="info-card__meta">
-                <div className="rating">
-                    <span className="rating-badge" aria-label={`Average rating ${avgRating}`}>
-                        <FaStar /> <HighlightSpan variant="light">{avgRating}</HighlightSpan>
-                    </span>
-                    <span className="muted">({reviewCount})</span>
-                </div>
+      <div className="info-card__details">
+        {city && <div className="info-card__row"><strong>City:</strong> {city}</div>}
 
-                <div className="chips">
-                    {period && <span className="chip">{period}</span>}
-                    <span className="chip">{tour.maxGroupSize ?? "—"} people</span>
-                    {tour.price != null && (
-                        <span className="chip chip--price">
-                            {typeof tour.price === "number" ? `$${tour.price}` : tour.price}
-                        </span>
-                    )}
-                </div>
+        {address.line1 && (
+          <div className="info-card__row"><strong>Address:</strong> {address.line1}{address.line2 ? `, ${address.line2}` : ""}</div>
+        )}
+
+        {(periodDays || periodNights) && (
+          <div className="info-card__row">
+            <strong>Duration:</strong> {periodDays ? `${periodDays} days` : ""} {periodNights ? ` / ${periodNights} nights` : ""}
+          </div>
+        )}
+
+        {maxGroupSize && <div className="info-card__row"><strong>Max group size:</strong> {maxGroupSize}</div>}
+      </div>
+
+      {/* Render structure-driven sections list (titles only) */}
+      {sections.length > 0 && (
+        <div className="info-card__structure">
+          {sections.map((s, i) => (
+            <div key={i} className="info-card__section">
+              <h3>{s.title}</h3>
+              {/* If you later have actual data for the section (itinerary content, reviews), render it here */}
             </div>
-
-            {tour.address && (
-                <div className="info-card__address">
-                    <FaMapMarkerAlt className="address-icon" />
-                    <div className="address-text">
-                        {/* Use Subtitle for address main and sub */}
-                        <SubTitle text={tour.address.line1} variant="tertiary" size="small" />
-                        <div className="address-sub">
-                            <span>
-                                {tour.address.line2 && `${tour.address.line2} • `}
-                                {tour.address.city}, {tour.address.state} {tour.address.zip} • {tour.address.country}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            )}
+          ))}
         </div>
-    );
+      )}
+    </div>
+  );
 };
 
 export default InfoCard;

@@ -9,7 +9,9 @@ import ServiceCard from "../../components/cards/serviceCard";
 
 
 const ServiceList = () => {
-    const { loading, error, componentData } = useComponentData("/services");
+    const { loading, error, componentData } = useComponentData("/services.json", {headers: {}, params: {
+        services:"services.json",
+    }});
 
 
     if (loading) return <ServicePreloader cards={3} />;
