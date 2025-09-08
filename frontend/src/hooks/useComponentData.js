@@ -1,6 +1,6 @@
 // src/hooks/useComponentData.js
-import {useCallback, useEffect, useState} from "react";
-import {fetchData} from "../utils/fetchData";
+import { useCallback, useEffect, useState } from "react";
+import { fetchData } from "../utils/fetchData";
 
 /**
  * useComponentData
@@ -10,7 +10,7 @@ import {fetchData} from "../utils/fetchData";
  * Returns: { loading, error, componentData, status, message, refetch }
  */
 export default function useComponentData(endpoint, options = {}) {
-  const {auto = true, transform = null} = options;
+  const { auto = true, transform = null } = options;
 
   const [state, setState] = useState({
     loading: !!auto,
@@ -28,23 +28,21 @@ export default function useComponentData(endpoint, options = {}) {
 
   const fetcher = useCallback(
     async (ep = endpoint) => {
-      setState((s) => ({...s, loading: true, error: null}));
+      setState((s) => ({ ...s, loading: true, error: null }));
       try {
-        const res = await fetchData(ep);
+        const res = await fetchData(ep, options);
 
         // fetchData already returns { status, message, componentData } or error fallback
-        const {status, message, componentData} = res;
+        const { status, message, componentData } = res;
 
         const finalComponentData = transform
-          ? transform(
-              componentData || {
-                title: "",
-                description: "",
-                data: [],
-                structure: {},
-                config: {},
-              }
-            )
+          ? transform(componentData || {
+              title: "",
+              description: "",
+              data: [],
+              structure: {},
+              config: {},
+            })
           : componentData || {
               title: "",
               description: "",
@@ -86,6 +84,7 @@ export default function useComponentData(endpoint, options = {}) {
         });
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [endpoint, transform]
   );
 

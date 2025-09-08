@@ -9,13 +9,18 @@ import authRoutes from "./routes/authRoutes.js";
 import tourRoutes from "./routes/tourRoutes.js";
 import heroRoutes from "./routes/heroRoutes.js";
 import serviceRoutes from "./routes/serviceRoutes.js";
-
-
+// import rateLimit from "express-rate-limit";
+// import contactAgentRouter from "./routes/contactAgent.js";
+import formsRouter from "./routes/form.js";
 
 const app = express();
 
 // ✅ Fix: Allow multiple frontend origins
-const allowedOrigins = ["http://localhost:3000", "http://localhost:5173", "http://localhost:3002"];
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:5173",
+  "http://localhost:3002",
+];
 
 app.use(
   cors({
@@ -33,12 +38,26 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
+// // rate limiter (recommended)
+// const rateLimit = require("express-rate-limit");
+// const contactLimiter = rateLimit({
+//   windowMs: 60 * 1000,
+//   max: 6,
+//   message: {status: "error", message: "Too many requests, try again later"},
+// });
+// app.use("/api/contact-agent", contactLimiter);
+
+// // mount router (adjust path as needed)
+// const contactAgentRouter = require("./routes/contactAgent");
+// app.use("/api/contact-agent", contactAgentRouter);
+
 app.use("/api/auth", authRoutes);
 app.use("/api/tours", tourRoutes);
 app.use("/api/hero", heroRoutes);
 app.use("/api/services", serviceRoutes);
+app.use("/api", formsRouter);
 
-
+// start server
 connectDB().then(() => {
   app.listen(5000, () => console.log("🚀 Server running on port 5000"));
 });

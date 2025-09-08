@@ -3,7 +3,7 @@ import SearchBar from "../../components/SEO/searchBar";
 import Title from "../../stories/Title";
 import "../../styles/pages/tours.scss";
 import Button from "../../stories/Button";
-import TourPackages from "../../featured/TourPackages/tourPackages";
+// import TourPackages from "../../featured/TourPackages/tourPackages";
 
 const Tours = () => {
     const [page, setPage] = useState(1);

@@ -1,15 +1,30 @@
 // src/pages/tours/TourDetails.jsx
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useParams } from "react-router-dom";
 import useComponentData from "../../hooks/useComponentData";
 import "../../styles/pages/tourDetails.scss"; // ensure this file exists
 import Gallery from "../../components/galary/galary";
 import InfoCard from "../../components/cards/Info/infoCard"
-import SummaryCard from "../../components/cards/Summary/summaryCard.jsx"
+import ContactAgentModal from "../../modals/ContactAgentModal.jsx";
+import { fetchData } from "../../utils/fetchData.js";
+import { SummaryCard } from "../../components/cards/Summary/summaryCards.jsx";
 
 const TourDetails = () => {
     const { id } = useParams();
-    const sumamryData = []
+    const [modalOpen, setModalOpen] = useState(false);
+    const [formData, setFormData] = useState(null);
+
+    // when contact button clicked, fetch form data and open modal
+    const handleContactClick = async (selectedTour) => {
+        try {
+            const res = await fetchData(`/form.json?form=contact-agent&tourId=${selectedTour._id}`);
+            if (res?.status === "success") {
+                console.log(res.componentData, "form data");
+                setFormData(res.componentData);
+                setModalOpen(true);
+            }
+        } catch (err) { console.error(err); }
+    };
 
     // transform: turn componentData into a single tour object
     const transform = useCallback((componentData) => {
@@ -58,7 +73,15 @@ const TourDetails = () => {
                         <InfoCard tour={tour} />
                     </div>
                     <div className="ui-tour-details__main__info--info-right">
-                        <SummaryCard tour={tour} data = {sumamryData} />
+                        <SummaryCard
+                            tour={tour}
+                            onBook={(t) => {/* handle book/whatsapp - t is the tour */ }}
+                            onContact={handleContactClick} // gets tour from card
+                        />
+                        {modalOpen && <ContactAgentModal
+                            open={modalOpen}
+                            tourId={tour._id}
+                            onClose={() => setModalOpen(false)} formData={formData} />}
                     </div>
                 </section>
 

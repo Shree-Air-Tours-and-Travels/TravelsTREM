@@ -3,21 +3,44 @@ import { upperFirst } from "lodash";
 import Title from "../../stories/Title";
 import SubTitle from "../../stories/SubTitle";
 import Button from "../../stories/Button";
-import Loader from "../../components/Loader/Loader";
+// import Loader from "../../components/Loader/Loader";
 import HighlightSpan from "../../stories/HighlightSpan";
 import { useNavigate } from "react-router-dom";
 import useComponentData from "../../hooks/useComponentData"; // ✅ our new hook
 import "./heroSection.style.scss";
 
+const HeroPreloader = () => {
+  return (
+    <section className="hero-preloader">
+      <div className="hero-preloader__content">
+        <div className="hp-line hp-title" />
+        <div className="hp-line hp-highlight" />
+        <div className="hp-line hp-desc" />
+        <div className="hp-actions">
+          <div className="hp-btn hp-btn-primary" />
+          <div className="hp-btn hp-btn-outline" />
+        </div>
+      </div>
+
+      <div className="hero-preloader__media">
+        <div className="hp-media" />
+      </div>
+    </section>
+  );
+};
+
 const HeroSection = ({ user }) => {
     const navigate = useNavigate();
 
     // ✅ Fetch hero content
-    const { loading, error, componentData } = useComponentData("/hero");
+    const { loading, error, componentData } = useComponentData("/hero", {headers: {}, params: {
+        hero:"hero.json",
+        
+    }});
 
     const { title, description, structure } = componentData;
 
-    if (loading) return <Loader />;
+    if (loading) return <HeroPreloader />;
     if (error) return <p className="ui-home__main__hero__error">{error}</p>;
     if (!componentData) return null;
 
