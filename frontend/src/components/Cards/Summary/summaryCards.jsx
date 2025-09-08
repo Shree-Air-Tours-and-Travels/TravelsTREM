@@ -29,8 +29,8 @@ const SummaryCard = ({ tour, onBook, onContact }) => {
 
             <div className="summary-row">
                 <SubTitle text="Price" variant="tertiary" size="small" />
-                 <Title
-                    text={`$${tour.price}`}
+                <Title
+                    text={`$${price}`}
                     variant="primary"
                     size="medium"
                 />
@@ -38,22 +38,23 @@ const SummaryCard = ({ tour, onBook, onContact }) => {
 
             <div className="summary-actions">
                 <Button
-                    text="Book Now"
+                    text="Chat on WhatsApp"
                     size="medium"
                     variant="solid"
                     color="primary"
-                    onClick={onBook ?? (() => { })}
+                    onClick={onBook ? () => onBook(tour) : () => { }}
                 />
                 <Button
-                    text="Contact"
+                    text="Contact Agent"
                     size="medium"
                     variant="outline"
                     color="primary"
-                    onClick={onContact ?? (() => { })}
+                    onClick={onContact ? () => onContact(tour) : () => { }}
                 />
             </div>
+
         </div>
     );
 };
 
-export default SummaryCard;
+export { SummaryCard };
