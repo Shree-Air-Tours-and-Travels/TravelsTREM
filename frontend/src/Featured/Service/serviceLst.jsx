@@ -2,16 +2,17 @@ import React from "react";
 import "./serviceList.scss";
 import Title from "../../stories/Title";
 import SubTitle from "../../stories/SubTitle";
-import Loader from "../../components/Loader/Loader";
+// import Loader from "../../components/Loader/Loader";
 import useComponentData from "../../hooks/useComponentData";
 import ServiceCard from "../../components/cards/serviceCard";
+
 
 
 const ServiceList = () => {
     const { loading, error, componentData } = useComponentData("/services");
 
 
-    if (loading) return <Loader />;
+    if (loading) return <ServicePreloader cards={3} />;
     if (error) return <p>{error}</p>;
     if (!componentData?.data?.length) return <p>No services available</p>;
 
@@ -41,6 +42,36 @@ const ServiceList = () => {
             </div>
         </section>
     );
+};
+
+const ServicePreloader = ({ cards = 3}) => {
+  // renders intro skeleton + `cards` number of card skeletons
+  return (
+    <section className="ui-service-preloader">
+      <div className="ui-service-preloader__container">
+        <div className="ui-service-preloader__intro">
+          <div className="sp-line sp-title" />
+          <div className="sp-line sp-desc" />
+        </div>
+
+        <div className="ui-service-preloader__cards">
+          {Array.from({ length: cards }).map((_, i) => (
+            <div className="sp-card" key={i}>
+              <div className="sp-card__media" />
+              <div className="sp-card__body">
+                <div className="sp-line sp-card-title" />
+                <div className="sp-line sp-card-sub" />
+                <div className="sp-actions">
+                  <div className="sp-btn sp-btn-primary" />
+                  <div className="sp-btn sp-btn-outline" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 };
 
 export default ServiceList;

@@ -150,6 +150,15 @@ button {
   }
 }
 
+//pre loader color
+$hp-bg: #ffffff;
+$hp-shimmer: linear-gradient(
+  90deg,
+  rgba(2, 1, 1, 0) 0%,
+  rgba(2, 16, 72, 0.168) 50%,
+  rgba(255, 255, 255, 0) 100%
+);
+
 // Utility Classes
 .text-primary { color: $primary-color; }
 .text-secondary { color: $secondary-color; }

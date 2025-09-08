@@ -31,7 +31,6 @@ const TourCard = ({ tour }) => {
             <div className="ui-tour-card__content">
                 <h3
                     className="ui-tour-card__title"
-                    style={{ cursor: "pointer" }}
                     onClick={handleClick}
                 >
                     {title}
