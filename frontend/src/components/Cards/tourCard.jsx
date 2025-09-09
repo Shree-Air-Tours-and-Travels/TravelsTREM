@@ -5,7 +5,7 @@ import "../../styles/components/tourCard.scss";
 import { useNavigate } from "react-router-dom";
 
 const TourCard = ({ tour }) => {
-    const { _id, title, city, price, reviews = [], avgRating: avgRatingFromServer, photos = [] } = tour;
+    const { _id, title, city, price, reviews = [], avgRating, photos = [] } = tour;
     const navigate = useNavigate();
 
     const handleClick = () => navigate(`/tours/${_id}`);
@@ -13,16 +13,8 @@ const TourCard = ({ tour }) => {
     // Photo fallback (first photo)
     const coverPhoto = photos.length > 0 ? photos[0] : "/tour-images/placeholder.jpg";
 
-    // Compute average rating from reviews when server doesn't provide avgRating
-    let computedAvgRating = 0;
-    if (typeof avgRatingFromServer === "number" && !isNaN(avgRatingFromServer)) {
-        computedAvgRating = avgRatingFromServer;
-    } else if (reviews.length > 0) {
-        const sum = reviews.reduce((acc, r) => acc + (Number(r.rating) || 0), 0);
-        computedAvgRating = sum / reviews.length;
-    }
     // show one decimal place (or 0)
-    const displayRating = Number.isFinite(computedAvgRating) ? computedAvgRating.toFixed(1) : "0.0";
+    const displayRating = Number.isFinite(avgRating) ? avgRating.toFixed(1) : "0.0";
 
     return (
         <div className="ui-tour-card">
@@ -47,7 +39,7 @@ const TourCard = ({ tour }) => {
                     <span className="ui-tour-card__review-count">
                         {reviews.length} {reviews.length === 1 ? "Review" : "Reviews"}
                     </span>
-                    <span className="ui-tour-card__rating" title={`${displayRating} out of 5`}>
+                    <span className="ui-tour-card__rating" >
                         <FaStar /> {displayRating}
                     </span>
                 </div>

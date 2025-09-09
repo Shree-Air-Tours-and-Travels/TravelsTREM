@@ -33,9 +33,8 @@ const HeroSection = ({ user }) => {
     const navigate = useNavigate();
 
     // ✅ Fetch hero content
-    const { loading, error, componentData } = useComponentData("/hero", {headers: {}, params: {
+    const { loading, error, componentData } = useComponentData("/hero.json", {headers: {}, params: {
         hero:"hero.json",
-        
     }});
 
     const { title, description, structure } = componentData;
