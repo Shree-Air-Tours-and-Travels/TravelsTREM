@@ -102,6 +102,8 @@ git remote set-head origin -a
 }
 
 
+// SVG: 
+https://www.svgrepo.com/svg/475633/apple-color
 
 
 // TODO: 

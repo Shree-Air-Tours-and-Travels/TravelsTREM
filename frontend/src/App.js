@@ -1,6 +1,6 @@
 // src/App.jsx
 import React from "react";
-import AuthWrapper from "./components/authentication/AuthWrapper";
+import AuthWrapper from "./pages/AuthPage/authentication/AuthWrapper";
 
 const App = () => {
     return <AuthWrapper />;

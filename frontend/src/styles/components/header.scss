@@ -1,12 +1,26 @@
 @import "../../styles/base/typography";
 
+$header-height: 64px; // adjust if needed
+$drawer-width: 280px;
+
 .ui-header {
   background-color: $bg-primary;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  padding: 1rem 0;
-  position: sticky;
+  height: $header-height;
+  padding: 0; // container will handle horizontal padding
+  position: fixed; // changed from sticky -> fixed
   top: 0;
-  z-index: 100;
+  left: 0;
+  right: 0;
+  z-index: 1000; // high z-index so overlay/drawer are above content
+  display: flex;
+  align-items: center;
+
+  // spacer element lives in DOM after header to prevent content jump
+  &__spacer {
+    height: $header-height;
+    width: 100%;
+  }
 
   &__container {
     display: flex;
@@ -15,6 +29,7 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
+    width: 100%;
   }
 
   &__logo {
@@ -22,11 +37,13 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
+
     a {
       font-size: $font-size-xxl;
       font-weight: $font-bold;
       color: $primary-color;
       text-decoration: none;
+
       &:hover {
         color: darken($primary-color, 10%);
       }
@@ -38,8 +55,10 @@
     align-items: center;
   }
 
+  /* desktop menu */
   &__menu {
     display: flex;
+    align-items: center;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -94,10 +113,16 @@
 
     &--start {
       margin-right: auto;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
     }
 
     &--end {
       margin-left: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
     }
   }
 
@@ -112,32 +137,139 @@
       gap: 0.5rem;
     }
   }
-}
 
-@media (max-width: 768px) {
-  .ui-header {
-    &__container {
+  /* mobile toggle button */
+  &__toggle {
+    display: none; // hidden on desktop
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+
+    .bar {
+      display: block;
+      width: 22px;
+      height: 2px;
+      margin: 4px 0;
+      background: $text-primary;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+
+    &.is-open .bar:nth-child(1) {
+      transform: translateY(6px) rotate(45deg);
+    }
+    &.is-open .bar:nth-child(2) {
+      opacity: 0;
+    }
+    &.is-open .bar:nth-child(3) {
+      transform: translateY(-6px) rotate(-45deg);
+    }
+  }
+
+  /* drawer and overlay (mobile) */
+  &__overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 900;
+    background: rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  &__drawer {
+    display: none;
+    position: fixed;
+    top: $header-height;
+    right: 0;
+    height: calc(100vh - #{$header-height});
+    width: $drawer-width;
+    max-width: 80%;
+    background: $bg-primary;
+    box-shadow: -6px 0 20px rgba(0, 0, 0, 0.12);
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 950;
+    padding: 1rem;
+    overflow-y: auto;
+
+    .drawer-menu {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
       flex-direction: column;
-      padding: 1rem;
-    }
-
-    &__nav {
-      width: 100%;
-      margin-top: 1rem;
-    }
-
-    &__menu {
-      width: 100%;
-      justify-content: space-between;
       gap: 1rem;
 
+      a,
+      button {
+        width: 100%;
+        text-align: left;
+        font-size: $font-size-md;
+        font-weight: $font-medium;
+        color: $text-primary;
+        text-decoration: none;
+        background: none;
+        border: none;
+        padding: 0.5rem 0;
+      }
+
+      .user-welcome {
+        margin-top: 0.25rem;
+        margin-bottom: 0.75rem;
+        font-size: $font-size-sm;
+      }
+    }
+  }
+
+  /* state when open */
+  &.is-open {
+    .ui-header__overlay {
+      display: block;
+      opacity: 1;
+      pointer-events: auto;
+    box-shadow: -6px 0 20px rgba(0, 0, 0, 0.12);
+
+    }
+
+    .ui-header__drawer {
+      display: block;
+      transform: translateX(0);
+    }
+
+
+  }
+
+  // Desktop -> mobile adjustments
+  @media (max-width: 768px) {
+    height: $header-height;
+    padding: 0;
+    .ui-header__container {
+      padding: 0 1rem;
+    }
+
+    .ui-header__menu {
+      gap: 1rem;
       &--start,
       &--end {
         margin: 0;
       }
     }
 
-    &--end__user-container {
+    // hide desktop menus, show toggle
+    .ui-header__menu.ui-header__menu--start,
+    .ui-header__menu.ui-header__menu--end {
+      display: none;
+    }
+
+    .ui-header__toggle {
+      display: flex;
+    }
+
+    .ui-header--end__user-container {
       flex-direction: column;
       align-items: flex-end;
       gap: 0.5rem;

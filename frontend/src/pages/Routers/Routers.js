@@ -8,7 +8,7 @@ import Tours from "../Tour/Tours";
 import ToursDetails from "../Tour/ToursDetails";
 import Home from "../homePage/home";
 import SearchResultList from "../../components/SEO/SearchResultList";
-import ProtectedRoute from "../AuthPage/ProtectedRoute";
+import ProtectedRoute from "../AuthPage/authentication/ProtectedRoute";
 
 const Routers = () => {
   const { user } = useSelector((state) => state.auth || {});
