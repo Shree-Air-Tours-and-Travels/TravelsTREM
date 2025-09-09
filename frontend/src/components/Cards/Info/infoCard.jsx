@@ -1,4 +1,4 @@
-// src/components/cards/Info/infoCard.jsx
+// src/components/Cards/Info/infoCard.jsx
 import React from "react";
 import get from "lodash/get";
 import "./infoCard.style.scss";

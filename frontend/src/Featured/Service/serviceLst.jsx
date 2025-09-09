@@ -4,7 +4,7 @@ import Title from "../../stories/Title";
 import SubTitle from "../../stories/SubTitle";
 // import Loader from "../../components/Loader/Loader";
 import useComponentData from "../../hooks/useComponentData";
-import ServiceCard from "../../components/cards/serviceCard";
+import ServiceCard from "../../components/Cards/serviceCard";
 
 
 

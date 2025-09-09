@@ -8,7 +8,7 @@ import ContactAgentModal from "../../modals/ContactAgentModal.jsx";
 import get from "lodash/get";
 import isArray from "lodash/isArray";
 import { fetchData } from "../../utils/fetchData";
-import SummaryCard from "../../components/cards/summaryCard/summaryCards.jsx";
+import SummaryCard from "../../components/Cards/summaryCard/summaryCards.jsx";
 
 const TourDetails = () => {
     const { id, slug } = useParams();

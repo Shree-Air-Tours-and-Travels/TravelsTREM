@@ -1,4 +1,3 @@
-// src/components/cards/Summary/summaryCard.jsx
 import get from "lodash/get";
 import Button from "../../../stories/Button";
 import { FaStar } from "react-icons/fa";

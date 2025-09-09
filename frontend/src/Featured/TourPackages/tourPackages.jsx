@@ -10,7 +10,7 @@ import Button from "../../stories/Button";
 import SubTitle from "../../stories/SubTitle";
 import isArray from "lodash/isArray";
 import get from "lodash/get";
-import TourCard from "../../components/cards/tourCard";
+import TourCard from "../../components/Cards/tourCard";
 
 const TourPackages = ({ user }) => {
   const navigate = useNavigate();
