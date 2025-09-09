@@ -5,9 +5,9 @@ import { useSelector } from "react-redux";
 // import Gallery from "../../components/galary/galary";
 // import Reviews from "../../featured/review";
 import "../../styles/pages/home.scss";
-import HeroSection from "../../featured/Hero/heroSection";
-import ServiceList from "../../featured/service/serviceLst";
-import TourPackages from "../../featured/TourPackages/tourPackages";    
+import HeroSection from "../../Featured/Hero/heroSection";
+import ServiceList from "../../Featured/Service/serviceLst";
+import TourPackages from "../../Featured/TourPackages/tourPackages";    
 /**
  * Home
  *
