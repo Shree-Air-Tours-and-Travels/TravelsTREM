@@ -1,10 +1,11 @@
 // src/components/AuthWrapper.jsx
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { initAuth, logout as logoutAction } from "../../redux/authSlice.js";
-import Header from "../../pages/ProfilePage/header";
-import Routers from "../../pages/Routers/Routers";
-import Footer from "../../pages/ProfilePage/footer";
+import { initAuth, logout as logoutAction } from "../../../redux/authSlice.js";
+import Header from "../../ProfilePage/header.jsx";
+import Routers from "../../Routers/Routers.js";
+import Footer from "../../ProfilePage/footer.jsx";
+
 
 
 /**
@@ -16,7 +17,7 @@ import Footer from "../../pages/ProfilePage/footer";
  */
 const AuthWrapper = () => {
     const dispatch = useDispatch();
-    const { loading } = useSelector((state) => state.auth || {});
+    const { loading,  user } = useSelector((state) => state.auth || {});
     const initCalled = useRef(false);
 
     useEffect(() => {
@@ -37,7 +38,7 @@ const AuthWrapper = () => {
     }, [dispatch]);
 
     return (
-        <>
+        <div>
             <Header />
             <main style={{ minHeight: "calc(100vh - 200px)" }}>
                 {loading ? (
@@ -49,10 +50,12 @@ const AuthWrapper = () => {
                     </div>
                 ) : (
                     <Routers />
+
+
                 )}
             </main>
-            <Footer />
-        </>
+           {/* {user && <Footer />} */}
+        </div>
     );
 };
 
