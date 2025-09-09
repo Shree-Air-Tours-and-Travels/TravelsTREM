@@ -18,7 +18,7 @@ const TourDetails = () => {
 
     // endpoint to fetch — controller provides new shape at /tours or /tours/:id
     const endpoint = id ? `/tours.json/${id}` : slug ? `/tours/slug/${slug}` : "/tours.json";
-    const { loading, error, componentData, handler } = useComponentData(endpoint, { auto: Boolean(endpoint) });
+    const { loading, error, componentData } = useComponentData(endpoint, { auto: Boolean(endpoint) });
 
 
     // try to get the primary tour object from multiple possible shapes
