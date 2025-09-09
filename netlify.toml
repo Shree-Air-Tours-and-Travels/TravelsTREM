@@ -1,6 +1,7 @@
 [build]
-  command = "npm --prefix frontend run build"
-  publish = "frontend/build"
+  # Netlify will cd into the base directory (frontend) before running this
+  command = "npm run build"
+  publish = "build"
 
 [[redirects]]
   from = "/*"
