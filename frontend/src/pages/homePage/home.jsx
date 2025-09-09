@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 // import Reviews from "../../featured/review";
 import "../../styles/pages/home.scss";
 import HeroSection from "../../featured/Hero/heroSection";
-import ServiceList from "../../featured/Service/serviceLst";
+import ServiceList from "../../featured/service/serviceLst";
 import TourPackages from "../../featured/TourPackages/tourPackages";    
 /**
  * Home
