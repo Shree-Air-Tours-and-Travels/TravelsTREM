@@ -5,8 +5,9 @@
     "type": "module",
     "scripts": {
         "seed:tours": "node seed.js",
-        "dev": "nodemon index.js",
-        "start": "node index.js"
+        "dev": "nodemon server.js",
+        "start": "node server.js",
+        "start:prod": "node server.js"
     },
     "keywords": [],
     "author": "",
