@@ -1,11 +1,12 @@
+// authRoutes.js (ESM version)
 import express from "express";
-import { register, login, getProfile } from "../controllers/authController.js";
-import authMiddleware from "../middleware/authMiddleware.js";
+import * as authController from "../controllers/authController.js";
+import jwtAuth from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/register", register);
-router.post("/login", login);
-router.get("/home", authMiddleware, getProfile);
+router.post("/register", authController.register);
+router.post("/login", authController.login);
+router.get("/me", jwtAuth, authController.getCurrentUser);
 
-export default router; // ✅ Use ES Module export
+export default router;

@@ -52,9 +52,9 @@ app.use(cookieParser());
 // app.use("/api/contact-agent", contactAgentRouter);
 
 app.use("/api/auth", authRoutes);
-app.use("/api/tours", tourRoutes);
-app.use("/api/hero", heroRoutes);
-app.use("/api/services", serviceRoutes);
+app.use("/api/tours.json", tourRoutes);
+app.use("/api/hero.json", heroRoutes);
+app.use("/api/services.json", serviceRoutes);
 app.use("/api", formsRouter);
 
 // start server
