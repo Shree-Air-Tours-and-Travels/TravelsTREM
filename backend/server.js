@@ -57,7 +57,8 @@ app.use("/api/hero.json", heroRoutes);
 app.use("/api/services.json", serviceRoutes);
 app.use("/api", formsRouter);
 
+const PORT = process.env.PORT || 5000;
 // start server
 connectDB().then(() => {
-  app.listen(5000, () => console.log("🚀 Server running on port 5000"));
+  app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
 });
