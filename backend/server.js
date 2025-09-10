@@ -1,11 +1,30 @@
+import express from "express";
+import dotenv from "dotenv";
+dotenv.config();
+
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import connectDB from "./config/db.js";
+import authRoutes from "./routes/authRoutes.js";
+import tourRoutes from "./routes/tourRoutes.js";
+import heroRoutes from "./routes/heroRoutes.js";
+import serviceRoutes from "./routes/serviceRoutes.js";
+// import rateLimit from "express-rate-limit";
+// import contactAgentRouter from "./routes/contactAgent.js";
+import formsRouter from "./routes/form.js";
+
+const app = express();
+
 // ✅ CORS: minimal, deploy-friendly replacement
 // Replace your existing `allowedOrigins` + app.use(cors(...)) block with this.
 
 const allowedOrigins = [
-    "http://localhost:3000",
-    "http://localhost:5173",
-    "http://localhost:3002",
-    "https://travelstrem-test.onrender.com", // allow direct onrender host
+  "http://localhost:3000",
+  "http://localhost:5173",
+  "http://localhost:3002",
+  "https://travelstrem.netlify.app",         // Netlify production
+  "https://travelstrem-test.onrender.com",   // Render backend
+  "https://deploy-preview-48--travelstrem.netlify.app" // Example preview
 ].filter(Boolean);
 
 // Allow additional origins via env var (comma-separated)
