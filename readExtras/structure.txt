@@ -24,6 +24,8 @@ The frontend stores the token (e.g., in localStorage or Redux) and uses it for a
 
 Shop Number-105, Ground Floor, Shalimar Complex, Church Road, M I Road, Jaipur - 302001, Opposite Church,Near Om Tower
 
+curl -i -v https://travelstrem-test.onrender.com/api/auth/config
+
 
 my-mern-website/
 │-- backend/                # Backend (Node.js + Express)
