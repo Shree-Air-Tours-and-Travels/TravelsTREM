@@ -1,0 +1,63 @@
+root repo: TravelsTREM
+package.json file:
+{
+  "name": "travelstrem",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+     "dev": "concurrently -n backend,frontend -c blue,green \"npm run dev --prefix backend\" \"npm start --prefix frontend\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shree-Air-Tours-and-Travels/TravelsTREM.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Shree-Air-Tours-and-Travels/TravelsTREM/issues"
+  },
+  "homepage": "https://github.com/Shree-Air-Tours-and-Travels/TravelsTREM#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
+
+TravelsTREM/backend: 
+package.json file:
+{
+    "name": "backend",
+    "version": "1.0.0",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "seed:tours": "node seed.js",
+        "dev": "nodemon server.js",
+        "start": "node server.js",
+        "start:prod": "node server.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "dependencies": {
+        "axios": "^1.11.0",
+        "bcryptjs": "^3.0.2",
+        "cookie-parser": "^1.4.7",
+        "cors": "^2.8.5",
+        "crypto": "^1.0.1",
+        "dotenv": "^16.4.7",
+        "dotenv-flow": "^4.1.0",
+        "express": "^4.21.2",
+        "jsonwebtoken": "^9.0.2",
+        "mongoose": "^8.13.0",
+        "morgan": "^1.10.0",
+        "nodemailer": "^7.0.6"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.10"
+    }
+}
+
