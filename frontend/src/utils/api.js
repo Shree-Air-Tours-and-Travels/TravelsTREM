@@ -1,33 +1,36 @@
 // frontend/src/utils/api.js
 import axios from "axios";
 
-// Use env var injected at build time (falls back to localhost for dev)
-const BASE =
-    (process.env.REACT_APP_API_URL && process.env.REACT_APP_API_URL.replace(/\/$/, "")) ||
-    "http://localhost:5000";
+function normalizeBase(raw) {
+  if (!raw) return "http://localhost:5000";
+  // if already includes http(s) keep it, else prepend https://
+  if (/^https?:\/\//i.test(raw)) return raw.replace(/\/$/, "");
+  return `https://${raw}`; // assume https if scheme missing
+}
 
-// If your backend mounts routes under /api, keep it in the baseURL.
-// Otherwise, remove the /api suffix and call `/api/...` from your code consistently.
+const RAW_BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+const BASE = normalizeBase(RAW_BASE);
+
+// If backend mounts routes under /api, keep it here. Else remove /api suffix.
 const api = axios.create({
-    baseURL: `${BASE}/api`.replace(/\/+/g, "/"), // results like: https://travelstrem-test.onrender.com/api
-    withCredentials: true,
+  baseURL: `${BASE}/api`.replace(/\/+/g, "/"), // ensure single slashes
+  withCredentials: true,
 });
 
-// Optional: add request interceptor to attach token from localStorage
 api.interceptors.request.use(
-    (config) => {
-        try {
-            const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-            if (userInfo?.token) {
-                config.headers = config.headers || {};
-                config.headers.Authorization = `Bearer ${userInfo.token}`;
-            }
-        } catch (err) {
-            // ignore parse errors
-        }
-        return config;
-    },
-    (error) => Promise.reject(error)
+  (config) => {
+    try {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      if (userInfo?.token) {
+        config.headers = config.headers || {};
+        config.headers.Authorization = `Bearer ${userInfo.token}`;
+      }
+    } catch (err) {
+      // ignore
+    }
+    return config;
+  },
+  (err) => Promise.reject(err)
 );
 
 export default api;
