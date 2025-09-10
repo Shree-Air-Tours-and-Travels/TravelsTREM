@@ -58,6 +58,11 @@ my-mern-website/
 │-- README.md               # Project Documentation
 
 
+# from repo root
+git grep -n "localhost:5000" || true
+git grep -n "http://localhost:5000" || true
+git grep -n "REACT_APP_API_URL" || true
+
 
 
 ///////////// sass ////////////////
