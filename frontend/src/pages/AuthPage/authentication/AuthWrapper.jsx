@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { initAuth, logout as logoutAction } from "../../../redux/authSlice.js";
 import Header from "../../ProfilePage/header.jsx";
 import Routers from "../../Routers/Routers.js";
-import Footer from "../../ProfilePage/footer.jsx";
 
 
 
@@ -17,7 +16,7 @@ import Footer from "../../ProfilePage/footer.jsx";
  */
 const AuthWrapper = () => {
     const dispatch = useDispatch();
-    const { loading,  user } = useSelector((state) => state.auth || {});
+    const { loading } = useSelector((state) => state.auth || {});
     const initCalled = useRef(false);
 
     useEffect(() => {

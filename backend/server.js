@@ -16,24 +16,56 @@ import formsRouter from "./routes/form.js";
 const app = express();
 
 // ✅ Fix: Allow multiple frontend origins
+
 const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:5173",
   "http://localhost:3002",
-];
+  "https://travelstrem-test.onrender.com", // allow direct onrender host
+].filter(Boolean);
+
+// Allow additional origins via env var (comma-separated)
+if (process.env.FRONTENDS) {
+  const extras = process.env.FRONTENDS.split(",").map(s => s.trim()).filter(Boolean);
+  allowedOrigins.push(...extras);
+}
+
+app.use((req, res, next) => {
+  console.log("Incoming CORS origin:", req.headers.origin);
+  next();
+});
 
 app.use(
-  cors({
+   cors({
     origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
+      // allow requests with no origin (curl, server-to-server, mobile apps)
+      if (!origin) return callback(null, true);
+
+      // exact whitelist match
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
       }
+
+      // allow Netlify preview domains like:
+      // https://deploy-preview-48--your-site.netlify.app
+      if (/^https?:\/\/.*--.*\.netlify\.app$/.test(origin) || /\.netlify\.app$/.test(origin)) {
+        return callback(null, true);
+      }
+
+      // allow Render/app onrender subdomains (any *.onrender.com)
+      if (/\.onrender\.com$/.test(origin)) {
+        return callback(null, true);
+      }
+
+      // otherwise block
+      return callback(new Error("Not allowed by CORS"));
     },
-    credentials: true, // Allow cookies
+    credentials: true,
+    optionsSuccessStatus: 200,
   })
 );
+
+app.options("*", cors()); // preflight
 
 app.use(express.json());
 app.use(cookieParser());
@@ -57,7 +89,10 @@ app.use("/api/hero.json", heroRoutes);
 app.use("/api/services.json", serviceRoutes);
 app.use("/api", formsRouter);
 
+const PORT = process.env.PORT || 5000;
 // start server
 connectDB().then(() => {
-  app.listen(5000, () => console.log("🚀 Server running on port 5000"));
+  app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
 });
+
+

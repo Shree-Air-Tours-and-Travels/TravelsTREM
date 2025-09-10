@@ -68,7 +68,9 @@ const Auth = () => {
                     strings: { ...(remote.strings || {}) },
                     storageKeys: {
                         token: (remote.storageKeys && remote.storageKeys.token) || "token",
-                        rememberEmail: (remote.storageKeys && (remote.storageKeys.rememberMe || remote.storageKeys.rememberEmail)) || "remember_email",
+                        rememberEmail:
+                            (remote.storageKeys && (remote.storageKeys.rememberMe || remote.storageKeys.rememberEmail)) ||
+                            "remember_email",
                     },
                 };
 
@@ -238,7 +240,11 @@ const Auth = () => {
     // If config still loading, show a centered loader (you can render form but disabled — up to you)
     if (cfgLoading || form === null) {
         return (
-            <div className="auth-page" aria-live="polite" style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "40vh" }}>
+            <div
+                className="auth-page"
+                aria-live="polite"
+                style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "40vh" }}
+            >
                 <div>
                     <div style={{ textAlign: "center", marginBottom: 8 }}>Loading authentication configuration…</div>
                     {cfgError && (
@@ -357,7 +363,11 @@ const Auth = () => {
                                     onClick={() => setShowConfirmPassword((s) => !s)}
                                     aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
                                 >
-                                    <Icon name={showConfirmPassword ? "eyeSlash" : "eye"} size={16} title={showConfirmPassword ? "Hide confirm password" : "Show confirm password"} />
+                                    <Icon
+                                        name={showConfirmPassword ? "eyeSlash" : "eye"}
+                                        size={16}
+                                        title={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+                                    />
                                 </button>
                             </div>
 
@@ -400,7 +410,11 @@ const Auth = () => {
                     )}
 
                     <button type="submit" className="auth__button" disabled={loading}>
-                        {loading ? cfg.strings?.processing || "Processing..." : activeTab === "login" ? cfg.strings?.loginButton || "Log In" : cfg.strings?.registerButton || "Register"}
+                        {loading
+                            ? cfg.strings?.processing || "Processing..."
+                            : activeTab === "login"
+                                ? cfg.strings?.loginButton || "Log In"
+                                : cfg.strings?.registerButton || "Register"}
                     </button>
                 </form>
 
@@ -408,16 +422,28 @@ const Auth = () => {
                     {activeTab === "login" ? (
                         <>
                             {cfg.strings?.notAMember || "Not a member?"}{" "}
-                            <a style={{ cursor: "pointer" }} onClick={() => setActiveTab("register")}>
+                            <button
+                                type="button"
+                                className="auth__link"
+                                onClick={() => {
+                                    setActiveTab("register");
+                                }}
+                            >
                                 {cfg.strings?.signUp || "Sign up"}
-                            </a>
+                            </button>
                         </>
                     ) : (
                         <>
                             {cfg.strings?.alreadyAMember || "Already a member?"}{" "}
-                            <a style={{ cursor: "pointer" }} onClick={() => setActiveTab("login")}>
+                            <button
+                                type="button"
+                                className="auth__link"
+                                onClick={() => {
+                                    setActiveTab("login");
+                                }}
+                            >
                                 {cfg.strings?.loginButton || "Log In"}
-                            </a>
+                            </button>
                         </>
                     )}
                 </p>

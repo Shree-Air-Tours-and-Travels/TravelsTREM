@@ -1,14 +1,13 @@
 // src/pages/homePage/home.jsx
 import React from "react";
 import { useSelector } from "react-redux";
-import HeroSection from "../../featured/Hero/heroSection";
 // import Experience from "../../featured/experience";
 // import Gallery from "../../components/galary/galary";
 // import Reviews from "../../featured/review";
 import "../../styles/pages/home.scss";
-import ServiceList from "../../featured/Service/serviceLst";
-import TourPackages from "../../featured/TourPackages/tourPackages";
-
+import HeroSection from "../../Featured/Hero/heroSection";
+import ServiceList from "../../Featured/Service/serviceLst";
+import TourPackages from "../../Featured/TourPackages/tourPackages";    
 /**
  * Home
  *

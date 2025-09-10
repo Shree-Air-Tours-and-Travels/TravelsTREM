@@ -7,9 +7,11 @@ function PackageDetail() {
   const [pkg, setPkg] = useState(null);
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/packages/${id}`)
-      .then(res => setPkg(res.data))
-      .catch(err => console.log("Error fetching package:", err));
+    const base = process.env.REACT_APP_API_URL || "http://localhost:5000";
+    axios
+      .get(`${base}/api/packages/${id}`)
+      .then((res) => setPkg(res.data))
+      .catch((err) => console.log("Error fetching package:", err));
   }, [id]);
 
   if (!pkg) return <p>Loading package...</p>;

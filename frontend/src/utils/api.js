@@ -1,21 +1,37 @@
+// frontend/src/utils/api.js
 import axios from "axios";
 
-// Create an Axios instance
-const api = axios.create({
-  baseURL: "http://localhost:5000/api", // your backend URL
-  withCredentials: true, // send cookies automatically
-});
+function normalizeBase(raw) {
+    if (!raw) return "http://localhost:5000";
+    if (/^https?:\/\//i.test(raw)) return raw.replace(/\/$/, "");
+    return `https://${raw}`;
+}
 
-// Optional: add request interceptor to attach token from localStorage
+const RAW_BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+const BASE = normalizeBase(RAW_BASE);
+
+// Build baseURL but preserve the "://" in the protocol
+const baseURL = `${BASE}/api`.replace(/([^:]\/)\/+/g, "$1");
+// this collapses duplicate slashes except the "://"
+
+const api = axios.create({
+    baseURL,
+    withCredentials: true,
+});
 api.interceptors.request.use(
-  (config) => {
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    if (userInfo?.token) {
-      config.headers.Authorization = `Bearer ${userInfo.token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
+    (config) => {
+        try {
+            const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+            if (userInfo?.token) {
+                config.headers = config.headers || {};
+                config.headers.Authorization = `Bearer ${userInfo.token}`;
+            }
+        } catch (err) {
+            // ignore
+        }
+        return config;
+    },
+    (err) => Promise.reject(err)
 );
 
 export default api;

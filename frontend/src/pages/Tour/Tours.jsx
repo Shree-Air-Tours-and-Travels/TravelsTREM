@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import SearchBar from "../../components/SEO/searchBar";
 import Title from "../../stories/Title";
 import "../../styles/pages/tours.scss";
 import Button from "../../stories/Button";
@@ -25,7 +24,6 @@ const Tours = () => {
             <span>
                 <Title text={header.highlight} variant="secondary" />
             </span>
-            <SearchBar />
             {/* <TourPackages /> */}
             <div className="ui-tours__pagination">
                 <Button
