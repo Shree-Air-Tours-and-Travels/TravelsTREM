@@ -1,8 +1,17 @@
-// backend/server.js
 import express from "express";
 import dotenv from "dotenv";
 import fs from "fs";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import connectDB from "./config/db.js";
+import config from "./config/index.js";
+import authRoutes from "./routes/authRoutes.js";
+import tourRoutes from "./routes/tourRoutes.js";
+import heroRoutes from "./routes/heroRoutes.js";
+import serviceRoutes from "./routes/serviceRoutes.js";
+import formsRouter from "./routes/form.js";
 
+// Load environment variables
 const currentEnv = process.env.NODE_ENV || "development";
 const envFile = `.env.${currentEnv}`;
 
@@ -14,23 +23,9 @@ if (fs.existsSync(envFile)) {
     console.log(`⚠️  Loaded fallback .env (didn't find ${envFile})`);
 }
 
-import cors from "cors";
-import cookieParser from "cookie-parser";
-import connectDB from "./config/db.js";
-import config from "./config/index.js";
-
-import authRoutes from "./routes/authRoutes.js";
-import tourRoutes from "./routes/tourRoutes.js";
-import heroRoutes from "./routes/heroRoutes.js";
-import serviceRoutes from "./routes/serviceRoutes.js";
-import formsRouter from "./routes/form.js";
-
 const app = express();
 
-// Optional (recommended) middlewares you can enable later:
-// import helmet from "helmet"; app.use(helmet());
-// import morgan from "morgan"; app.use(morgan(config.debug ? "dev" : "combined"));
-
+// CORS Configuration
 const allowedOrigins = Array.isArray(config.frontends) ? config.frontends : [];
 
 app.use((req, res, next) => {
@@ -89,16 +84,14 @@ app.use((err, req, res, next) => {
     });
 });
 
-const PORT = config.port;
+const PORT = config.port || 5000; // Default to 5000 if not set
 
 (async () => {
     try {
-        await connectDB();
-        app.listen(PORT, () =>
-            console.log(`🚀 Server running in ${config.nodeEnv} on port ${PORT}`)
-        );
+        await connectDB(); // Handle DB connection
+        app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
     } catch (err) {
         console.error("Failed to start server:", err);
-        process.exit(1);
+        process.exit(1); // Exit if DB connection fails
     }
 })();
