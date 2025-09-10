@@ -20,6 +20,7 @@ function normalizeBase(raw) {
 
 // Decide RAW_BASE with safer production behavior
 let RAW_BASE = process.env.REACT_APP_API_URL;
+console.log("BUILD ENV:", process.env.NODE_ENV, "REACT_APP_API_URL:", process.env.REACT_APP_API_URL);
 
 // If not provided, default differently based on NODE_ENV
 if (!RAW_BASE) {
@@ -31,6 +32,10 @@ if (!RAW_BASE) {
     RAW_BASE = "";
   }
 }
+
+// near top of frontend/src/utils/api.js
+
+
 
 const BASE = normalizeBase(RAW_BASE) ?? "";
 
