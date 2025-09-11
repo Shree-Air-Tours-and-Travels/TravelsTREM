@@ -1,24 +1,31 @@
 {
-  "name": "travelstrem",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-     "dev": "concurrently -n backend,frontend -c blue,green \"npm run dev --prefix backend\" \"npm start --prefix frontend\""
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Shree-Air-Tours-and-Travels/TravelsTREM.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/Shree-Air-Tours-and-Travels/TravelsTREM/issues"
-  },
-  "homepage": "https://github.com/Shree-Air-Tours-and-Travels/TravelsTREM#readme",
-  "devDependencies": {
-    "concurrently": "^9.2.1"
-  }
+    "name": "travelstrem",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "dev": "concurrently -n backend,frontend -c blue,green \"cross-env NODE_ENV=development npm run dev --prefix backend\" \"cross-env NODE_ENV=development npm start --prefix frontend\"",
+        "dev:backend": "cross-env NODE_ENV=development npm run dev --prefix backend",
+        "dev:frontend": "cross-env NODE_ENV=development npm start --prefix frontend",
+        "start": "cross-env NODE_ENV=production npm run start --prefix backend & cross-env NODE_ENV=production npm run start --prefix frontend",
+        "start:backend": "cross-env NODE_ENV=production npm start --prefix backend",
+        "start:frontend": "cross-env NODE_ENV=production npm start --prefix frontend",
+        "test": "cross-env NODE_ENV=test npm --prefix backend run test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Shree-Air-Tours-and-Travels/TravelsTREM.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "type": "commonjs",
+    "bugs": {
+        "url": "https://github.com/Shree-Air-Tours-and-Travels/TravelsTREM/issues"
+    },
+    "homepage": "https://github.com/Shree-Air-Tours-and-Travels/TravelsTREM#readme",
+    "devDependencies": {
+        "concurrently": "^9.2.1",
+        "cross-env": "^7.0.3"
+    }
 }

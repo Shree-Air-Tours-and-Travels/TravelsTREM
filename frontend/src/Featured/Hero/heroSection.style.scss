@@ -1,243 +1,253 @@
 // heroSection.style.scss
 @import "../../styles/base/typography";
 
+/* ---------- Base layout ---------- */
 .ui-home__main__hero {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: space-between;
+  padding: 2rem;
   width: 100%;
-  padding: 1rem 2rem;
+  box-sizing: border-box;
   background: rgba($color: $primary-color, $alpha: 1);
+  color: $color-white;
+  flex-wrap: wrap; // prevents overflow if items can't fit
 
   &__content {
+    flex: 1 1 50%; // let it shrink/grow
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    max-width: 800px;
-    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    min-width: 280px; // ensures readability
   }
 
   &__media {
+    flex: 1 1 10%;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    min-width: 240px;
   }
 
   &__image {
-    width: 300px;
-    max-width: 100%;
-    animation: flyLeft 8s linear infinite;
-  }
-
-  &__image:hover {
-    filter: drop-shadow(0 0 15px $primary-color);
-    transition: filter 0.3s ease;
+    width: 100%;
+    max-width: 100%; // allow it to shrink with container
+    height: auto;
+    border-radius: 18px;
+    object-fit: cover;
   }
 
   &__title {
-    font-size: 3rem;
-    font-weight: 700;
-    line-height: 1.2;
     margin: 0;
-
-    .secondary {
-      color: #0077ff; // highlight color
-    }
+    line-height: 1.05;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap; // prevent text from truncating
   }
 
   &__description {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    color: #555;
-    margin: 0 auto;
+    max-width: 55rem;
+    overflow-wrap: break-word; // avoids text overflow
   }
 
-  button {
-    margin-top: 1rem;
-    align-self: center;
-  }
-}
-
-// flying animation for the image
-@keyframes flyLeft {
-  0% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(-10px);
-  }
-  100% {
-    transform: translateX(0);
-  }
-}
-
-// 📱 Mobile styles
-@media (max-width: 768px) {
-  .ui-home__main__hero {
-    padding: 1.5rem;
-
+  // 📱 Responsive breakpoints
+  @media (max-width: 1024px) {
     flex-direction: column;
+    align-items: center;
+    text-align: center;
 
+    &__content,
     &__media {
-      justify-content: center;
-      margin-top: 2rem;
+      flex: 1 1 100%;
+      max-width: 100%;
     }
 
     &__image {
-      width: 200px;
-      animation: flyLeft 8s linear infinite;
-    }
-
-    &__title {
-      font-size: 2.2rem;
-    }
-
-    &__description {
-      font-size: 1rem;
-      max-width: 100%;
+      max-width: 90%; // keeps image inside screen
     }
   }
 }
 
-@media (max-width: 480px) {
-  .ui-home__main__hero {
-    padding: 1rem;
-    &__title {
-      font-size: 1.8rem;
-    }
-
-    &__description {
-      font-size: 0.95rem;
-    }
-
-    button {
-      width: 100%;
-    }
-  }
+/* ---------- Button (keeps consistent spacing) ---------- */
+.ui-home__main__hero .stories-button {
+  // if your Button exports a class this will target it. Otherwise rely on inline props.
+  margin-top: 0.5rem;
 }
 
-.hero-preloader {
-  display: flex;
-  gap: 24px;
-  align-items: center;
-  justify-content: space-between;
-  padding: 28px;
-  box-sizing: border-box;
-  width: 100%;
-  background-color: $hp-bg;
-
-  &__content {
-    flex: 1 1 55%;
-    min-width: 260px;
-  }
-
-  &__media {
-    flex: 1 1 40%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* ---------- Preloader styles (shared) ---------- */
+.ui-home__main__hero--preloader {
+  background-color: white;
+  // visually match the shape of the real hero
+  .ui-home__main__hero__content {
+    width: 100%;
+    max-width: 720px;
   }
 
   .hp-line {
-    background: $hp-bg;
+    height: 18px;
+    background: linear-gradient(
+      90deg,
+      rgba(2, 1, 1, 0) 0%,
+      rgba(2, 16, 72, 0.168) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
     border-radius: 8px;
-    height: 20px;
-    margin-bottom: 12px;
-    position: relative;
-    overflow: hidden;
+    margin-bottom: 0.75rem;
+    animation: shimmer 1.4s infinite linear;
   }
 
   .hp-title {
-    width: 70%;
+    width: 60%;
     height: 34px;
-    border-radius: 10px;
   }
-
   .hp-highlight {
-    width: 40%;
-    height: 28px;
-    border-radius: 8px;
-    margin-top: 6px;
+    width: 35%;
+    height: 26px;
   }
-
   .hp-desc {
-    width: 95%;
+    width: 85%;
     height: 16px;
-    margin-top: 14px;
-    margin-bottom: 18px;
   }
 
   .hp-actions {
     display: flex;
-    gap: 12px;
-    margin-top: 10px;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
   }
-
   .hp-btn {
-    height: 40px;
-    border-radius: 8px;
-    min-width: 120px;
-    position: relative;
-    overflow: hidden;
-  }
-  .hp-btn-primary {
-    width: 160px;
+    border-radius: 10px;
+    height: 42px;
+    width: 120px;
+    background: rgba(255, 255, 255, 0.04);
   }
   .hp-btn-outline {
-    width: 120px;
+    width: 100px;
   }
 
+  .ui-home__main__hero__media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   .hp-media {
-    width: 320px;
-    height: 200px;
-    border-radius: 10px;
-    background: $hp-bg;
-    position: relative;
-    overflow: hidden;
-  }
-
-  // Shimmer effect
-  .hp-line::after,
-  .hp-btn::after,
-  .hp-media::after {
-    content: "";
-    position: absolute;
-    left: -150%;
-    top: 0;
-    height: 100%;
-    width: 250%;
-    background-image: $hp-shimmer;
-    transform: translateX(0);
-    animation: shimmer 1.2s linear infinite;
-  }
-
-  @keyframes shimmer {
-    0% {
-      transform: translateX(-60%);
-    }
-    100% {
-      transform: translateX(60%);
-    }
-  }
-
-  // Responsive tweaks (match your hero responsive breakpoints)
-  @media (max-width: 768px) {
-    flex-direction: column;
-    gap: 12px;
-    padding: 18px;
-
-    &__media {
-      width: 100%;
-    }
-    .hp-media {
-      width: 100%;
-      height: 160px;
-    }
-    .hp-title {
-      width: 100%;
-    }
-    .hp-desc {
-      width: 100%;
-    }
+    width: 280px;
+    height: 180px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    animation: shimmer 1.4s infinite linear;
   }
 }
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+/* shimmer background helper */
+.ui-home__main__hero--preloader .hp-line,
+.ui-home__main__hero--preloader .hp-media {
+  background: $hp-shimmer;
+  background-size: 400% 100%;
+}
+
+/* ---------- Responsive: Tablet ---------- */
+@media (max-width: $breakpoint-tablet) and (min-width: ($breakpoint-mobile + 1)) {
+  .ui-home__main__hero {
+    padding: 2.25rem 1.5rem;
+    flex-direction: row;
+
+    &__content {
+      flex: 1 1 60%;
+    }
+    &__media {
+      flex: 0 0 36%;
+    }
+
+    &__title {
+      font-size: 1.6rem;
+    }
+    &__description {
+      max-width: 40rem;
+    }
+  }
+
+  .ui-home__main__hero--preloader .hp-media {
+    width: 240px;
+    height: 160px;
+  }
+}
+
+/* ---------- Responsive: Mobile (stacked) ---------- */
+@media (max-width: $breakpoint-mobile) {
+  .ui-home__main__hero {
+    padding: 1.5rem 1rem;
+    flex-direction: column-reverse; // image first visually on mobile
+    align-items: stretch;
+    gap: 1rem;
+
+    &__content {
+      order: 2;
+      width: 100%;
+      padding: 0;
+    }
+
+    &__media {
+      order: 1;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    &__title {
+      font-size: 1.25rem;
+      line-height: 1.08;
+    }
+
+    &__description {
+      max-width: 100%;
+    }
+
+    &__image {
+      max-width: 360px;
+      width: 100%;
+      border-radius: 12px;
+      margin: 0 auto;
+    }
+  }
+
+  /* preloader mobile sizes */
+  .ui-home__main__hero--preloader .hp-media {
+    width: 100%;
+    height: 160px;
+    border-radius: 12px;
+  }
+  .ui-home__main__hero--preloader .hp-line.hp-title {
+    height: 26px;
+  }
+  .ui-home__main__hero--preloader .hp-line.hp-desc {
+    height: 14px;
+  }
+}
+
+/* ---------- Utility: text overflow single-line highlight ---------- */
+.ui-home__main__hero__title .highlight-span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- Small accessibility tweaks ---------- */
+.ui-home__main__hero__media img[alt=""] {
+  visibility: hidden;
+}
+
+/* End of SCSS */

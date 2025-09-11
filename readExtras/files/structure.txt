@@ -27,6 +27,13 @@ Shop Number-105, Ground Floor, Shalimar Complex, Church Road, M I Road, Jaipur -
 curl -i -v https://travelstrem-test.onrender.com/api/auth/config
 
 
+TravelsTREM — a comprehensive tours and travel website offering domestic & international packages,
+              flight and hotel bookings, and visa/passport assistance — I’ll now step into the shoes of a 
+              Business Analyst/Product Owner to help you define:
+
+T.R.E.M. = Travel, Reservation, Experience & Management
+
+
 my-mern-website/
 │-- backend/                # Backend (Node.js + Express)
 │   ├── models/             # User Model (MongoDB)
@@ -50,6 +57,11 @@ my-mern-website/
 │
 │-- README.md               # Project Documentation
 
+
+# from repo root
+git grep -n "localhost:5000" || true
+git grep -n "http://localhost:5000" || true
+git grep -n "REACT_APP_API_URL" || true
 
 
 

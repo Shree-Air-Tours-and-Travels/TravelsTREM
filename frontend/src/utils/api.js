@@ -1,37 +1,49 @@
 // frontend/src/utils/api.js
 import axios from "axios";
 
+/**
+ * Normalize and choose base:
+ * - If REACT_APP_API_URL is provided at build time, use it (strip trailing slash)
+ * - Else if in development, default to http://localhost:5000
+ * - Else in production, default to empty string (relative requests -> same origin)
+ */
+
 function normalizeBase(raw) {
-    if (!raw) return "http://localhost:5000";
-    if (/^https?:\/\//i.test(raw)) return raw.replace(/\/$/, "");
-    return `https://${raw}`;
+  if (raw == null || raw === "") return raw;
+  if (/^https?:\/\//i.test(raw)) return raw.replace(/\/$/, "");
+  return `https://${raw}`.replace(/\/$/, "");
 }
 
-const RAW_BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
-const BASE = normalizeBase(RAW_BASE);
+let RAW_BASE = process.env.REACT_APP_API_URL;
+if (!RAW_BASE) {
+  RAW_BASE = process.env.NODE_ENV === "development" ? "http://localhost:5000" : "";
+}
 
-// Build baseURL but preserve the "://" in the protocol
-const baseURL = `${BASE}/api`.replace(/([^:]\/)\/+/g, "$1");
-// this collapses duplicate slashes except the "://"
+const BASE = normalizeBase(RAW_BASE) ?? "";
+const baseURL = (`${BASE}/api`).replace(/([^:]\/)\/+/g, "$1");
+
+console.info("API baseURL (built):", baseURL);
 
 const api = axios.create({
-    baseURL,
-    withCredentials: true,
+  baseURL,
+  withCredentials: true,
+  headers: { "Content-Type": "application/json" },
 });
+
 api.interceptors.request.use(
-    (config) => {
-        try {
-            const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-            if (userInfo?.token) {
-                config.headers = config.headers || {};
-                config.headers.Authorization = `Bearer ${userInfo.token}`;
-            }
-        } catch (err) {
-            // ignore
-        }
-        return config;
-    },
-    (err) => Promise.reject(err)
+  (cfg) => {
+    try {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      if (userInfo?.token) {
+        cfg.headers = cfg.headers || {};
+        cfg.headers.Authorization = `Bearer ${userInfo.token}`;
+      }
+    } catch (err) {
+      // ignore parse errors
+    }
+    return cfg;
+  },
+  (err) => Promise.reject(err)
 );
 
 export default api;
