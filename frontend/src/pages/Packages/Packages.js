@@ -7,7 +7,13 @@ function Packages() {
 
     // Fetch all packages from the backend
     useEffect(() => {
-        const base = process.env.REACT_APP_API_URL || "http://localhost:5000";
+        function getApiBase() {
+            const raw = process.env.REACT_APP_API_URL;
+            if (raw && raw !== "") return raw.replace(/\/$/, "");
+            return process.env.NODE_ENV === "development" ? "http://localhost:5000" : "";
+        }
+
+        const base = getApiBase();
 
         axios
             .get(`${base}/api/packages`)
