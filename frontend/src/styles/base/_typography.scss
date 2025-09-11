@@ -43,6 +43,14 @@ $subtle-color: #04467fba;
 $white-color: #ffffff;   // Pure White
 $subtitle-color: #6c757d;   // Subtitle Gray
 
+$color-bg: #0b1020;
+$color-accent: #ffd166;
+$color-white: #ffffff;
+$color-muted: rgba(255, 255, 255, 0.75);
+
+$breakpoint-mobile: 768px;
+$breakpoint-tablet: 1024px;
+
 // Text Colors
 $text-primary: #212529;
 $text-secondary: #6c757d;
@@ -159,6 +167,7 @@ $hp-shimmer: linear-gradient(
   rgba(255, 255, 255, 0) 100%
 );
 
+
 // Utility Classes
 .text-primary { color: $primary-color; }
 .text-secondary { color: $secondary-color; }
@@ -176,6 +185,8 @@ $hp-shimmer: linear-gradient(
 .font-bold { font-weight: $font-bold; }
 
 
+$breakpoint-mobile: 768px;
+$breakpoint-tablet: 1024px;
 
 // sp card
 

@@ -41,7 +41,7 @@ const Home = ({ user: userProp, readonly = false }) => {
       {/* Explore Section */}
       <section className="ui-home__explore">
         <ServiceList readonly={readonly} />
-        <TourPackages user={childUser} readonly={readonly} />
+        {/* <TourPackages user={childUser} readonly={readonly} /> */}
         {/* <Experience /> */}
         {/* <Gallery /> */}
         {/* <Reviews /> */}
