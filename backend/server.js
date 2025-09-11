@@ -1,98 +1,151 @@
+// server.js
 import express from "express";
 import dotenv from "dotenv";
-dotenv.config();
-
+import fs from "fs";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import helmet from "helmet";
+import morgan from "morgan";
+import rateLimit from "express-rate-limit";
 import connectDB from "./config/db.js";
+import config from "./config/index.js";
 import authRoutes from "./routes/authRoutes.js";
 import tourRoutes from "./routes/tourRoutes.js";
 import heroRoutes from "./routes/heroRoutes.js";
 import serviceRoutes from "./routes/serviceRoutes.js";
-// import rateLimit from "express-rate-limit";
-// import contactAgentRouter from "./routes/contactAgent.js";
 import formsRouter from "./routes/form.js";
 
-const app = express();
+// Load environment variables: allow explicit .env.<env> but don't rely on .env for production
+const currentEnv = process.env.NODE_ENV || "development";
+const envFile = `.env.${currentEnv}`;
 
-// ✅ Fix: Allow multiple frontend origins
-
-const allowedOrigins = [
-  "http://localhost:3000",
-  "http://localhost:5173",
-  "http://localhost:3002",
-  "https://travelstrem-test.onrender.com", // allow direct onrender host
-].filter(Boolean);
-
-// Allow additional origins via env var (comma-separated)
-if (process.env.FRONTENDS) {
-  const extras = process.env.FRONTENDS.split(",").map(s => s.trim()).filter(Boolean);
-  allowedOrigins.push(...extras);
+if (currentEnv !== "production" && fs.existsSync(envFile)) {
+    dotenv.config({ path: envFile });
+    console.log(`✅ Loaded env from ${envFile}`);
+} else {
+    // attempt to load plain .env if present (useful for local dev)
+    dotenv.config(); // safe no-op when no .env present
+    if (currentEnv !== "production") {
+        console.log(`⚠️ Loaded fallback .env (or none) for ${currentEnv}`);
+    }
 }
 
+const app = express();
+app.set("trust proxy", true); // needed if behind proxies (Render, Netlify functions, etc.)
+
+// Basic middleware
+app.use(helmet());
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+// Logging: less verbose in production
+if (config.debug) {
+    app.use(morgan("dev"));
+} else {
+    app.use(morgan("combined"));
+}
+
+// Rate limiter (configurable via envs)
+const limiter = rateLimit({
+    windowMs: config.rateLimit.windowMs,
+    max: config.rateLimit.max,
+});
+app.use(limiter);
+
+// CORS Configuration
+const allowedOrigins = Array.isArray(config.frontends) ? config.frontends : [];
+
 app.use((req, res, next) => {
-  console.log("Incoming CORS origin:", req.headers.origin);
-  next();
+    // Helpful for debugging which origin a request had
+    // (remove or lower logging level in production)
+    if (config.debug) console.log("Incoming CORS origin:", req.headers.origin);
+    next();
 });
 
 app.use(
-   cors({
-    origin: function (origin, callback) {
-      // allow requests with no origin (curl, server-to-server, mobile apps)
-      if (!origin) return callback(null, true);
+    cors({
+        origin: function (origin, callback) {
+            // No origin (like server-to-server or curl) — allow
+            if (!origin) return callback(null, true);
 
-      // exact whitelist match
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
+            // Exact match
+            if (allowedOrigins.includes(origin)) {
+                return callback(null, true);
+            }
 
-      // allow Netlify preview domains like:
-      // https://deploy-preview-48--your-site.netlify.app
-      if (/^https?:\/\/.*--.*\.netlify\.app$/.test(origin) || /\.netlify\.app$/.test(origin)) {
-        return callback(null, true);
-      }
+            // allow Netlify preview domains (like preview--site.netlify.app)
+            if (/^https?:\/\/.*--.*\.netlify\.app$/.test(origin) || /\.netlify\.app$/.test(origin)) {
+                return callback(null, true);
+            }
 
-      // allow Render/app onrender subdomains (any *.onrender.com)
-      if (/\.onrender\.com$/.test(origin)) {
-        return callback(null, true);
-      }
+            // allow Render subdomains (*.onrender.com)
+            if (/\.onrender\.com$/.test(origin)) {
+                return callback(null, true);
+            }
 
-      // otherwise block
-      return callback(new Error("Not allowed by CORS"));
-    },
-    credentials: true,
-    optionsSuccessStatus: 200,
-  })
+            return callback(new Error(`CORS blocked: ${origin}`));
+        },
+        credentials: true,
+        optionsSuccessStatus: 200,
+    })
 );
 
-app.options("*", cors()); // preflight
+// Preflight handler
+app.options("*", cors());
 
-app.use(express.json());
-app.use(cookieParser());
+// Health-check / readiness endpoints
+app.get("/health", (req, res) => res.status(200).json({ status: "ok", env: currentEnv }));
+app.get("/", (req, res) => res.send("Travelstrem API is running"));
 
-// // rate limiter (recommended)
-// const rateLimit = require("express-rate-limit");
-// const contactLimiter = rateLimit({
-//   windowMs: 60 * 1000,
-//   max: 6,
-//   message: {status: "error", message: "Too many requests, try again later"},
-// });
-// app.use("/api/contact-agent", contactLimiter);
-
-// // mount router (adjust path as needed)
-// const contactAgentRouter = require("./routes/contactAgent");
-// app.use("/api/contact-agent", contactAgentRouter);
-
+// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/tours.json", tourRoutes);
 app.use("/api/hero.json", heroRoutes);
 app.use("/api/services.json", serviceRoutes);
 app.use("/api", formsRouter);
 
-const PORT = process.env.PORT || 5000;
-// start server
-connectDB().then(() => {
-  app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+// Central error handler
+app.use((err, req, res, next) => {
+    if (err && err.message && err.message.startsWith("CORS blocked:")) {
+        return res.status(403).json({ status: "error", message: err.message });
+    }
+
+    // Log error stack for debugging
+    console.error(err && err.stack ? err.stack : err);
+
+    res.status(err.status || 500).json({
+        status: "error",
+        message: err.message || "Internal Server Error",
+    });
 });
 
+// Prefer platform PORT (e.g. Render provides process.env.PORT)
+const PORT = Number(process.env.PORT) || Number(config.port) || 5000;
 
+(async () => {
+    try {
+        await connectDB(); // connect to DB before accepting requests
+        const server = app.listen(PORT, () =>
+            console.log(`🚀 Server running on port ${PORT} (env: ${currentEnv})`)
+        );
+
+        // Graceful shutdown
+        const shutdown = async () => {
+            console.log("Shutting down gracefully...");
+            server.close(() => {
+                console.log("HTTP server closed");
+                // optionally close DB connection if your connectDB exposes close
+                process.exit(0);
+            });
+            // force exit in 10s
+            setTimeout(() => process.exit(1), 10_000).unref();
+        };
+
+        process.on("SIGTERM", shutdown);
+        process.on("SIGINT", shutdown);
+    } catch (err) {
+        console.error("Failed to start server:", err);
+        process.exit(1);
+    }
+})();
