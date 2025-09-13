@@ -1,6 +1,5 @@
 @import "../../styles/base/typography"; // Import typography variables
 
-
 .ui-button {
   font-family: $font-primary;
   font-weight: $font-bold;
@@ -35,8 +34,8 @@
 
   // Circular Button (For Icon Buttons)
   &--circular {
-    width: 40px;
-    height: 40px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     padding: 0;
   }
@@ -52,7 +51,7 @@
       }
     }
 
-    &.ui-button--secondary {
+    &.ui-button--c {
       background: $secondary-color;
       color: $light-color;
       border-color: $secondary-color;
@@ -72,13 +71,12 @@
 
     &.ui-button--white {
       background: $white-color;
-      color: $light-color;
+      color: $primary-color;
       border-color: $white-color;
       &:hover {
         background: darken($white-color, 10%);
       }
     }
-
   }
 
   // Outline Style
@@ -119,6 +117,106 @@
       &:hover {
         background: darken($white-color, 10%);
       }
+    }
+  }
+
+  // Text Style
+  &--text {
+    background: transparent;
+    border: none;
+    padding: 0;
+    font-weight: $font-regular;
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &.ui-button--primary {
+      color: $primary-color;
+      &:hover {
+        color: darken($primary-color, 10%);
+      }
+    }
+
+    &.ui-button--secondary {
+      color: $secondary-color;
+      &:hover {
+        color: darken($secondary-color, 10%);
+      }
+    }
+
+    &.ui-button--danger {
+      color: $danger-color;
+      &:hover {
+        color: darken($danger-color, 10%);
+      }
+    }
+
+    &.ui-button--white {
+      color: $white-color;
+      &:hover {
+        color: darken($white-color, 10%);
+      }
+    }
+  }
+
+  // Solid + Outline Combo
+  &--solid-outline {
+    background: transparent;
+    border-width: 2px;
+    font-weight: $font-bold;
+
+    &.ui-button--primary {
+      background: $primary-color;
+      color: $light-color;
+      border-color: $secondary-color; // outline color
+      &:hover {
+        background: darken($primary-color, 10%);
+        border-color: darken($secondary-color, 10%);
+      }
+    }
+
+    &.ui-button--secondary {
+      background: $secondary-color;
+      color: $light-color;
+      border-color: $primary-color; // outline color
+      &:hover {
+        background: darken($secondary-color, 10%);
+        border-color: darken($primary-color, 10%);
+      }
+    }
+
+    &.ui-button--danger {
+      background: $danger-color;
+      color: $light-color;
+      border-color: $white-color;
+      &:hover {
+        background: darken($danger-color, 10%);
+        border-color: darken($white-color, 10%);
+      }
+    }
+
+    &.ui-button--white {
+      background: $white-color;
+      color: $primary-color;
+      border-color: $danger-color;
+      &:hover {
+        background: darken($white-color, 10%);
+        border-color: darken($danger-color, 10%);
+      }
+    }
+  }
+
+  // Support secondaryColor helper
+  @each $clr in (primary, secondary, danger) {
+    &--secondary-#{$clr} {
+      border-color: if(
+        $clr == primary,
+        $primary-color,
+        if(
+          $clr == secondary,
+          $light-color,
+          if($clr == danger, $danger-color, $white-color)
+        )
+      );
     }
   }
 }

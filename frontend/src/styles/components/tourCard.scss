@@ -4,7 +4,7 @@
 .ui-tour-card {
   width: 100%;
   min-width: 300px;
-  max-width: 350px;
+  min-height: 300px;
   background: $light-color;
   border-radius: 10px;
   overflow: hidden;

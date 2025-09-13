@@ -12,23 +12,24 @@ import "./heroSection.style.scss";
 // -------------------------
 const HeroPreloader = () => {
     return (
-        <section className="ui-home__main__hero ui-home__main__hero--preloader" aria-hidden>
-            <div className="ui-home__main__hero__content">
-                <div className="hp-line hp-title" />
-                <div className="hp-line hp-highlight" />
-                <div className="hp-line hp-desc" />
-                <div className="hp-actions">
-                    <div className="hp-btn hp-btn-primary" />
-                    <div className="hp-btn hp-btn-outline" />
+        <section className="hero-preloader" aria-hidden>
+            <div className="hero-preloader__content">
+                <div className="hp-line hp-line--title" />
+                <div className="hp-line hp-line--highlight" />
+                <div className="hp-line hp-line--desc" />
+                <div className="hero-preloader__actions">
+                    <div className="hp-btn hp-btn--primary" />
+                    <div className="hp-btn hp-btn--outline" />
                 </div>
             </div>
 
-            <div className="ui-home__main__hero__media">
+            <div className="hero-preloader__media">
                 <div className="hp-media" />
             </div>
         </section>
     );
 };
+
 
 // -------------------------
 // HeroSection

@@ -14,6 +14,8 @@ import tourRoutes from "./routes/tourRoutes.js";
 import heroRoutes from "./routes/heroRoutes.js";
 import serviceRoutes from "./routes/serviceRoutes.js";
 import formsRouter from "./routes/form.js";
+import chatRoutes from "./routes/chatRoutes.js";
+
 
 // Load environment variables: allow explicit .env.<env> but don't rely on .env for production
 const currentEnv = process.env.NODE_ENV || "development";
@@ -103,6 +105,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/tours.json", tourRoutes);
 app.use("/api/hero.json", heroRoutes);
 app.use("/api/services.json", serviceRoutes);
+app.use("/api/chat", chatRoutes);
 app.use("/api", formsRouter);
 
 // Central error handler

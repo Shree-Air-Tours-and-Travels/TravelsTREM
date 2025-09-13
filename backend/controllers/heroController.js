@@ -2,7 +2,7 @@ import Hero from "../models/Hero.js";
 
 // Default Hero
 const DefaultHero = {
-  title: "Traveling opens the door to creating",
+  title: "Travelling opens the door to creating",
   description:
     "Discover the world with TravelsTREM. Curated adventures, stunning destinations, and memories that last a lifetime.",
   data: [], // dynamic will go here if needed

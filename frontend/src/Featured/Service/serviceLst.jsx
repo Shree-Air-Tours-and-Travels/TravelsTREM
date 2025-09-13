@@ -5,6 +5,7 @@ import SubTitle from "../../stories/SubTitle";
 import useComponentData from "../../hooks/useComponentData";
 import ServiceCard from "../../components/Cards/serviceCard";
 import { debounce, clamp, get, max } from "lodash";
+
 /*
   ServiceList
   - responsive: desktop (3+ cards), tablet (2 visible), mobile (1 visible)
@@ -13,8 +14,6 @@ import { debounce, clamp, get, max } from "lodash";
   - BEM naming + flexbox only
   - relies on typography.scss (user provided) for fonts/sizes
 */
-
-
 
 const ServiceList = () => {
     const { loading, error, componentData } = useComponentData("/services.json", {
@@ -25,9 +24,12 @@ const ServiceList = () => {
     });
 
     const [current, setCurrent] = useState(0);
-    const trackRef = useRef(null);
     const [visibleCount, setVisibleCount] = useState(3);
-    // update visibleCount based on viewport — match SCSS breakpoints (debounced)
+    const intervalRef = useRef(null);
+    const trackRef = useRef(null);
+    const wrapperRef = useRef(null); // for hover pause
+
+    // Responsive visibleCount
     useEffect(() => {
         const calc = () => {
             const w = window.innerWidth;
@@ -42,27 +44,63 @@ const ServiceList = () => {
 
         return () => {
             window.removeEventListener("resize", debouncedCalc);
-            debouncedCalc.cancel?.(); // cancel pending calls if any
+            debouncedCalc.cancel?.();
         };
     }, []);
 
-    // clamp current when data or visibleCount changes (uses lodash.get + clamp + max)
+    // Auto-scroll behavior
+    useEffect(() => {
+        const startAutoScroll = () => {
+            const length = get(componentData, "data.length", 0);
+            const maxIndex = Math.max(0, length - visibleCount);
+
+            intervalRef.current = setInterval(() => {
+                setCurrent(prev => (prev >= maxIndex ? 0 : prev + 1));
+            }, 2000);
+        };
+
+        const stopAutoScroll = () => {
+            clearInterval(intervalRef.current);
+        };
+
+        if (componentData?.data?.length) {
+            startAutoScroll();
+        }
+
+        const wrapper = wrapperRef.current;
+        if (wrapper) {
+            wrapper.addEventListener("mouseenter", stopAutoScroll);
+            wrapper.addEventListener("mouseleave", startAutoScroll);
+        }
+
+        return () => {
+            stopAutoScroll();
+            if (wrapper) {
+                wrapper.removeEventListener("mouseenter", stopAutoScroll);
+                wrapper.removeEventListener("mouseleave", startAutoScroll);
+            }
+        };
+    }, [componentData?.data?.length, visibleCount]);
+
+    // Clamp current index when data/visibleCount changes
     useEffect(() => {
         const length = get(componentData, "data.length", 0);
         const maxIndex = max([0, length - visibleCount]);
         setCurrent((prev) => clamp(prev, 0, maxIndex));
     }, [componentData?.data?.length, visibleCount]);
 
-    if (loading) return <ServicePreloader cards={3} />;
+    if (loading) return <ServicePreloader />;
     if (error) return <p className="ui-service__error">{error}</p>;
     if (!componentData?.data?.length) return <p className="ui-service__empty">No services available</p>;
 
     const services = componentData.data;
     const maxIndex = Math.max(0, services.length - visibleCount);
 
-    const prev = () => setCurrent((s) => Math.max(0, s - 2));
+    const prev = () => setCurrent((s) => Math.max(0, s - 1));
     const next = () => setCurrent((s) => Math.min(maxIndex, s + 1));
+
     const step = (100 / visibleCount).toFixed(2);
+
     return (
         <section className="ui-service">
             <div className="ui-service__container">
@@ -78,7 +116,7 @@ const ServiceList = () => {
                 </div>
 
                 {/* Cards + controls */}
-                <div className="ui-service__cards-wrap">
+                <div className="ui-service__cards-wrap" ref={wrapperRef}>
                     <button
                         className="ui-service__nav ui-service__nav--prev"
                         onClick={prev}
@@ -123,11 +161,11 @@ const ServiceList = () => {
 /* Preloader Component */
 const ServicePreloader = () => {
     const isMobile = window.matchMedia("(max-width: 768px)").matches;
-    const cards = isMobile ? 1 : 3
+    const cards = isMobile ? 1 : 3;
 
     return (
         <section className="ui-service ui-service--preloader" aria-hidden>
-            <div className="ui-service__container  ui-service__container--preloader">
+            <div className="ui-service__container ui-service__container--preloader">
                 <div className="ui-service__intro ui-service__intro--preloader sp-card__body">
                     <div className="sp-line sp-card-sub" />
                     <div className="sp-line sp-card-title" />
@@ -158,4 +196,3 @@ const ServicePreloader = () => {
 };
 
 export default ServiceList;
-
