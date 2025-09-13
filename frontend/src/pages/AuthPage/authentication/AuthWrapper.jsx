@@ -49,8 +49,6 @@ const AuthWrapper = () => {
                     </div>
                 ) : (
                     <Routers />
-
-
                 )}
             </main>
            {/* {user && <Footer />} */}
