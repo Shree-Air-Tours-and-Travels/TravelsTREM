@@ -2,81 +2,352 @@
 @import "../../styles/base/typography";
 
 .ui-tour-details {
-  width: 100%;
-  min-height: 60vh;
-  padding: 2rem;
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  align-items: center;
-  background: rgba($color: $primary-color, $alpha: 1);
+  width: 100%;
+  box-sizing: border-box;
+  background: $primary-color;
+  color: $text-primary;
 
+  &__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 2rem;
+    height: 100%;
+    padding: 1.5rem;
+    box-sizing: border-box;
+  }
+
+  // Gallery is full width by default (Gallery component handles internal layout)
+  .ui-gallery {
+    width: 50%;
+    min-width: 280px;
+    box-sizing: border-box;
+  }
 
   &__main {
-    width: 100%;
-    max-width: 1200px;
-    padding: 1.25rem;
-    background: white;
-    border-radius: 1rem;
+    gap: 2rem;
+    width: 50%;
+    box-sizing: border-box;
+    height: 100%;
 
     &__info {
-      display: flex;
-      justify-content: space-between;
-      gap: 2rem;
-
+      height: 100%;
       &--info-left {
-        width: 100%;
-      }
-
-      &--info-right  {
-        width: 100%;
+        display: flex;
+        min-width: 0;
+        height: 100%;
       }
     }
-  }
 
-  .ui-loader,
-  .ui-error {
-    width: 100%;
-    max-width: 1200px;
-    margin: 1rem auto;
-    padding: 1rem;
-    border-radius: 8px;
-    background: $bg-primary;
-    color: $text-secondary;
-    text-align: center;
-    font-weight: $font-semibold;
-  }
-
-  // Responsive
-  @media (max-width: 820px) {
-    padding: 1rem;
-
-    > :first-child img {
-      height: clamp(200px, 30vh, 340px);
-    }
-
-    .ui-tour-details__info {
-      grid-template-columns: 1fr;
-    }
-
-    .info-right {
-      order: 2;
+    @include mq-max($tablet-max) {
+      grid-template-columns: 1fr; // single column layout on tablet and below
       width: 100%;
-      max-width: none;
-    }
-
-    .info-left {
-      order: 1;
+      gap: 1.25rem;
     }
   }
 
-  @media (max-width: 420px) {
-    > :first-child img {
-      height: 220px;
+  // generic page sections
+  section {
+    margin-bottom: 0;
+  }
+
+  // small helper to visually separate sections on larger screens
+  @include mq-min($breakpoint-laptop) {
+    padding: 2.5rem;
+  }
+}
+
+/* ============================
+   Preloader: uses hp-shimmer & hp-bg
+   ============================ */
+
+.ui-tour-details__preloader {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 1.5rem;
+  align-items: start;
+  width: 100%;
+  padding: 1.25rem 0;
+  box-sizing: border-box;
+  pointer-events: none;
+  user-select: none;
+
+  // gallery placeholder
+  .td-pre__gallery {
+    .hp-media {
+      width: 100%;
+      height: 360px;
+      border-radius: 12px;
+      background: $hp-bg;
+      position: relative;
+      overflow: hidden;
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: -150%;
+        top: 0;
+        height: 100%;
+        width: 250%;
+        background-image: $hp-shimmer;
+        animation: service-shimmer 1.2s linear infinite;
+      }
     }
-    .ui-tour-details__main {
-      padding: 0;
+  }
+
+  // content placeholder (right column)
+  .td-pre__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 0;
+  }
+
+  .hp-line {
+    position: relative;
+    display: block;
+    border-radius: 10px;
+    background: $hp-bg;
+    overflow: hidden;
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: -150%;
+      top: 0;
+      height: 100%;
+      width: 250%;
+      background-image: $hp-shimmer;
+      animation: service-shimmer 1.2s linear infinite;
+    }
+
+    &--title {
+      width: 85%;
+      height: 28px;
+      border-radius: 10px;
+    }
+    &--highlight {
+      width: 55%;
+      height: 18px;
+      border-radius: 8px;
+    }
+    &--desc {
+      width: 100%;
+      height: 14px;
+      border-radius: 8px;
+    }
+  }
+
+  .td-pre__actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 0.5rem;
+  }
+
+  .hp-btn {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    background: $hp-bg;
+    min-width: 100px;
+    height: 40px;
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: -150%;
+      top: 0;
+      height: 100%;
+      width: 250%;
+      background-image: $hp-shimmer;
+      animation: service-shimmer 1.2s linear infinite;
+    }
+
+    &--primary {
+      min-width: 140px;
+      height: 44px;
+      border-radius: 10px;
+    }
+    &--outline {
+      min-width: 110px;
+      height: 40px;
+      border-radius: 8px;
+    }
+  }
+
+  .td-pre__summary {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 0.75rem;
+    align-items: center;
+
+    .sp-card__media {
+      width: 90px;
+      height: 60px;
+      background: $hp-bg;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    .sp-card-title {
+      width: 70%;
+      height: 12px;
+      background: $hp-bg;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    .sp-card-sub {
+      width: 50%;
+      height: 10px;
+      background: $hp-bg;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    // reuse shimmer on those elements
+    .sp-card__media::after,
+    .sp-card-title::after,
+    .sp-card-sub::after {
+      content: "";
+      position: absolute;
+      left: -150%;
+      top: 0;
+      height: 100%;
+      width: 250%;
+      background-image: $hp-shimmer;
+      animation: service-shimmer 1.2s linear infinite;
+    }
+  }
+
+  // stack on smaller screens
+  @include mq-max($tablet-max) {
+    grid-template-columns: 1fr;
+    .td-pre__gallery {
+      order: 1;
+      .hp-media {
+        height: 220px;
+      }
+    }
+    .td-pre__content {
+      order: 2;
+    }
+    .td-pre__summary {
+      grid-template-columns: 64px 1fr;
+      .sp-card__media {
+        width: 64px;
+        height: 48px;
+      }
+    }
+  }
+
+  @include mq-max($breakpoint-mobile) {
+    padding: 0.5rem 0;
+    .td-pre__gallery .hp-media {
+      height: 160px;
+    }
+    .hp-line--title {
+      height: 22px;
+    }
+    .hp-btn--primary {
+      min-width: 110px;
+    }
+  }
+}
+
+/* shimmer keyframes (shared) */
+@keyframes service-shimmer {
+  0% {
+    transform: translateX(-60%);
+  }
+  100% {
+    transform: translateX(60%);
+  }
+}
+
+/* Error and loader states (small helpers) */
+.ui-error {
+  padding: 1rem;
+  border-radius: 8px;
+  background: rgba($danger-color, 0.06);
+  color: $danger-color;
+  font-weight: $font-medium;
+}
+
+.ui-loader {
+  padding: 1rem;
+  border-radius: 8px;
+  background: $bg-secondary;
+  color: $text-primary;
+  font-weight: $font-medium;
+  text-align: center;
+}
+
+/* small responsive tweaks for main layout */
+@include mq-max($tablet-max) {
+  .ui-tour-details {
+    padding: 1rem;
+
+    &__container {
+      flex-direction: column;
+    }
+
+    // Make gallery and main stack and use full width on tablet
+    .ui-gallery {
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+
+    &__main {
+      width: 100%;
+      grid-template-columns: 1fr; // stack main + summary
+      gap: 1rem;
+    }
+  }
+}
+
+/* mobile specific tweaks */
+@include mq-max($breakpoint-mobile) {
+  .ui-tour-details {
+    gap: 1rem;
+    height: auto; // allow natural height for long content on mobile
+
+    &__container {
+      padding: 0.75rem;
+    }
+
+    .ui-gallery {
+      width: 100%;
+      min-width: 0;
+    }
+
+    &__main {
+      gap: 0.75rem;
+
+      &__info {
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+    }
+
+    .ui-tour-details__preloader {
+      .td-pre__gallery .hp-media {
+        height: 160px;
+      }
+      .hp-line--title {
+        height: 20px;
+      }
+      .hp-btn--primary {
+        min-width: 100px;
+      }
+      .td-pre__summary {
+        grid-template-columns: 64px 1fr;
+      }
     }
   }
 }
