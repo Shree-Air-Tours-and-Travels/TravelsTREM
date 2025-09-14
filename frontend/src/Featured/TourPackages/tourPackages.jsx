@@ -1,7 +1,7 @@
 // src/pages/tours/TourPackages.jsx
 import React from "react";
 import map from "lodash/map";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { calculateAverageRating } from "../../utils/calculateRating";
 import "./tourPackages.scss";
 import Title from "../../stories/Title";
@@ -10,7 +10,8 @@ import Button from "../../stories/Button";
 import SubTitle from "../../stories/SubTitle";
 import isArray from "lodash/isArray";
 import get from "lodash/get";
-import TourCard from "../../components/Cards/tourCard";
+import TourCard from "../../pages/Tour/Cards/TourCardSecondary";
+
 
 /**
  * Helpers
@@ -96,6 +97,12 @@ const TourPackages = ({ user }) => {
         else navigate("/login");
     };
 
+      const navigateToTour = (tourId) => {
+        if (user) navigate(`/tours/${tourId}`);
+        else navigate("/login");
+    };
+
+
     return (
         <section className="ui-tour" aria-labelledby="tours-title">
             {/* Header */}
@@ -120,9 +127,7 @@ const TourPackages = ({ user }) => {
                     const tourId = tour?._id || tour?.id;
                     return (
                         <div key={tourId || JSON.stringify(tour)} className="ui-tour__card" role="listitem">
-                            <Link to={`/tours/${tourId}`} className="ui-tour__card-link" aria-label={`Open ${tour.title}`}>
-                                <TourCard tour={updatedTour} id={tourId} />
-                            </Link>
+                                <TourCard key={tourId} tour={updatedTour} onView={()=> navigateToTour(tourId)} />
                         </div>
                     );
                 })}

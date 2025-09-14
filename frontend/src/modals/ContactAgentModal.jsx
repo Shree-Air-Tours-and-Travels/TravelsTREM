@@ -116,7 +116,7 @@ const ContactAgentModal = ({ open, onClose, tourId, formData }) => {
 
             {/* inline styles for isolation — keep as before */}
             <style jsx>{`
-        .ct-modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.45); display:flex; align-items:center; justify-content:center; z-index:9999; }
+        .ct-modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; z-index:9999; }
         .ct-modal-card { background:#fff; padding:20px; width:520px; max-width:96%; border-radius:10px; position:relative; box-shadow:0 8px 30px rgba(0,0,0,0.12); }
         .ct-close { position:absolute; right:12px; top:10px; border:none; background:transparent; cursor:pointer; font-size:16px; }
       `}</style>

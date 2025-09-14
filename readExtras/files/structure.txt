@@ -26,6 +26,19 @@ Shop Number-105, Ground Floor, Shalimar Complex, Church Road, M I Road, Jaipur -
 
 curl -i -v https://travelstrem-test.onrender.com/api/auth/config
 
+<-->
+// olllama gpt install
+# install (official quick installer)
+curl -fsSL https://ollama.com/install.sh | sh
+
+# pull a model (example: llama3.2 or a smaller q4 model)
+ollama pull llama3.2
+
+# start the server (or use ollama serve in a separate shell)
+ollama serve
+# default listening port: 11434
+<--> 
+
 
 TravelsTREM — a comprehensive tours and travel website offering domestic & international packages,
               flight and hotel bookings, and visa/passport assistance — I’ll now step into the shoes of a 
