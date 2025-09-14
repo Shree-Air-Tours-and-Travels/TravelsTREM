@@ -142,6 +142,7 @@ $accent-color: if(global-variable-exists(accent-color), $light-color, #1e88e5);
   &__meta {
     margin-top: 0.75rem;
     display: flex;
+    flex-direction: column;
     gap: 1rem;
     align-items: center;
     justify-content: center;
@@ -174,7 +175,7 @@ $accent-color: if(global-variable-exists(accent-color), $light-color, #1e88e5);
       width: 10px;
       height: 10px;
       border-radius: 999px;
-      border: 1px solid rgba(0, 0, 0, 0.12);
+      border: 1px solid #fff;
       background: rgba(0, 0, 0, 0.06);
       padding: 0;
       transition: transform 180ms ease, background 180ms ease;
@@ -199,7 +200,7 @@ $accent-color: if(global-variable-exists(accent-color), $light-color, #1e88e5);
     .ui-gallery__thumb {
       border: none;
       background: transparent;
-      padding: 0;
+      padding: 0.25rem;
       cursor: pointer;
       border-radius: 6px;
       box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02) inset;

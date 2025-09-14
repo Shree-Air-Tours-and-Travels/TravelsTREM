@@ -1,0 +1,42 @@
+// components/Filters/filters.scss
+@import "../../../styles/base/typography";
+
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+
+  &__row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  &__input {
+    flex: 1 1 200px;
+    min-width: 140px;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    border: 1px solid $border-color;
+    background: $bg-primary;
+    font-size: $font-size-sm;
+    color: $text-dark;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+}
+
+@include mq-max($breakpoint-tablet) {
+  .filters {
+    &__row { gap: 0.5rem; }
+    &__input { flex: 1 1 100%; min-width: 0; }
+  }
+}
+

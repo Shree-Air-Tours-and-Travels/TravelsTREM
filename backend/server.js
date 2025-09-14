@@ -14,6 +14,7 @@ import tourRoutes from "./routes/tourRoutes.js";
 import heroRoutes from "./routes/heroRoutes.js";
 import serviceRoutes from "./routes/serviceRoutes.js";
 import formsRouter from "./routes/form.js";
+import filtersRoutes from "./routes/filtersRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 
 
@@ -107,6 +108,7 @@ app.use("/api/hero.json", heroRoutes);
 app.use("/api/services.json", serviceRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api", formsRouter);
+app.use("/api", filtersRoutes);
 
 // Central error handler
 app.use((err, req, res, next) => {

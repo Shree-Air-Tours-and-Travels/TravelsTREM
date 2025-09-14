@@ -48,7 +48,9 @@ $color-bg: #0b1020;
 $color-accent: #ffd166;
 $color-white: #ffffff;
 $color-muted: rgba(255, 255, 255, 0.75);
-$primary-color: #11467f;
+$primary-color: #11467f;  // use this as main background color and for color use $light-color
+$light-color: #f8f9fa;  // use this as main alternate background color and for color use $primary-color
+
 
 // Breakpoints
 $breakpoint-mobile: 480px; // small devices (portrait phones)
@@ -435,7 +437,6 @@ textarea {
   line-height: $line-height-md;
   color: $text-dark;
   padding: 0.5rem 0.75rem;
-  border: 1px solid $border-color;
   background: $bg-primary;
   border-radius: 6px;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;

@@ -147,7 +147,7 @@ const TourDetails = () => {
             console.error(err);
         }
     };
-    
+
     if (loading) return <TourDetailsPreloader />;
     if (error) return <div className="ui-error">{typeof error === "string" ? error : "Failed to load tour"}</div>;
     if (!tour) return <div className="ui-error">Tour not found</div>;
@@ -182,12 +182,16 @@ const TourDetails = () => {
                 </div>
 
                 {modalOpen && (
-                    <ContactAgentModal
-                        open={modalOpen}
-                        tourId={tour._id}
-                        onClose={() => setModalOpen(false)}
-                        formData={formData}
-                    />
+                    <>
+                        
+                        <ContactAgentModal
+                            open={modalOpen}
+                            tourId={tour._id}
+                            onClose={() => setModalOpen(false)}
+                            formData={formData}
+                        />
+                    </>
+
                 )}
             </div>
         </div>

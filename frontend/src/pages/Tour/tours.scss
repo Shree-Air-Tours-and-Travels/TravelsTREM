@@ -1,0 +1,589 @@
+// src/pages/Tours/tours.scss
+// BEM oriented SCSS for ToursPage
+// Adjust variables to your trem-scss tokens or import them at top
+
+@import "../../styles/base/typography"; // if you use trem-scss, keep this
+
+$tours-gap: 1.25rem;
+$tours-max-width: 1200px;
+$tours-padding: 1.25rem;
+
+/* Root */
+.tours-page {
+  width: 100%;
+  box-sizing: border-box;
+  padding: $tours-padding;
+  background: $primary-color; // ensure defined in your typography file or replace
+
+  &__inner {
+    max-width: $tours-max-width;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  /* Header: left (title) and right (filters) */
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+
+    &__left {
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    &__right {
+      min-width: 220px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+  }
+
+  /* Content wrapper */
+  &__content {
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    position: relative;
+    padding-bottom: 2rem;
+  }
+
+  /* messages */
+  &__message {
+    padding: 1rem;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.03);
+    color: $text-primary;
+    &--error {
+      background: rgba(255, 50, 50, 0.05);
+      color: $danger-color;
+    }
+  }
+
+  /* Inline loader (small) */
+  &__inline-loader {
+    align-items: center;
+    font-size: 0.95rem;
+    color: white;
+
+    &__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: $primary-color;
+      animation: tours-pulse 1s infinite;
+    }
+
+    &__text {
+      opacity: 0.95;
+    }
+  }
+
+  /* List: use flexbox to make responsive columns, no grid */
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+
+  &__card {
+    /* Cards will responsively size to column widths */
+    flex: 1 1 calc(25% - 1rem); /* default 4 columns */
+    box-sizing: border-box;
+
+    /* card content should fill height so cards align */
+    display: flex;
+    flex-direction: column;
+
+    @media (max-width: 1280px) {
+      flex: 1 1 calc(33.3333% - 1rem); /* 3 columns */
+    }
+    @media (max-width: 900px) {
+      flex: 1 1 calc(50% - 1rem); /* 2 columns */
+    }
+    @media (max-width: 480px) {
+      flex: 1 1 100%; /* 1 column */
+      max-width: 100%;
+    }
+  }
+
+  /* sentinel at bottom (for intersection observer) */
+  &__sentinel {
+    height: 1px;
+    width: 100%;
+  }
+
+  /* skeletons (placeholder cards) */
+  &__skeletons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  &__skeleton {
+    flex: 1 1 calc(25% - 1rem);
+    max-width: calc(25% - 1rem);
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 6px;
+    padding: 0.75rem;
+    box-sizing: border-box;
+
+    @media (max-width: 1280px) {
+      flex: 1 1 calc(33.3333% - 1rem);
+      max-width: calc(33.3333% - 1rem);
+    }
+    @media (max-width: 900px) {
+      flex: 1 1 calc(50% - 1rem);
+      max-width: calc(50% - 1rem);
+    }
+    @media (max-width: 480px) {
+      flex: 1 1 100%;
+      max-width: 100%;
+    }
+
+    &__inner {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    &__media {
+      height: 140px;
+      border-radius: 6px;
+      background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.06),
+        rgba(0, 0, 0, 0.03)
+      );
+    }
+
+    &__title {
+      height: 16px;
+      width: 60%;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.06);
+      margin-top: 0.5rem;
+    }
+
+    &__line {
+      height: 12px;
+      width: 90%;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    &__actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+
+      .sp-btn {
+        height: 36px;
+        width: 100%;
+        border-radius: 6px;
+      }
+    }
+  }
+}
+
+/* small animation for loader dot */
+@keyframes tours-pulse {
+  0% {
+    opacity: 0.4;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 0.4;
+    transform: scale(0.9);
+  }
+}
+
+/* ===== preloader classes you asked to keep exactly (so styles exist) ===== */
+.ui-tour-details__preloader {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1rem;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.02);
+  margin-bottom: 1rem;
+
+  .td-pre__gallery {
+    flex: 0 0 40%;
+    .hp-media {
+      height: 120px;
+      border-radius: 6px;
+      background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.06),
+        rgba(0, 0, 0, 0.03)
+      );
+    }
+  }
+
+  .td-pre__content {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .hp-line {
+      height: 12px;
+      width: 100%;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.05);
+
+      &--title {
+        height: 20px;
+        width: 70%;
+      }
+      &--highlight {
+        height: 14px;
+        width: 40%;
+        margin-top: 0.25rem;
+      }
+      &--desc {
+        height: 10px;
+        width: 100%;
+        margin-top: 0.25rem;
+      }
+    }
+
+    .td-pre__actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.6rem;
+
+      .hp-btn {
+        height: 36px;
+        border-radius: 6px;
+        width: 120px;
+        &--primary {
+          background: rgba(0, 0, 0, 0.06);
+        }
+        &--outline {
+          background: transparent;
+          border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+      }
+    }
+
+    .td-pre__summary {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      margin-top: 0.6rem;
+
+      .sp-card__media {
+        width: 56px;
+        height: 40px;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.05);
+      }
+      .sp-card-title {
+        width: 140px;
+        height: 10px;
+        border-radius: 4px;
+        background: rgba(0, 0, 0, 0.04);
+      }
+      .sp-card-sub {
+        width: 90px;
+        height: 8px;
+        border-radius: 4px;
+        background: rgba(0, 0, 0, 0.03);
+      }
+    }
+  }
+
+  @media (max-width: 700px) {
+    flex-direction: column;
+    .td-pre__gallery {
+      width: 100%;
+      .hp-media {
+        height: 160px;
+      }
+    }
+    .td-pre__content {
+      width: 100%;
+    }
+  }
+}
+
+.ui-tour--loading {
+  padding: 28px 14px;
+  box-sizing: border-box;
+  width: 100%;
+  background: $bg-primary; /* preloader section white background as requested */
+
+  .ui-tour__header {
+    width: 100%;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ui-tour-preloader__intro {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    max-width: 760px;
+
+    .sp-line {
+      background: $hp-bg;
+      border-radius: 10px;
+      height: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .sp-title {
+      width: 36%;
+      border-radius: 12px;
+    }
+    .sp-desc {
+      width: 72%;
+      border-radius: 8px;
+      margin-top: 6px;
+    }
+  }
+
+  .ui-tour-preloader__packages {
+    width: 100%;
+    max-width: 1200px;
+    margin-top: 16px;
+    display: grid;
+    gap: 12px;
+    align-items: start;
+    justify-items: center;
+
+    /* mobile: 1 column */
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .sp-card {
+    background: transparent;
+    border-radius: 12px;
+    padding: 12px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 320px;
+    transition: transform 0.18s ease;
+  }
+
+  .sp-card__media {
+    width: 100%;
+    height: 160px;
+    border-radius: 10px;
+    background: $hp-bg;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .sp-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .sp-card-title {
+      width: 60%;
+      height: 14px;
+      border-radius: 8px;
+      background: $hp-bg;
+      position: relative;
+      overflow: hidden;
+    }
+    .sp-card-sub {
+      width: 40%;
+      height: 12px;
+      border-radius: 8px;
+      background: $hp-bg;
+      position: relative;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+
+    .sp-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .sp-btn {
+      height: 36px;
+      border-radius: 8px;
+      min-width: 88px;
+      background: $hp-bg;
+      position: relative;
+      overflow: hidden;
+    }
+    .sp-btn-primary {
+      width: 120px;
+    }
+    .sp-btn-outline {
+      width: 90px;
+    }
+  }
+
+  /* shimmer overlay element */
+  .sp-line::after,
+  .sp-card__media::after,
+  .sp-card-title::after,
+  .sp-card-sub::after,
+  .sp-btn::after {
+    content: "";
+    position: absolute;
+    left: -150%;
+    top: 0;
+    height: 100%;
+    width: 250%;
+    background-image: $hp-shimmer;
+    transform: translateX(0);
+    animation: service-shimmer 1.2s linear infinite;
+  }
+
+  @keyframes service-shimmer {
+    0% {
+      transform: translateX(-60%);
+    }
+    100% {
+      transform: translateX(60%);
+    }
+  }
+}
+
+/* ====================
+   Preloader responsive columns
+   (grid only used here)
+   ==================== */
+
+/* Tablet: 2 columns */
+@media (min-width: $breakpoint-mobile) and (max-width: $tablet-max) {
+  .ui-tour {
+    &__packages {
+      /* ensure flex container behaves */
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      justify-content: center;
+      align-items: stretch;
+    }
+
+    /* Each card becomes ~50% minus the gap so two fit per row */
+    .ui-tour__card {
+      box-sizing: border-box;
+      flex: 0 0 calc(50% - 18px); /* subtract gap */
+      max-width: calc(50% - 18px);
+      min-width: 220px; /* optional: prevents cards from getting too narrow */
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Make sure inner content fills the card height (equal-height cards) */
+    .ui-tour__card > * {
+      width: 100%;
+    }
+  }
+
+  /* Slightly smaller media on tablet for preloader */
+  .ui-tour--loading .ui-tour-preloader__packages {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .sp-card__media {
+    height: 140px;
+  }
+}
+
+/* Desktop: 4 columns */
+@media (min-width: $breakpoint-tablet) {
+  .ui-tour--loading .ui-tour-preloader__packages {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .sp-card__media {
+    height: 180px;
+  }
+}
+
+/* ====================
+   Small screen polish
+   ==================== */
+@media (max-width: 420px) {
+  .sp-card__media {
+    height: 120px;
+  }
+  .sp-card {
+    gap: 10px;
+    padding: 10px;
+  }
+  .ui-tour {
+    padding: 18px 12px;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1499px) {
+  .ui-tour {
+    &__packages {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      justify-content: center;
+      align-items: stretch;
+    }
+
+    .ui-tour__card {
+      box-sizing: border-box;
+      flex: 0 0 calc(33.333% - 18px); /* 3 columns */
+      max-width: calc(33.333% - 18px);
+      min-width: 260px; /* optional safeguard */
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  /* Preloader: 3 columns too */
+  .ui-tour--loading .ui-tour-preloader__packages {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .sp-card__media {
+    height: 160px;
+  }
+}
+
+/* Large Desktop: ≥1500px, show 4 columns */
+@media (min-width: 1500px) {
+  .ui-tour {
+    .ui-tour__card {
+      flex: 0 0 calc(25% - 20px);
+      max-width: calc(25% - 20px);
+    }
+  }
+
+  .ui-tour--loading .ui-tour-preloader__packages {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .sp-card__media {
+    height: 180px;
+  }
+}
