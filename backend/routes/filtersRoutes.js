@@ -1,11 +1,10 @@
 // server/routes/filters.routes.js
 import express from "express";
-import { getFilters } from "../controllers/filtersController.js"
+import { getFilters } from "../controllers/filtersController.js";
 
 const router = express.Router();
 
-router.get("/filters.json", getFilters);
+// GET /api/filters
+router.get("/", getFilters);
 
-export default filtersRoutes;
-
-
+export default router;
