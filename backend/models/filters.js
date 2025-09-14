@@ -1,56 +1,36 @@
-// server/models/FiltersQuery.model.js
-import mongoose from "mongoose";
+// server/models/filters.js
+import Joi from "joi";
 
-const { Schema } = mongoose;
+/**
+ * Joi schema to validate query params sent to GET /api/filters
+ * Exported as FiltersQuery (named export)
+ */
+const FiltersQueryModel = Joi.object({
+  search: Joi.string().allow("").trim(),
+  city: Joi.string().allow("").trim(),
 
-const FiltersQuerySchema = new Schema(
-    {
-        search: {
-            type: String,
-            default: "",
-            trim: true,
-        },
-        city: {
-            type: String,
-            default: "",
-            trim: true,
-        },
+  // price & days
+  minPrice: Joi.alternatives().try(Joi.number().min(0), Joi.string().allow("")).allow(null),
+  maxPrice: Joi.alternatives().try(Joi.number().min(0), Joi.string().allow("")).allow(null),
+  minDays: Joi.alternatives().try(Joi.number().min(0), Joi.string().allow("")).allow(null),
+  maxDays: Joi.alternatives().try(Joi.number().min(0), Joi.string().allow("")).allow(null),
 
-        // price & days
-        minPrice: { type: Number, min: 0, default: null },
-        maxPrice: { type: Number, min: 0, default: null },
-        minDays: { type: Number, min: 0, default: null },
-        maxDays: { type: Number, min: 0, default: null },
+  // booleans & rating
+  featured: Joi.string().valid("true", "false", "").default(""),
+  rating: Joi.alternatives().try(Joi.number().valid(1, 2, 3, 4, 5), Joi.string().allow("")).allow(null),
 
-        // booleans & rating
-        featured: {
-            type: String,
-            enum: ["true", "false", ""],
-            default: "",
-        },
-        rating: {
-            type: Number,
-            enum: [1, 2, 3, 4, 5],
-            default: null,
-        },
+  // travelers
+  adults: Joi.alternatives().try(Joi.number().min(1).max(20), Joi.string().allow("")).default(2),
+  children: Joi.alternatives().try(Joi.number().min(0).max(20), Joi.string().allow("")).default(0),
+  infants: Joi.alternatives().try(Joi.number().min(0).max(10), Joi.string().allow("")).default(0),
 
-        // travelers
-        adults: { type: Number, min: 1, max: 20, default: 2 },
-        children: { type: Number, min: 0, max: 20, default: 0 },
-        infants: { type: Number, min: 0, max: 10, default: 0 },
+  // dates (accept iso date string or empty)
+  arrivalDate: Joi.alternatives().try(Joi.date().iso(), Joi.string().allow("")).allow(null),
+  returnDate: Joi.alternatives().try(Joi.date().iso(), Joi.string().allow("")).allow(null),
 
-        // dates
-        arrivalDate: { type: Date, default: null },
-        returnDate: { type: Date, default: null },
+  // optional extras
+  transport: Joi.string().allow("").trim(),
+  mealPlan: Joi.string().allow("").trim(),
+}).unknown(true);
 
-        // optional extras
-        transport: { type: String, default: "", trim: true },
-        mealPlan: { type: String, default: "", trim: true },
-    },
-    {
-        timestamps: true, // adds createdAt, updatedAt
-        versionKey: false,
-    }
-);
-const FiltersQuery = mongoose.model("FiltersQuery", FiltersQuerySchema);
-export default FiltersQuery
+export default FiltersQueryModel;
