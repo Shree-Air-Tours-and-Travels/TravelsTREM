@@ -1,0 +1,339 @@
+{
+  "status": "success",
+  "message": "Tour fetched successfully",
+  "handler": "admin",
+  "componentData": {
+    "state": {
+      "data": {
+        "id": "68c55cd7fcf103836ee265e6",
+        "title": "Zagreb Autumn Hike",
+        "description": "Short hikes and scenic viewpoints in autumn hues.",
+        "tours": [
+          {
+            "_id": "68c55cd7fcf103836ee265e6",
+            "title": "Zagreb Autumn Hike",
+            "city": "Zagreb",
+            "address": {
+              "line1": "Hill Trails",
+              "line2": "",
+              "city": "Zagreb",
+              "state": "Zagreb",
+              "zip": "10000",
+              "country": "Croatia",
+              "_id": "68c55cd7fcf103836ee265e7"
+            },
+            "distance": 200,
+            "period": {
+              "days": 2,
+              "nights": 1
+            },
+            "photos": [
+              "/tour-images/tour-img01.jpg",
+              "/tour-images/tour-img07.jpg"
+            ],
+            "desc": "Short hikes and scenic viewpoints in autumn hues.",
+            "price": 89,
+            "maxGroupSize": 10,
+            "reviews": [
+              {
+                "name": "Ivan",
+                "rating": 4.1,
+                "comment": "Refreshing weekend.",
+                "_id": "68c55cd7fcf103836ee265e8"
+              }
+            ],
+            "featured": false,
+            "__v": 0,
+            "createdAt": "2025-09-13T12:00:24.006Z",
+            "updatedAt": "2025-09-13T12:00:24.006Z",
+            "avgRating": 4.1,
+            "id": "68c55cd7fcf103836ee265e6",
+            "itinerary": [
+              {
+                "day": 1,
+                "title": "Arrival & Short Trail",
+                "overview": "Arrive in Zagreb. Short orientation walk and an introductory hike to viewpoint 'Medvednica Ridge'. Evening at leisure.",
+                "mealsIncluded": ["Dinner"],
+                "overnight": "Zagreb - Central Hotel"
+              },
+              {
+                "day": 2,
+                "title": "Full Hike & Departure",
+                "overview": "Full day hike exploring autumn trails, picnic lunch, return to town and depart.",
+                "mealsIncluded": ["Breakfast", "Lunch"],
+                "overnight": null
+              }
+            ],
+            "highlights": {
+              "tripType": "Cultural & Active",
+              "groupSizeType": "Small Group Tour",
+              "lodgingLevel": "Standard - 3 star",
+              "physicalLevel": "Easy",
+              "tripPace": "Balanced schedule",
+              "highlights": [
+                "Short scenic hikes with autumn foliage and lookout points.",
+                "Local market visit in Zagreb and optional cyclo tour of old town.",
+                "Picnic lunch with local produce on the ridge overlooking the city.",
+                "Interaction with local hikers and a chance to learn regional hiking traditions."
+              ]
+            }
+          }
+        ],
+        "itinerary": {
+          "note": "This top-level itinerary object can hold page-level recommended plans or templated day sequences for quick creation.",
+          "sample": [
+            {
+              "day": 1,
+              "title": "Arrival & Orientation",
+              "details": "Meet & greet, city walk, welcome dinner."
+            },
+            {
+              "day": 2,
+              "title": "Main Activity Day",
+              "details": "Full day outing with included meals and local guide."
+            },
+            {
+              "day": 3,
+              "title": "Wrap-up & Departure",
+              "details": "Free morning and departure; optional extensions available."
+            }
+          ]
+        }
+      }
+    },
+    "structure": {
+      "fields": [
+        {
+          "name": "title",
+          "type": "text",
+          "label": "Tour Title",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "textarea",
+          "label": "Tour Description",
+          "required": true
+        },
+        {
+          "name": "tours",
+          "type": "form",
+          "label": "Tour's Data",
+          "itemStructure": {
+            "fields": [
+              {
+                "name": "title",
+                "type": "text",
+                "label": "Tour Title",
+                "required": true
+              },
+              {
+                "name": "city",
+                "type": "text",
+                "label": "City",
+                "required": true
+              },
+              {
+                "name": "address.line1",
+                "type": "text",
+                "label": "Address Line 1",
+                "required": true
+              },
+              {
+                "name": "address.line2",
+                "type": "text",
+                "label": "Address Line 2"
+              },
+              {
+                "name": "address.city",
+                "type": "text",
+                "label": "City",
+                "required": true
+              },
+              {
+                "name": "address.state",
+                "type": "text",
+                "label": "State/Province",
+                "required": true
+              },
+              {
+                "name": "address.zip",
+                "type": "text",
+                "label": "ZIP/Postal Code",
+                "required": true
+              },
+              {
+                "name": "address.country",
+                "type": "text",
+                "label": "Country",
+                "required": true
+              },
+              {
+                "name": "distance",
+                "type": "number",
+                "label": "Distance (in km)",
+                "required": true,
+                "min": 0
+              },
+              {
+                "name": "period.days",
+                "type": "number",
+                "label": "Number of Days",
+                "required": true,
+                "min": 1
+              },
+              {
+                "name": "period.nights",
+                "type": "number",
+                "label": "Number of Nights",
+                "required": true,
+                "min": 0
+              },
+              {
+                "name": "photos",
+                "type": "array",
+                "label": "Photo URLs",
+                "itemType": "text",
+                "required": true
+              },
+              {
+                "name": "desc",
+                "type": "textarea",
+                "label": "Description",
+                "required": true
+              },
+              {
+                "name": "price",
+                "type": "number",
+                "label": "Price (in USD)",
+                "required": true,
+                "min": 0
+              },
+              {
+                "name": "maxGroupSize",
+                "type": "number",
+                "label": "Maximum Group Size",
+                "required": true,
+                "min": 1
+              },
+              {
+                "name": "featured",
+                "type": "checkbox",
+                "label": "Featured Tour"
+              },
+              {
+                "name": "itinerary",
+                "type": "array",
+                "label": "Itinerary (day-by-day)",
+                "itemType": "object",
+                "itemStructure": {
+                  "fields": [
+                    { "name": "day", "type": "number", "label": "Day", "required": true },
+                    { "name": "title", "type": "text", "label": "Title", "required": true },
+                    { "name": "overview", "type": "textarea", "label": "Overview" },
+                    { "name": "mealsIncluded", "type": "array", "label": "Meals Included", "itemType": "text" },
+                    { "name": "overnight", "type": "text", "label": "Overnight stay" }
+                  ]
+                }
+              },
+              {
+                "name": "highlights",
+                "type": "object",
+                "label": "Trip Highlights & Meta",
+                "itemStructure": {
+                  "fields": [
+                    { "name": "tripType", "type": "text", "label": "Trip Type" },
+                    { "name": "groupSizeType", "type": "text", "label": "Group Type" },
+                    { "name": "lodgingLevel", "type": "text", "label": "Lodging Level" },
+                    { "name": "physicalLevel", "type": "text", "label": "Physical Level" },
+                    { "name": "tripPace", "type": "text", "label": "Trip Pace" },
+                    { "name": "highlights", "type": "array", "label": "Highlights (bullets)", "itemType": "text" }
+                  ]
+                }
+              },
+              {
+                "name": "createdAt",
+                "type": "datetime",
+                "label": "Created At",
+                "readonly": true
+              },
+              {
+                "name": "updatedAt",
+                "type": "datetime",
+                "label": "Updated At",
+                "readonly": true
+              },
+              {
+                "name": "avgRating",
+                "type": "number",
+                "label": "Average Rating",
+                "readonly": true,
+                "min": 0,
+                "max": 5
+              }
+            ]
+          },
+          "config": {},
+          "actions": {}
+        }
+      ],
+      "card": {},
+      "config": {},
+      "actions": {
+        "share": {
+          "label": "Share this tour"
+        },
+        "save": {
+          "label": "Save to Wishlist"
+        }
+      },
+      "layout": {}
+    },
+    "config": {
+      "pageTitle": "Tour Details",
+      "permissionsNote": "Create/Update/Delete actions are only enabled for users with roles 'admin' or 'agent'."
+    },
+    "actions": {
+      "back": {
+        "label": "Back to Tours",
+        "url": "/tours"
+      },
+      "footer": {
+        "label": "Back to Tours",
+        "url": "/tours"
+      },
+      "contact": {
+        "label": "Contact Us",
+        "url": "/form.json"
+      },
+      "chat": {
+        "label": "Chat on whatsapp",
+        "url": ""
+      },
+      "reserve": {
+        "label": "Reserve",
+        "url": ""
+      },
+      "roleActions": {
+        "create": {
+          "label": "Create Tour",
+          "allowedRoles": ["admin", "agent"],
+          "method": "POST",
+          "endpoint": "/tours"
+        },
+        "update": {
+          "label": "Update Tour",
+          "allowedRoles": ["admin", "agent"],
+          "method": "PUT",
+          "endpoint": "/tours/:id"
+        },
+        "delete": {
+          "label": "Delete Tour",
+          "allowedRoles": ["admin", "agent"],
+          "method": "DELETE",
+          "endpoint": "/tours/:id"
+        }
+      }
+    }
+  }
+}
