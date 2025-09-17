@@ -1,19 +1,58 @@
 // controllers/tourController.js
 import Tour from "../models/Tour.js";
+import fs from "fs/promises";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const DATA_FILE = path.join(__dirname, "../data/tourDetails.json");
+
+const DEFAULT_DELAY_MS = 3000;
 
 /**
- * Helper: determine handler from req.user
- * expects req.user.role to be one of: 'admin', 'employee', 'user'
+ * Read static JSON (structure, config, actions, etc.)
+ * If reading/parsing fails, returns a safe fallback object.
+ */
+const readStaticPayload = async () => {
+    try {
+        const raw = await fs.readFile(DATA_FILE, "utf-8");
+        const payload = JSON.parse(raw);
+        return payload || {};
+    } catch (err) {
+        console.warn("readStaticPayload warning:", err?.message || err);
+        // fallback minimal structure
+        return {
+            state: { data: {} },
+            structure: null,
+            config: null,
+            actions: null,
+        };
+    }
+};
+
+/**
+ * helper for consistent delayed responses (keeps your 3s loader)
+ */
+const respondDelayed = (res, statusCode, body, delay = DEFAULT_DELAY_MS) => {
+    return setTimeout(() => res.status(statusCode).json(body), delay);
+};
+
+/**
+ * determine handler from req.user
+ * expects req.user.role to be one of: 'admin', 'agent', 'user'
  */
 const getHandlerFromReq = (req) => {
     const role = req?.user?.role;
     if (role === "admin") return "admin";
-    if (role === "employee") return "employee";
-    return "admin";
+    if (role === "agent") return "agent";
+    if (role === "user") return "user";
+    // default to "user"
+    return "user";
 };
 
 /**
- * Shared structure for admin forms and fields (feel free to extend)
+ * Shared structure for admin forms and fields (kept as-is)
  */
 const getBaseStructure = (pageTitle = "") => ({
     fields: [
@@ -56,15 +95,8 @@ const getBaseStructure = (pageTitle = "") => ({
                     { name: "avgRating", type: "number", label: "Average Rating", readonly: true, min: 0, max: 5 },
                 ],
             },
-            config: {
-                header: { title: pageTitle },
-                footer: { text: "Explore more tours" },
-            },
-            actions: {
-                back: { label: "Back to Tours", url: "/tours" },
-                contact: { label: "Contact Us" },
-                chat: { label: "Chat on whatsapp" },
-            },
+            config: {},
+            actions: {},
         },
     ],
     card: {},
@@ -77,144 +109,252 @@ const getBaseStructure = (pageTitle = "") => ({
 });
 
 /**
+ * Filter roleActions so only actions allowed for the current handler are exposed.
+ * Returns a shallow copy of actions with roleActions pruned.
+ */
+const filterRoleActionsForHandler = (actions = {}, handler = "user") => {
+    if (!actions || !actions.roleActions) return actions;
+    const filtered = { ...actions };
+    const available = {};
+    Object.entries(actions.roleActions).forEach(([key, action]) => {
+        const allowed = action.allowedRoles || [];
+        if (allowed.includes(handler)) {
+            available[key] = action;
+        }
+    });
+    filtered.roleActions = available;
+    return filtered;
+};
+
+/**
+ * Provide dummy highlights + itinerary so FE can render even if DB doesn't have them yet.
+ * If payload (static JSON) contains templates, prefer those.
+ * Later you can populate real data in DB and this function will pick from DB values.
+ */
+const getDummyHighlights = () => ({
+    tripType: "Cultural & Active",
+    groupSizeType: "Small Group Tour",
+    lodgingLevel: "Standard - 3 star",
+    physicalLevel: "Easy",
+    tripPace: "Balanced schedule",
+    highlights: [
+        "Stay in a local’s home and learn about regional life.",
+        "Explore colourful heritage streets and bustling markets.",
+        "Spend a night aboard a traditional boat for a unique experience.",
+        "Cyclo tour through old city and ancient temples.",
+        "Dine at a local social enterprise to support the community."
+    ],
+});
+
+const getDummyItinerary = (days = 3) => {
+    const sample = [];
+    for (let i = 1; i <= days; i += 1) {
+        sample.push({
+            day: i,
+            title: i === 1 ? "Arrival & Orientation" : i === days ? "Wrap-up & Departure" : `Main Activity Day ${i}`,
+            overview: i === 1 ? "Arrival, meet & greet, short orientation walk and welcome dinner." :
+                i === days ? "Free morning and depart; optional extensions available." :
+                    "Full day outing with local guide, included meals and activities.",
+            mealsIncluded: i === 1 ? ["Dinner"] : i === days ? ["Breakfast"] : ["Breakfast", "Lunch"],
+            overnight: i === days ? null : `Hotel - Night ${i}`,
+        });
+    }
+    return sample;
+};
+
+/**
+ * Merge/enrich a tour object with highlights and itinerary.
+ * Priority:
+ *  1. tour.highlights / tour.itinerary if set in DB
+ *  2. payload-level templates (payload.state.data.tours[0].highlights or payload.state.data.itinerary)
+ *  3. dummy defaults
+ */
+const enrichTourWithStatic = (tour = {}, payload = {}) => {
+    const enriched = { ...tour };
+
+    // Try DB values first
+    if (!enriched.highlights) {
+        // check payload-level tour template or top-level itinerary/highlights
+        const payloadTourTemplate = payload?.state?.data?.tours && Array.isArray(payload.state.data.tours) && payload.state.data.tours[0]
+            ? payload.state.data.tours[0].highlights
+            : null;
+
+        enriched.highlights = tour.highlights
+            || payloadTourTemplate
+            || payload?.highlights
+            || payload?.state?.data?.highlights
+            || getDummyHighlights();
+    }
+
+    if (!enriched.itinerary) {
+        // payload may have top-level sample itinerary at payload.state.data.itinerary
+        const payloadItinerary = payload?.state?.data?.itinerary || payload?.itinerary || payload?.data?.itinerary;
+        enriched.itinerary = tour.itinerary
+            || payloadItinerary
+            || getDummyItinerary((tour?.period?.days) || 3);
+    }
+
+    return enriched;
+};
+
+/**
  * GET /tours
- * returns list and structure; delayed by 3 seconds (kept as requested)
+ * returns list and structure; keeps the 3s delay for loader testing
+ * static UI data (structure/config/actions) comes from data/tourDetails.json
+ * dynamic data (tours array) comes from DB
  */
 export const getTours = async (req, res) => {
     const handler = getHandlerFromReq(req);
-
     try {
-        const tours = await Tour.find().sort({ createdAt: -1 });
+        const [payload, toursRaw] = await Promise.all([
+            readStaticPayload(),
+            Tour.find().sort({ createdAt: -1 }),
+        ]);
 
-        // shape the componentData according to the new schema
+        // enrich tours with highlights/itinerary so FE can render
+        const tours = (Array.isArray(toursRaw) ? toursRaw : []).map((t) => enrichTourWithStatic(t.toObject ? t.toObject() : t, payload));
+
+        // structure/config/actions come from payload; filter roleActions by handler
+        const actions = payload?.actions || getBaseStructure().actions;
+        const filteredActions = filterRoleActionsForHandler(actions, handler);
+
         const componentData = {
             state: {
                 data: {
-                    // page-level id/title if needed - for list, id can be omitted or set to empty
                     id: null,
-                    title: "All Tours",
-                    description: "List of all tours",
+                    title: payload?.state?.title || "All Tours",
+                    description: payload?.state?.description || "List of all tours",
                     tours: tours,
                 },
             },
-            structure: getBaseStructure("Our Popular Tour Packages"),
-            config: {
+            // prefer the payload structure if present; otherwise fall back to base structure
+            structure: payload?.structure || getBaseStructure("Our Popular Tour Packages"),
+            config: payload?.config || {
                 header: { title: "Our Popular Tour Packages" },
                 footer: { text: "Explore curated tours across stunning destinations" },
             },
-            actions: {
-                share: { label: "Share this tour" },
-                save: { label: "Save to Wishlist" },
-            },
+            // actions filtered for handler
+            actions: filteredActions,
         };
 
-        // simulate slow response for loader testing
-        return setTimeout(() => {
-            return res.status(200).json({
-                status: "success",
-                message: "Tours fetched successfully",
-                handler,
-                componentData,
-            });
-        }, 3000);
+        return respondDelayed(res, 200, {
+            status: "success",
+            message: "Tours fetched successfully",
+            handler,
+            componentData,
+        });
     } catch (error) {
         console.error("getTours error:", error);
-        return setTimeout(() => {
-            return res.status(500).json({
-                status: "error",
-                message: "Failed to fetch tours",
-                handler: getHandlerFromReq(req),
-                componentData: {
-                    state: { data: { tours: [] } },
-                    structure: getBaseStructure("Our Tour Packages"),
-                    config: { header: { title: "Our Tour Packages" } },
-                    actions: {},
-                },
-                error: error.message,
-            });
-        }, 3000);
+        const payload = await readStaticPayload(); // still attempt to get static structure
+        const actions = payload?.actions || {};
+        const filteredActions = filterRoleActionsForHandler(actions, handler);
+
+        return respondDelayed(res, 500, {
+            status: "error",
+            message: "Failed to fetch tours",
+            handler,
+            componentData: {
+                state: { data: { tours: [] } },
+                structure: payload?.structure || getBaseStructure("Our Tour Packages"),
+                config: payload?.config || { header: { title: "Our Tour Packages" } },
+                actions: filteredActions,
+            },
+            error: error.message,
+        });
     }
 };
 
 /**
  * GET /tours/:id
  * returns single tour wrapped inside state.data.{ id, title, tours: [tour] }
- * delayed by 3 seconds (kept as requested)
+ * also includes static payload (structure/config/actions) read from JSON
  */
 export const getTourById = async (req, res) => {
     const handler = getHandlerFromReq(req);
-    try {
-        const { id } = req.params;
-        const tour = await Tour.findById(id);
+    const { id } = req.params;
 
-        if (!tour) {
-            return setTimeout(() => {
-                return res.status(404).json({
-                    status: "error",
-                    message: "Tour not found",
-                    handler,
-                    componentData: {
-                        state: {
-                            data: {
-                                id,
-                                title: "Tour Not Found",
-                                description: "",
-                                tours: [],
-                            },
+    try {
+        const [payload, tourRaw] = await Promise.all([
+            readStaticPayload(),
+            Tour.findById(id),
+        ]);
+
+        if (!tourRaw) {
+            const actions = payload?.actions || {};
+            const filteredActions = filterRoleActionsForHandler(actions, handler);
+
+            return respondDelayed(res, 404, {
+                status: "error",
+                message: "Tour not found",
+                handler,
+                componentData: {
+                    state: {
+                        data: {
+                            id,
+                            title: "Tour Not Found",
+                            description: "",
+                            tours: [],
                         },
-                        structure: getBaseStructure("Tour Not Found"),
-                        config: { header: { title: "Tour Not Found" } },
-                        actions: {},
                     },
-                });
-            }, 3000);
+                    structure: payload?.structure || getBaseStructure("Tour Not Found"),
+                    config: payload?.config || { header: { title: "Tour Not Found" } },
+                    actions: filteredActions,
+                },
+            });
         }
+
+        // convert mongoose document to plain object if needed
+        const tourObj = tourRaw.toObject ? tourRaw.toObject() : tourRaw;
+        const enrichedTour = enrichTourWithStatic(tourObj, payload);
+
+        const actions = payload?.actions || {};
+        const filteredActions = filterRoleActionsForHandler(actions, handler);
 
         const componentData = {
             state: {
                 data: {
-                    id: tour._id,
-                    title: tour.title || tour.name || "",
-                    description: tour.desc || tour.description || "",
-                    tours: [tour],
+                    id: enrichedTour._id,
+                    title: enrichedTour.title || enrichedTour.name || "",
+                    description: enrichedTour.desc || enrichedTour.description || "",
+                    tours: [enrichedTour],
                 },
             },
-            structure: getBaseStructure(tour.title || "Tour Details"),
-            config: {
-                header: { title: tour.title || "Tour Details" },
-                footer: { text: "Explore more tours" },
-            },
+            structure: payload?.structure || getBaseStructure("Tour Details"),
+            config: payload?.config || {},
             actions: {
+                ...filteredActions,
                 back: { label: "Back to Tours", url: "/tours" },
-                contact: { label: "Contact Us" },
-                chat: { label: "Chat on whatsapp" },
+                footer: { label: "Back to Tours", url: "/tours" },
+                contact: { label: "Contact Us", url: "/form.json" },
+                chat: { label: "Chat on whatsapp", url: "" },
+                reserve: { label: "Reserve", url: "" },
             },
         };
 
-        return setTimeout(() => {
-            return res.status(200).json({
-                status: "success",
-                message: "Tour fetched successfully",
-                handler,
-                componentData,
-            });
-        }, 3000);
+        return respondDelayed(res, 200, {
+            status: "success",
+            message: "Tour fetched successfully",
+            handler,
+            componentData,
+        });
     } catch (error) {
         console.error("getTourById error:", error);
-        return setTimeout(() => {
-            return res.status(500).json({
-                status: "error",
-                message: "Failed to fetch tour",
-                handler: getHandlerFromReq(req),
-                componentData: {
-                    state: { data: { tours: [] } },
-                    structure: getBaseStructure("Tour Details"),
-                    config: {},
-                    actions: {},
-                },
-                error: error.message,
-            });
-        }, 3000);
+        const payload = await readStaticPayload();
+        const actions = payload?.actions || {};
+        const filteredActions = filterRoleActionsForHandler(actions, handler);
+
+        return respondDelayed(res, 500, {
+            status: "error",
+            message: "Failed to fetch tour",
+            handler,
+            componentData: {
+                state: { data: { tours: [] } },
+                structure: payload?.structure || getBaseStructure("Tour Details"),
+                config: payload?.config || {},
+                actions: filteredActions,
+            },
+            error: error.message,
+        });
     }
 };
 
@@ -226,8 +366,15 @@ export const getTourById = async (req, res) => {
 export const createTour = async (req, res) => {
     const handler = getHandlerFromReq(req);
     try {
+        // Optionally: sanitize/whitelist fields from req.body here
         const newTour = new Tour(req.body);
         const savedTour = await newTour.save();
+
+        const payload = await readStaticPayload();
+        const enrichedTour = enrichTourWithStatic(savedTour.toObject ? savedTour.toObject() : savedTour, payload);
+
+        const actions = payload?.actions || {};
+        const filteredActions = filterRoleActionsForHandler(actions, handler);
 
         return res.status(201).json({
             status: "success",
@@ -236,30 +383,32 @@ export const createTour = async (req, res) => {
             componentData: {
                 state: {
                     data: {
-                        id: savedTour._id,
-                        title: savedTour.title || "",
-                        description: savedTour.desc || "",
-                        tours: [savedTour],
+                        id: enrichedTour._id,
+                        title: enrichedTour.title || "",
+                        description: enrichedTour.desc || "",
+                        tours: [enrichedTour],
                     },
                 },
-                structure: getBaseStructure(savedTour.title || "New Tour"),
-                config: { header: { title: savedTour.title || "New Tour" } },
-                actions: {
-                    back: { label: "Back to Tours", url: "/tours" },
-                },
+                structure: payload?.structure || getBaseStructure(enrichedTour.title || "New Tour"),
+                config: payload?.config || { header: { title: enrichedTour.title || "New Tour" } },
+                actions: filteredActions,
             },
         });
     } catch (error) {
         console.error("createTour error:", error);
+        const payload = await readStaticPayload();
+        const actions = payload?.actions || {};
+        const filteredActions = filterRoleActionsForHandler(actions, handler);
+
         return res.status(400).json({
             status: "error",
             message: "Failed to create tour",
             handler,
             componentData: {
                 state: { data: { tours: [] } },
-                structure: getBaseStructure("Create Tour"),
-                config: {},
-                actions: {},
+                structure: payload?.structure || getBaseStructure("Create Tour"),
+                config: payload?.config || {},
+                actions: filteredActions,
             },
             error: error.message,
         });
@@ -272,26 +421,36 @@ export const createTour = async (req, res) => {
  */
 export const updateTour = async (req, res) => {
     const handler = getHandlerFromReq(req);
+    const { id } = req.params;
+
     try {
-        const { id } = req.params;
         const updatedTour = await Tour.findByIdAndUpdate(id, req.body, {
             new: true,
             runValidators: true,
         });
 
         if (!updatedTour) {
+            const payload = await readStaticPayload();
+            const actions = payload?.actions || {};
+            const filteredActions = filterRoleActionsForHandler(actions, handler);
+
             return res.status(404).json({
                 status: "error",
                 message: "Tour not found",
                 handler,
                 componentData: {
                     state: { data: { tours: [] } },
-                    structure: getBaseStructure("Tour Details"),
-                    config: {},
-                    actions: {},
+                    structure: payload?.structure || getBaseStructure("Tour Details"),
+                    config: payload?.config || {},
+                    actions: filteredActions,
                 },
             });
         }
+
+        const payload = await readStaticPayload();
+        const enrichedTour = enrichTourWithStatic(updatedTour.toObject ? updatedTour.toObject() : updatedTour, payload);
+        const actions = payload?.actions || {};
+        const filteredActions = filterRoleActionsForHandler(actions, handler);
 
         return res.status(200).json({
             status: "success",
@@ -300,30 +459,32 @@ export const updateTour = async (req, res) => {
             componentData: {
                 state: {
                     data: {
-                        id: updatedTour._id,
-                        title: updatedTour.title || "",
-                        description: updatedTour.desc || "",
-                        tours: [updatedTour],
+                        id: enrichedTour._id,
+                        title: enrichedTour.title || "",
+                        description: enrichedTour.desc || "",
+                        tours: [enrichedTour],
                     },
                 },
-                structure: getBaseStructure(updatedTour.title || "Updated Tour"),
-                config: { header: { title: updatedTour.title || "Updated Tour" } },
-                actions: {
-                    back: { label: "Back to Tours", url: "/tours" },
-                },
+                structure: payload?.structure || getBaseStructure(enrichedTour.title || "Updated Tour"),
+                config: payload?.config || { header: { title: enrichedTour.title || "Updated Tour" } },
+                actions: filteredActions,
             },
         });
     } catch (error) {
         console.error("updateTour error:", error);
+        const payload = await readStaticPayload();
+        const actions = payload?.actions || {};
+        const filteredActions = filterRoleActionsForHandler(actions, handler);
+
         return res.status(400).json({
             status: "error",
             message: "Failed to update tour",
             handler,
             componentData: {
                 state: { data: { tours: [] } },
-                structure: getBaseStructure("Tour Details"),
-                config: {},
-                actions: {},
+                structure: payload?.structure || getBaseStructure("Tour Details"),
+                config: payload?.config || {},
+                actions: filteredActions,
             },
             error: error.message,
         });
@@ -336,9 +497,14 @@ export const updateTour = async (req, res) => {
  */
 export const deleteTour = async (req, res) => {
     const handler = getHandlerFromReq(req);
+    const { id } = req.params;
+
     try {
-        const { id } = req.params;
         const deletedTour = await Tour.findByIdAndDelete(id);
+
+        const payload = await readStaticPayload();
+        const actions = payload?.actions || {};
+        const filteredActions = filterRoleActionsForHandler(actions, handler);
 
         if (!deletedTour) {
             return res.status(404).json({
@@ -347,9 +513,9 @@ export const deleteTour = async (req, res) => {
                 handler,
                 componentData: {
                     state: { data: { tours: [] } },
-                    structure: getBaseStructure("Tour Details"),
-                    config: {},
-                    actions: {},
+                    structure: payload?.structure || getBaseStructure("Tour Details"),
+                    config: payload?.config || {},
+                    actions: filteredActions,
                 },
             });
         }
@@ -367,24 +533,26 @@ export const deleteTour = async (req, res) => {
                         tours: [],
                     },
                 },
-                structure: getBaseStructure("Tour Deleted"),
-                config: { header: { title: "Tour Deleted" } },
-                actions: {
-                    back: { label: "Back to Tours", url: "/tours" },
-                },
+                structure: payload?.structure || getBaseStructure("Tour Deleted"),
+                config: payload?.config || { header: { title: "Tour Deleted" } },
+                actions: filteredActions,
             },
         });
     } catch (error) {
         console.error("deleteTour error:", error);
+        const payload = await readStaticPayload();
+        const actions = payload?.actions || {};
+        const filteredActions = filterRoleActionsForHandler(actions, handler);
+
         return res.status(500).json({
             status: "error",
             message: "Failed to delete tour",
             handler,
             componentData: {
                 state: { data: { tours: [] } },
-                structure: getBaseStructure("Tour Details"),
-                config: {},
-                actions: {},
+                structure: payload?.structure || getBaseStructure("Tour Details"),
+                config: payload?.config || {},
+                actions: filteredActions,
             },
             error: error.message,
         });

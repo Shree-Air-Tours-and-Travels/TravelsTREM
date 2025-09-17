@@ -28,7 +28,6 @@ $tours-padding: 1.25rem;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
-    align-items: center;
     gap: 2rem;
 
     &__left {
@@ -41,8 +40,6 @@ $tours-padding: 1.25rem;
     &__right {
       min-width: 220px;
       display: flex;
-      justify-content: flex-end;
-      align-items: center;
     }
   }
 

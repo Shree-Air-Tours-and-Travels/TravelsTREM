@@ -1,65 +1,137 @@
 {
     "status": "success",
-    "message": "filters metadata",
+    "message": "filters fallback",
     "componentData": {
-        "title": "Tours Filters",
-        "description": "Available filters for tours listing",
+        "title": "Filters",
+        "description": "Search and filtering packages",
         "data": [],
         "structure": {
-            "fields": {
-                "search": {
+            "fields": [
+                {
+                    "name": "search",
+                    "label": "Search",
                     "type": "text",
-                    "label": "Search"
+                    "value": ""
                 },
-                "city": {
-                    "type": "select",
+                {
+                    "name": "city",
                     "label": "City",
+                    "type": "select",
+                    "value": "",
                     "optionsSource": "cities"
                 },
-                "minPrice": {
+                {
+                    "name": "minPrice",
+                    "label": "Min Price",
                     "type": "number",
-                    "label": "Min price"
+                    "value": ""
                 },
-                "maxPrice": {
+                {
+                    "name": "maxPrice",
+                    "label": "Max Price",
                     "type": "number",
-                    "label": "Max price"
+                    "value": ""
                 },
-                "minDays": {
+                {
+                    "name": "minDays",
+                    "label": "Min Days",
                     "type": "number",
-                    "label": "Min days"
+                    "value": ""
                 },
-                "maxDays": {
+                {
+                    "name": "maxDays",
+                    "label": "Max Days",
                     "type": "number",
-                    "label": "Max days"
+                    "value": ""
                 },
-                "featured": {
+                {
+                    "name": "featured",
+                    "label": "Featured",
                     "type": "select",
-                    "label": "Featured"
+                    "value": "",
+                    "optionsSource": "featured"
                 },
-                "rating": {
+                {
+                    "name": "rating",
+                    "label": "Rating",
                     "type": "select",
-                    "label": "Rating"
+                    "value": "",
+                    "optionsSource": "ratings"
                 },
-                "adults": {
+                {
+                    "name": "adults",
+                    "label": "Adults",
                     "type": "number",
-                    "label": "Adults"
+                    "value": 2
                 },
-                "children": {
+                {
+                    "name": "children",
+                    "label": "Children",
                     "type": "number",
-                    "label": "Children"
+                    "value": 0
                 },
-                "infants": {
+                {
+                    "name": "infants",
+                    "label": "Infants",
                     "type": "number",
-                    "label": "Infants"
+                    "value": 0
                 },
-                "arrivalDate": {
+                {
+                    "name": "arrivalDate",
+                    "label": "Arrival Date",
                     "type": "date",
-                    "label": "Arrival date"
+                    "value": ""
                 },
-                "returnDate": {
+                {
+                    "name": "returnDate",
+                    "label": "Return Date",
                     "type": "date",
-                    "label": "Return date"
+                    "value": ""
                 }
+            ],
+            "actions": [
+                {
+                    "name": "apply",
+                    "type": "apply",
+                    "label": "Apply filters",
+                    "className": "button button--primary",
+                    "method": "POST",
+                    "endpoint": "/api/filters.json/apply"
+                },
+                {
+                    "name": "reset",
+                    "type": "apply",
+                    "label": "Reset filters",
+                    "className": "button button--primary",
+                    "method": "POST",
+                    "endpoint": "/api/tours.json"
+                }
+            ],
+            "submitText": "Apply Filters",
+            "layout": {
+                "rows": [
+                    [
+                        "search",
+                        "city",
+                        "minPrice",
+                        "maxPrice"
+                    ],
+                    [
+                        "minDays",
+                        "maxDays",
+                        "featured",
+                        "rating"
+                    ],
+                    [
+                        "adults",
+                        "children",
+                        "infants",
+                        "arrivalDate"
+                    ],
+                    [
+                        "returnDate"
+                    ]
+                ]
             }
         },
         "config": {
@@ -84,7 +156,10 @@
                     "London",
                     "New York",
                     "Delhi",
-                    "Tokyo"
+                    "Tokyo",
+                    "Barcelona",
+                    "Rome",
+                    "Bangkok"
                 ],
                 "featured": [
                     {
@@ -126,7 +201,29 @@
                 "dateRange": {
                     "earliest": "2025-01-01",
                     "latest": "2026-12-31"
-                }
+                },
+                "priceBuckets": [
+                    {
+                        "label": "Under $100",
+                        "from": 0,
+                        "to": 100
+                    },
+                    {
+                        "label": "$100 - $300",
+                        "from": 100,
+                        "to": 300
+                    },
+                    {
+                        "label": "$300 - $700",
+                        "from": 300,
+                        "to": 700
+                    },
+                    {
+                        "label": "Above $700",
+                        "from": 700,
+                        "to": 1000000
+                    }
+                ]
             }
         }
     }

@@ -1,0 +1,141 @@
+/* itineraryCard.scss */
+
+@import "../../../styles/base/typography";
+.itinerary-card {
+  /* wrapper modifier (the actual card) */
+  &--itinerary {
+    width: 100%;
+    box-sizing: border-box;
+    background: var(--card-bg, #ffffff);
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0 20px 20px 20px;
+
+    /* make the card scrollable while header can stick */
+    overflow: auto; /* prefer auto over scroll */
+    -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+    max-height: 600px;
+    position: relative;
+    border-radius: 0 0 20px 20px;
+  }
+
+  /* header inside the card — will stick to the top of the card when scrolling */
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: $primary-color;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding: 0;
+    margin: 0 -16px 8px;
+    padding: 12px 16px;
+  }
+
+  &__title {
+    font-size: 1.05rem;
+    margin: 0;
+    color: var(--text-strong, #0b1a31);
+    line-height: 1;
+  }
+}
+
+/* list items and content area */
+.itinerary-card {
+  .ic-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .ic-list__item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 10px;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.02);
+  }
+
+  .ic-day {
+    min-width: 54px;
+    font-weight: 700;
+    color: var(--accent, #0b5);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ic-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    .ic-title {
+      font-weight: 600;
+      text-align: start !important;
+    }
+    .ic-overview {
+      font-size: 0.95rem;
+      color: var(--muted, #555);
+    }
+    .ic-meals,
+    .ic-overnight {
+      font-size: 0.9rem;
+      color: var(--muted, #666);
+    }
+  }
+
+  .ic-empty {
+    color: var(--muted, #777);
+    padding: 8px 0;
+  }
+}
+
+/* Responsive tweaks */
+@media (min-width: 720px) {
+  .itinerary-card {
+    &--itinerary {
+      padding: 0 20px 20px 20px;
+      max-height: 700px;
+    }
+    &__header {
+      margin: 0 -20px 12px;
+      padding: 14px 20px;
+    }
+    .ic-list__item {
+      gap: 16px;
+      padding: 12px;
+    }
+    .ic-day {
+      min-width: 68px;
+      font-size: 1rem;
+    }
+  }
+}
+
+/* Mobile small tweaks */
+@media (max-width: 479px) {
+  .itinerary-card {
+    &--itinerary {
+      max-height: 420px;
+      padding: 0 20px 20px 20px;
+    }
+    &__header {
+      margin: 0 -20px 8px;
+      padding: 10px 12px;
+    }
+    .ic-day {
+      min-width: 48px;
+      font-size: 0.9rem;
+    }
+  }
+}

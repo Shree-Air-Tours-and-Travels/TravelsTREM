@@ -1,42 +1,288 @@
 // components/Filters/filters.scss
 @import "../../../styles/base/typography";
 
+/* components/Filters/filters.scss */
 
-.filters {
+/* Variables - adapt to trem-scss if you want */
+$card-bg: #fff;
+$card-border: rgba(16, 24, 40, 0.04);
+$text-strong: #0f172a;
+$text-muted: #475569;
+$accent: #0ea5a0;
+$error: #dc2626;
+$success: #059669;
+
+.filters-card {
+  background: $card-bg;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(16, 24, 40, 0.06);
+  padding: 0;
+  border: 1px solid $card-border;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: inherit;
+  transition: transform 0.18s ease, max-height 0.2s ease;
+
+  /* sticky wrapper - it will stick below header/menu. You can adjust --site-header-height */
+  &__sticky {
+    position: sticky;
+    top: var(--site-header-height, 64px);
+    z-index: 40;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.98),
+      rgba(255, 255, 255, 0.96)
+    );
+    padding: 12px;
+    border-radius: 12px;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    padding: 0 6px 8px 6px;
+  }
+
+  &__header-left {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: $text-strong;
+  }
+
+  &__desc {
+    font-size: 0.85rem;
+    color: $text-muted;
+    margin-top: 4px;
+  }
+
+  &__body {
+    padding: 8px 6px 0 6px;
+  }
+
+  &__footer {
+    padding: 8px 6px 6px 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &.collapsed {
+    .filters-card__body,
+    .filters-card__footer {
+      display: none;
+    }
+  }
+}
+
+.ui-filter-title{
+    text-align: unset !important;
+}
+
+/* header right button */
+.button--ghost {
+  background: transparent;
+  border: 1px solid rgba(2, 6, 23, 0.06);
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Rows layout (grid) */
+.filters-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 8px;
+  align-items: end;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (max-width: 520px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.filters-col {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  padding: 0.5rem 0;
+}
 
-  &__row {
-    display: flex;
-    gap: 0.75rem;
-    align-items: center;
-    flex-wrap: wrap;
+/* field styling */
+.filters__label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: $text-strong;
+}
+
+.filters__labelText {
+  font-size: 0.8rem;
+  color: $text-muted;
+}
+
+.filters__input {
+  height: 40px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #e6eef6;
+  background: #ffffff;
+  font-size: 0.95rem;
+  outline: none;
+  transition: box-shadow 0.12s ease, border-color 0.12s ease;
+}
+
+.filters__input:focus {
+  border-color: $accent;
+  box-shadow: 0 0 0 4px rgba(14, 165, 160, 0.06);
+}
+
+.filters__input--error {
+  border-color: $error;
+  box-shadow: none;
+}
+
+/* errors */
+.filters__fieldError {
+  margin-top: 6px;
+  color: $error;
+  font-size: 0.8rem;
+}
+
+/* search input tweak */
+.filters__search {
+  padding-left: 12px;
+}
+
+/* checkbox */
+.filters__checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+
+  input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* actions & status */
+.filters-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.button {
+  border: 1px solid rgba(2, 6, 23, 0.08);
+  background: #fff;
+  color: #06121b;
+  border-radius: 8px;
+  padding: 8px 12px;
+  min-height: 36px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.button--primary {
+  background: $accent;
+  color: #fff;
+  border: none;
+}
+
+.button[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.filters-status {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 0.9rem;
+  color: $text-muted;
+
+  &__loading {
+    color: $text-muted;
   }
 
-  &__input {
-    flex: 1 1 200px;
-    min-width: 140px;
-    padding: 0.5rem 0.75rem;
+  &__error {
+    color: $error;
+  }
+
+  &__success {
+    color: $success;
+  }
+}
+
+/* skeleton preloader */
+.filters-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 6px 0;
+
+  .skeleton-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+
+    @media (max-width: 1200px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    @media (max-width: 900px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media (max-width: 520px) {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+
+  .skeleton-box {
+    height: 44px;
     border-radius: 8px;
-    border: 1px solid $border-color;
-    background: $bg-primary;
-    font-size: $font-size-sm;
-    color: $text-dark;
+    background: linear-gradient(90deg, #f5f7fb 0%, #eef4ff 50%, #f5f7fb 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.2s linear infinite;
+    border: 1px solid rgba(2, 6, 23, 0.03);
   }
 
-  &__actions {
+  .skeleton-actions {
     display: flex;
-    gap: 0.5rem;
-    align-items: center;
+    gap: 10px;
+    margin-top: 6px;
+  }
+
+  .skeleton-btn {
+    width: 120px;
+    height: 36px;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #f5f7fb 0%, #eef4ff 50%, #f5f7fb 100%);
+    animation: shimmer 1.2s linear infinite;
   }
 }
 
-@include mq-max($breakpoint-tablet) {
-  .filters {
-    &__row { gap: 0.5rem; }
-    &__input { flex: 1 1 100%; min-width: 0; }
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
   }
 }
-
