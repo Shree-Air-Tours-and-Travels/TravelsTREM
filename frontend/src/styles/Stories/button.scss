@@ -205,6 +205,10 @@
     }
   }
 
+  &--ghost{
+    cursor: not-allowed !important;
+  }
+
   // Support secondaryColor helper
   @each $clr in (primary, secondary, danger) {
     &--secondary-#{$clr} {

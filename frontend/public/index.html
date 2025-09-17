@@ -2,29 +2,96 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/png" href="%PUBLIC_URL%/logo.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>TravelsTREM — curated tours & travel packages</title>
+
+    <!-- Primary meta -->
     <meta
       name="description"
-      content="Web site created using create-react-app"
+      content="TravelsTREM — discover curated tours, book experiences, and explore destinations. Find the best prices, reviews, and local guides."
     />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>TravelsTREM</title>
+    <!-- Favicon / PWA -->
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <link rel="apple-touch-icon" href="/logo192.png" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://travelstrem-testfe.onrender.com/" />
+
+    <!-- Open Graph (for link previews on social) -->
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="TravelsTREM — curated tours & travel packages"
+    />
+    <meta
+      property="og:description"
+      content="Discover curated tours, book experiences, and explore destinations with TravelsTREM."
+    />
+    <meta
+      property="og:url"
+      content="https://travelstrem-testfe.onrender.com/"
+    />
+    <meta property="og:site_name" content="TravelsTREM" />
+    <!-- replace with your real image (1200x630 recommended) -->
+    <meta
+      property="og:image"
+      content="https://travelstrem-testfe.onrender.com/og-image.jpg"
+    />
+    <meta
+      property="og:image:alt"
+      content="TravelsTREM — explore destinations"
+    />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="TravelsTREM — curated tours & travel packages"
+    />
+    <meta
+      name="twitter:description"
+      content="Discover curated tours, book experiences, and explore destinations with TravelsTREM."
+    />
+    <meta
+      name="twitter:image"
+      content="https://travelstrem-testfe.onrender.com/og-image.jpg"
+    />
+    <!-- optional: your twitter handle -->
+    <meta name="twitter:site" content="@YourTwitterHandle" />
+
+    <!-- Preconnect / Preload (fonts, analytics) -->
+    <!-- example for Google Fonts — replace if you self-host fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Preload main css/js for faster render -->
+    <link rel="preload" href="/static/css/main.c02e8249.css" as="style" />
+    <link rel="preload" href="/static/js/main.c632fd22.js" as="script" />
+
+    <!-- Consider preloading hero image or OG image for speed -->
+    <link rel="preload" href="/og-image.jpg" as="image" />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "TravelsTREM",
+        "url": "https://travelstrem-testfe.onrender.com/",
+        "sameAs": [],
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://travelstrem-testfe.onrender.com/?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
+
+    <!-- Styles & scripts injected by build -->
+    <link href="/static/css/main.c02e8249.css" rel="stylesheet" />
+    <script defer src="/static/js/main.c632fd22.js"></script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

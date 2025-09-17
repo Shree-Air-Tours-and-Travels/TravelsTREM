@@ -87,6 +87,7 @@ const TourCard = ({ tour, onView }) => {
                         text="View tour"
                         variant="solid"
                         color="primary"
+                        size="small"
                         onClick={() => onView(_id)}
                     />
                 </div>

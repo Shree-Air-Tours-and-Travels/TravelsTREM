@@ -5,7 +5,7 @@ import "./summaryCard.style.scss";
 import Title from "../../../stories/Title";
 import SubTitle from "../../../stories/SubTitle";
 
-const SummaryCard = ({ tour, onBook, onContact }) => {
+const SummaryCard = ({ tour, onReserve, onContact, goBack, startChat }) => {
     if (!tour) return null;
 
     // Centralized defaults
@@ -18,11 +18,11 @@ const SummaryCard = ({ tour, onBook, onContact }) => {
         },
         units: {
             people: "people",
-            days: "days",
-            nights: "nights",
+            days: "d",
+            nights: "n",
         },
         actions: {
-            book: "Book Now",
+            book: "Reserve Now",
             contact: "Contact Us",
             chat: "Chat",
         },
@@ -41,7 +41,7 @@ const SummaryCard = ({ tour, onBook, onContact }) => {
     const city = get(tour, "city");
     const avgRating = Number.isFinite(Number(get(tour, "avgRating"))) ? Number(get(tour, "avgRating")) : null;
     const reviewsCount = Array.isArray(get(tour, "reviews")) ? get(tour, "reviews").length : 0;
-    const footerText = get(tour, "_page.config.footer.text");
+    const backToTours = get(tour, "_page.actions.back");
 
     return (
         <aside className="summary-card">
@@ -85,17 +85,17 @@ const SummaryCard = ({ tour, onBook, onContact }) => {
             </div>
 
             <div className="summary-card__actions">
-                {actions?.book ? (
+                {actions?.reserve ? (
                     <Button
-                        text={actions.book.label || DEFAULTS.actions.book}
-                        variant="solid"
-                        onClick={() => onBook && onBook(tour)}
+                        text={actions.reserve.label || DEFAULTS.actions.reserve}
+                        variant="ghost"
+                        onClick={() => onReserve && onReserve(tour)}
                     />
                 ) : (
                     <Button
                         text={DEFAULTS.actions.book}
                         variant="ghost"
-                        onClick={() => onBook && onBook(tour)}
+                        onClick={() => onReserve && onReserve(tour)}
                     />
                 )}
 
@@ -117,22 +117,18 @@ const SummaryCard = ({ tour, onBook, onContact }) => {
                     <Button
                         text={actions.chat.label || DEFAULTS.actions.chat}
                         variant="ghost"
-                        onClick={() => {
-                            /* implement chat */
-                        }}
+                        // onClick={startChat(tour)}
                     />
                 )}
 
-                {footerText && (
+                {backToTours && (
                     <Button
-                        text={footerText}
-                        variant="ghost"
-                        onClick={() => {
-                            /* implement footer action */
-                        }}
+                        text={backToTours.label}
+                        variant="outline"
+                        onClick={()=>goBack(backToTours.url)}
                     />
                 )}
-            </div>
+            </div> 
         </aside>
     );
 };
